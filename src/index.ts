@@ -3,9 +3,15 @@ import { Worker } from 'worker_threads'
 import { jsShell } from 'simon-js-tool'
 import type { Color, Spinner } from 'ora'
 import ora from 'ora'
+import { version } from '../package.json'
 
 // package install
 export async function pi() {
+  const argv = process.argv.slice(2)
+  if (argv[0] === '-v' || argv[0] === '--version') {
+    console.log(`pi version:${version}`)
+    process.exit(0)
+  }
   const { status: hasNi } = jsShell('ni -v', 'pipe')
   if (hasNi === 1)
     await jsShell('npm i -g @antfu/ni', 'pipe')
@@ -13,7 +19,6 @@ export async function pi() {
   const color = _color as Color
   const { result: _spinner = 'star' } = await jsShell('echo $PI_SPINNER', 'pipe')
   const spinner = _spinner as unknown as Spinner
-  const argv = process.argv.slice(2)
   const params = argv.join(' ')
   const pkg = argv.filter(v => !v.startsWith('-')).join(' ')
   const text = pkg ? `Installing ${pkg} ...\n` : '正在更新依赖...\n'

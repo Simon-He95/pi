@@ -1,5 +1,5 @@
 {
-  "name": "pkg-name",
+  "name": "@simon_he/pi",
   "type": "module",
   "version": "0.0.0",
   "packageManager": "pnpm@7.2.1",
@@ -7,12 +7,12 @@
   "author": "Simon He",
   "license": "MIT",
   "funding": "https://github.com/sponsors/Simon-He95",
-  "homepage": "https://github.com/Simon-He95/pkg-name#readme",
+  "homepage": "https://github.com/Simon-He95/pi#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Simon-He95/pkg-name.git"
+    "url": "git+https://github.com/Simon-He95/pi.git"
   },
-  "bugs": "https://github.com/Simon-He95/pkg-name/issues",
+  "bugs": "https://github.com/Simon-He95/pi/issues",
   "keywords": [],
   "sideEffects": false,
   "exports": {
