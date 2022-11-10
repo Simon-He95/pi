@@ -5,6 +5,7 @@ import { jsShell, useNodeWorker } from 'simon-js-tool'
 import type { Color, Spinner } from 'ora'
 import ora from 'ora'
 import { version } from '../package.json'
+
 interface IJsShell {
   status: 0 | 1
   result: string
@@ -12,7 +13,7 @@ interface IJsShell {
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-const url = path.resolve(__dirname, './seprateThread.js')
+const url = path.resolve(__dirname, './seprateThread.mjs')
 
 // package install
 export async function pi() {
