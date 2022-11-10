@@ -24,7 +24,7 @@ export async function pi() {
   const pkg = argv.filter(v => !v.startsWith('-')).join(' ')
   const text = pkg ? `Installing ${pkg} ...\n` : '正在更新依赖...\n'
   const successMsg = pkg ? `Installed ${pkg} successfully! 😊` : '更新依赖成功! 😊'
-  const failMsg = pkg ? `Failed to install ${pkg} 😭` : '更新依赖失败! 😭'
+  const failMsg = pkg ? `Failed to install ${pkg} , v我50 😭` : '更新依赖失败! 😭'
 
   const loading = ora({
     text,
@@ -128,5 +128,4 @@ export function runner() {
   runMap[exec]?.()
 }
 
-pi()
 runner()
