@@ -12,7 +12,12 @@ https://user-images.githubusercontent.com/57086651/200901242-34bc9576-b21c-4e2e-
 
 ## 使用
 ```
+  # 安装依赖
   pi xxx
+  # 卸载依赖
+  pui xxx
+  # 执行命令
+  prun
 ```
 
 ## 自定义配置
@@ -27,6 +32,6 @@ export PI_SPINNER=star # loading样式
 ## 依赖
 - [@antfu/ni](https://github.com/antfu/ni)
 - [ora](https://github.com/sindresorhus/ora)
-
+- [ccommand](https://github.com/Simon-He95/ccommand)
 
 
