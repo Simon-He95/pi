@@ -1,5 +1,5 @@
-import { argv } from 'process'
 import path from 'path'
+import process from 'process'
 import { fileURLToPath } from 'url'
 import { jsShell, useNodeWorker } from 'simon-js-tool'
 import type { Color, Spinner } from 'ora'
@@ -16,9 +16,7 @@ const __dirname = path.dirname(__filename)
 const url = path.resolve(__dirname, './seprateThread.mjs')
 
 // package install
-export async function pi() {
-  const argv = process.argv.slice(2)
-  await installDeps()
+export async function pi(argv: string[]) {
   returnVersion(argv)
   const { color, spinner } = await getStyle()
   const params = argv.join(' ')
@@ -42,9 +40,7 @@ export async function pi() {
 }
 
 // package uninstall
-export async function pui() {
-  const argv = process.argv.slice(2)
-  await installDeps()
+export async function pui(argv: string[]) {
   returnVersion(argv)
   const { color, spinner } = await getStyle()
   const params = argv.join(' ')
@@ -71,9 +67,7 @@ export async function pui() {
 }
 
 // package run script
-export async function prun() {
-  const argv = process.argv.slice(2)
-  await installDeps()
+export function prun(argv: string[]) {
   returnVersion(argv)
   const params = argv.join(' ')
   jsShell(`ccommand ${params}`)
@@ -122,11 +116,60 @@ const runMap: Record<string, Function> = {
   prun,
 }
 
-export function runner() {
-  const cmd = argv[1]
+function isGo() {
+  const { result } = jsShell('test -f "go.mod" && echo "0"|| echo "1"', 'pipe')
+  return result === '0'
+}
+
+function isRust() {
+  const { result } = jsShell('test -f "Cargo.toml" && echo "0"|| echo "1"', 'pipe')
+  return result === '0'
+}
+
+export async function runner() {
+  const cmd = process.argv[1]
   const last = cmd.lastIndexOf('/') + 1
   const exec = cmd.slice(last, cmd.length)
-  runMap[exec]?.()
+  const argv = process.argv.slice(2)
+
+  if (isGo()) {
+    if (exec === 'pi') {
+      jsShell(`go get ${argv.join(' ')}`)
+      return
+    }
+    else if (exec === 'pui') {
+      jsShell(`go clean ${argv.join(' ')}`)
+      return
+    }
+    else if (exec === 'prun') {
+      jsShell(`go run ${argv.join(' ')}`)
+      return
+    }
+    console.log('go mod 项目暂不支持其他命令')
+    return
+  }
+  if (isRust()) {
+    if (exec === 'pi') {
+      jsShell(`cargo install ${argv.join(' ')}`)
+      return
+    }
+    else if (exec === 'pui') {
+      jsShell(`cargo uninstall ${argv.join(' ')}`)
+      return
+    }
+    else if (exec === 'prun') {
+      jsShell(`cargo run ${argv.join(' ')}`)
+      return
+    }
+    console.log('Cargo 项目暂不支持其他命令')
+    return
+  }
+  if (!runMap[exec]) {
+    console.log('命令不存在,请执行pi -h查看帮助')
+    return
+  }
+  await installDeps()
+  runMap[exec](argv)
 }
 
 runner()

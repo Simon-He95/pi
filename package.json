@@ -62,8 +62,7 @@
     "simon-js-tool": "^4.1.24",
     "terminal-kit": "^3.0.0",
     "terminal-link": "^3.0.0",
-    "vitest": "^0.25.1",
-    "vivid-typing": "^1.1.26"
+    "vitest": "^0.25.1"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.25.1",
