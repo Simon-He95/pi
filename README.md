@@ -1,7 +1,14 @@
 <span ><p align="center">![kv](/assets/pi.png)</p></span>
 
 ## PI
-一个带有自定义loading样式的smart包管理器，让你安装依赖时更加美观:),支持pnpm、yarn、npm、rust、go的执行
+一个带有自定义loading样式的smart包管理器，让你安装依赖时更加美观:)
+
+## 聪明的包管理器
+- 支持go mod 的依赖和执行
+- 支持Cargo 的依赖和执行
+- 支持npm 的依赖和执行
+- 支持pnpm 的依赖和执行
+- 支持yarn 的依赖和执行
 
 
 https://user-images.githubusercontent.com/57086651/203143603-9e78f686-399e-4c3d-ae53-56638501b276.mov
