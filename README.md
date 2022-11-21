@@ -3,7 +3,9 @@
 ## PI
 一个带有自定义loading样式的smart包管理器，让你安装依赖时更加美观:),支持pnpm、yarn、npm、rust、go的执行
 
-https://user-images.githubusercontent.com/57086651/200901242-34bc9576-b21c-4e2e-8e9c-9d858c9ffb12.mov
+
+https://user-images.githubusercontent.com/57086651/203143603-9e78f686-399e-4c3d-ae53-56638501b276.mov
+
 
 ## 安装
 ```
