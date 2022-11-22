@@ -4,11 +4,11 @@
 一个带有自定义loading样式的smart包管理器，让你安装依赖时更加美观:)
 
 ## 聪明的包管理器
-- 支持go mod 的依赖和执行
-- 支持Cargo 的依赖和执行
-- 支持npm 的依赖和执行
-- 支持pnpm 的依赖和执行
-- 支持yarn 的依赖和执行
+- 支持 go mod 的依赖安装、卸载、执行和打包
+- 支持 Cargo 的依赖安装、卸载、执行和打包
+- 支持 npm 的依赖安装、卸载和执行
+- 支持 pnpm 的依赖安装、卸载和执行
+- 支持 yarn 的依赖安装、卸载和执行
 
 
 https://user-images.githubusercontent.com/57086651/203143603-9e78f686-399e-4c3d-ae53-56638501b276.mov
@@ -28,6 +28,10 @@ https://user-images.githubusercontent.com/57086651/203143603-9e78f686-399e-4c3d-
   pui xxx
   # 执行命令
   prun
+  # 初始化
+  pinit
+  # 打包 - 针对cargo  go
+  pbuild
 ```
 
 ## 自定义配置
