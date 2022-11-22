@@ -59,6 +59,7 @@
     "chalk": "^5.1.2",
     "clipboardy": "^3.0.0",
     "dot-text": "^1.0.7",
+    "fast-glob": "^3.2.12",
     "libnpmsearch": "^6.0.0",
     "ora": "^6.1.2",
     "simon-js-tool": "^4.1.27",

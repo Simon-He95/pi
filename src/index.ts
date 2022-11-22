@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url'
 import { getPkgTool, jsShell, useNodeWorker } from 'simon-js-tool'
 import type { Color, Spinner } from 'ora'
 import ora from 'ora'
+import fg from 'fast-glob'
 import { version } from '../package.json'
 
 interface IJsShell {
@@ -11,6 +12,7 @@ interface IJsShell {
   result: string
 }
 
+const rootPath = process.cwd()
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const url = path.resolve(__dirname, './seprateThread.mjs')
@@ -116,12 +118,14 @@ const runMap: Record<string, Function> = {
 }
 
 function isGo() {
-  const { result } = jsShell('test -f "main.go" && echo "0"|| echo "1"', 'pipe')
+  const url = path.resolve(rootPath, 'go.mod')
+  const { result } = jsShell(`(test -f "main.go" || test -f "${url}") && echo "0"|| echo "1"`, 'pipe')
   return result === '0'
 }
 
 function isRust() {
-  const { result } = jsShell('test -f "Cargo.toml" && echo "0"|| echo "1"', 'pipe')
+  const url = path.resolve(rootPath, 'Cargo.toml')
+  const { result } = jsShell(`test -f "${url}" && echo "0"|| echo "1"`, 'pipe')
   return result === '0'
 }
 
@@ -141,8 +145,7 @@ export async function runner() {
   const exec = cmd.slice(last, cmd.length)
   const argv = process.argv.slice(2)
   returnVersion(argv)
-  const params = argv.join(' ')
-
+  const params = argv.join(' ').trim()
   if (isGo()) {
     if (exec === 'pi') {
       const loading_status = await loading(`Installing ${params} ...\n`)
@@ -161,7 +164,17 @@ export async function runner() {
         loading_status.fail('Failed to uninstall 😭')
     }
     else if (exec === 'prun') {
-      jsShell(`go run ${params}`)
+      const match = params
+        ? params.endsWith('.go')
+          ? [`**/${params}`]
+          : [`**/${params}.go`, `**/${params}/main.go`]
+        : 'main.go'
+      const target = (await fg(match))[0]
+      if (!target) {
+        console.log('No such file')
+        process.exit(1)
+      }
+      jsShell(`go run ${target}`)
     }
     else if (exec === 'pinit') {
       jsShell(`go mod init ${params}`)
