@@ -36,7 +36,9 @@
   "bin": {
     "pi": "./cli.mjs",
     "pui": "./cli.mjs",
-    "prun": "./cli.mjs"
+    "prun": "./cli.mjs",
+    "pinit":"./cli.mjs",
+    "pbuild":"./cli.mjs"
   },
   "files": [
     "dist"
@@ -59,22 +61,22 @@
     "dot-text": "^1.0.7",
     "libnpmsearch": "^6.0.0",
     "ora": "^6.1.2",
-    "simon-js-tool": "^4.1.24",
+    "simon-js-tool": "^4.1.27",
     "terminal-kit": "^3.0.0",
     "terminal-link": "^3.0.0",
-    "vitest": "^0.25.1"
+    "vitest": "^0.25.2"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.25.1",
-    "@antfu/ni": "^0.16.2",
+    "@antfu/eslint-config": "^0.25.2",
+    "@antfu/ni": "^0.16.3",
     "@antfu/utils": "^0.5.2",
-    "@types/node": "^18.0.0",
+    "@types/node": "^18.11.9",
     "bumpp": "^8.2.1",
-    "eslint": "^8.18.0",
+    "eslint": "^8.28.0",
     "esno": "^0.16.3",
-    "pnpm": "^7.2.1",
+    "pnpm": "^7.17.0",
     "rimraf": "^3.0.2",
-    "typescript": "^4.7.4",
-    "unbuild": "^0.7.4"
+    "typescript": "^4.9.3",
+    "unbuild": "^0.7.6"
   }
 }
