@@ -116,7 +116,7 @@ const runMap: Record<string, Function> = {
 }
 
 function isGo() {
-  const { result } = jsShell('test -f "go.mod" && echo "0"|| echo "1"', 'pipe')
+  const { result } = jsShell('test -f "main.go" && echo "0"|| echo "1"', 'pipe')
   return result === '0'
 }
 
