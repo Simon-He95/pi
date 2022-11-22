@@ -37,6 +37,15 @@ https://user-images.githubusercontent.com/57086651/203143603-9e78f686-399e-4c3d-
   pbuild
 ```
 
+## :monocle_face: Feature
+```
+<-- Go -->
+ ## 直接输入目录名即可执行
+ prun  # 默认执行当前目录下的main.go
+ prun table # 如果table.go存在, 则执行table.go, 否则会执行table/main.go. table可以在任意的目录下。例如examples/table/main.go, 也会被找到并执行
+<-- Go -->
+```
+
 ## :bulb: 自定义配置
 可以在.zshrc配置loading样式，如下：
 ```

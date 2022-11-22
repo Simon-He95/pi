@@ -36,6 +36,15 @@ https://user-images.githubusercontent.com/57086651/203143603-9e78f686-399e-4c3d-
   pbuild
 ```
 
+## :monocle_face: Feature
+```
+<-- Go -->
+ ## input folder and executor command
+ prun  # default executor main.go
+ prun table # if table.go exists, executor table.go else executor table/main.go. and table can under any folder. For example, examples/table/main.go will also be found and executed
+<-- Go -->
+```
+
 ## :bulb: Custom configuration
 You can configure the loading style in .zshrc, as follows：
 ```
