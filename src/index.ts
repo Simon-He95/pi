@@ -1,7 +1,7 @@
 import path from 'path'
 import process from 'process'
 import { fileURLToPath } from 'url'
-import { jsShell, useNodeWorker, getPkgTool } from 'simon-js-tool'
+import { getPkgTool, jsShell, useNodeWorker } from 'simon-js-tool'
 import type { Color, Spinner } from 'ora'
 import ora from 'ora'
 import { version } from '../package.json'
@@ -21,13 +21,13 @@ export async function pi(params: string[], pkg: string) {
   const successMsg = pkg ? `Installed ${pkg} successfully! 😊` : '更新依赖成功! 😊'
   const failMsg = pkg ? `Failed to install ${pkg} , v我50 😭` : '更新依赖失败! 😭'
 
-  const { succeed, fail } = await loading(text)
+  const loading_status = await loading(text)
 
-  const { status } = await useNodeWorker(url, { params, operate: 'install' }) as IJsShell
+  const { status } = await useNodeWorker(url, `ni ${params}`) as IJsShell
   if (status === 0)
-    succeed(successMsg)
+    loading_status.succeed(successMsg)
   else
-    fail(failMsg)
+    loading_status.fail(failMsg)
   process.exit()
 }
 
@@ -40,22 +40,21 @@ export async function pui(params: string[], pkg: string) {
     console.log('请输入要卸载的包名')
     process.exit(1)
   }
-  const { succeed, fail } = await loading(text)
-
-  const { status } = await useNodeWorker(url, { params, operate: 'uninstall' }) as IJsShell
+  const loading_status = await loading(text)
+  const { status } = await useNodeWorker(url, `nun ${params}`) as IJsShell
   if (status === 0)
-    succeed(successMsg)
+    loading_status.succeed(successMsg)
   else
-    fail(failMsg)
+    loading_status.fail(failMsg)
   process.exit()
 }
 
 // package run script
-export function prun(params: string[], pkg?: string) {
+export function prun(params: string[]) {
   jsShell(`ccommand ${params}`)
 }
 
-export function pinit(params: string[], pkg?: string) {
+export function pinit() {
   console.log('正在初始化项目...')
   switch (getPkgTool()) {
     case 'npm':
@@ -113,7 +112,7 @@ const runMap: Record<string, Function> = {
   pi,
   pui,
   prun,
-  pinit
+  pinit,
 }
 
 function isGo() {
@@ -128,12 +127,12 @@ function isRust() {
 
 async function loading(text: string) {
   const { color, spinner } = await getStyle()
-
-  return ora({
+  const result = ora({
     text,
     spinner,
     color,
   }).start()
+  return result
 }
 
 export async function runner() {
@@ -146,51 +145,65 @@ export async function runner() {
 
   if (isGo()) {
     if (exec === 'pi') {
-      loading(`Installing ${params} ...\n`)
-      jsShell(`go get ${params}`)
-      return
+      const loading_status = await loading(`Installing ${params} ...\n`)
+      const { status } = await useNodeWorker(url, `go get ${params}`) as IJsShell
+      if (status === 0)
+        loading_status.succeed('Installed successfully! 😊')
+      else
+        loading_status.fail('Failed to install 😭')
     }
     else if (exec === 'pui') {
-      loading(`Uninstalling ${params} ...\n`)
-      jsShell(`go clean ${params}`)
-      return
+      const loading_status = await loading(`Uninstalling ${params} ...\n`)
+      const { status } = await useNodeWorker(url, `go clean ${params}`) as IJsShell
+      if (status === 0)
+        loading_status.succeed('Uninstalled successfully! 😊')
+      else
+        loading_status.fail('Failed to uninstall 😭')
     }
     else if (exec === 'prun') {
       jsShell(`go run ${params}`)
-      return
-    } else if (exec === 'pinit') {
-      jsShell(`go mod init ${params}`)
-      return
-    } else if (exec === 'pbuild') {
-      jsShell(`go build ${params}`)
-      return
     }
-    console.log('go mod 项目暂不支持其他命令')
-    return
+    else if (exec === 'pinit') {
+      jsShell(`go mod init ${params}`)
+    }
+    else if (exec === 'pbuild') {
+      jsShell(`go build ${params}`)
+    }
+    else {
+      console.log('go mod 项目暂不支持其他命令')
+    }
+    process.exit()
   }
   if (isRust()) {
     if (exec === 'pi') {
-      loading(`Installing ${params} ...\n`)
-      jsShell(`cargo install ${params}`)
-      return
+      const loading_status = await loading(`Installing ${params} ...\n`)
+      const { status } = await useNodeWorker(url, `cargo install ${params}`) as IJsShell
+      if (status === 0)
+        loading_status.succeed('installed successfully! 😊')
+      else
+        loading_status.fail('Failed to install 😭')
     }
     else if (exec === 'pui') {
-      loading(`Uninstalling ${params} ...\n`)
-      jsShell(`cargo uninstall ${params}`)
-      return
+      const loading_status = await loading(`Uninstalling ${params} ...\n`)
+      const { status } = await useNodeWorker(url, `cargo uninstall ${params}`) as IJsShell
+      if (status === 0)
+        loading_status.succeed('Uninstalled successfully! 😊')
+      else
+        loading_status.fail('Failed to uninstall 😭')
     }
     else if (exec === 'prun') {
       jsShell(`cargo run ${params}`)
-      return
-    } else if (exec === 'pinit') {
-      jsShell(`cargo init ${params}`)
-      return
-    } else if (exec === 'pbuild') {
-      jsShell(`cargo build ${params}`)
-      return
     }
-    console.log('Cargo 项目暂不支持其他命令')
-    return
+    else if (exec === 'pinit') {
+      jsShell(`cargo init ${params}`)
+    }
+    else if (exec === 'pbuild') {
+      jsShell(`cargo build ${params}`)
+    }
+    else {
+      console.log('Cargo 项目暂不支持其他命令')
+    }
+    process.exit()
   }
   if (!runMap[exec]) {
     console.log('命令不存在,请执行pi -h查看帮助')
