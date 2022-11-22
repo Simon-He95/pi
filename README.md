@@ -42,7 +42,7 @@ You can configure the loading style in .zshrc, as follows：
 export PI_COLOR=red # loadingstyle color
 export PI_SPINNER=star # loadingstyle
 ```
-- 70+ types of styles, from[cli-spinners](https://jsfiddle.net/sindresorhus/2eLtsbey/embedded/result/)，You can choose to fill in the name in PI_SPINNER.
+- 70+ types of styles, from [cli-spinners](https://jsfiddle.net/sindresorhus/2eLtsbey/embedded/result/)，You can choose to fill in the name in PI_SPINNER.
 - Color options: 'black' | 'red' | 'green' | 'yellow' | 'blue' | 'magenta' | 'cyan' | 'white' | 'gray', Fill in PI_COLOR.
 
 ## :battery: Dependency
