@@ -17,9 +17,9 @@ const url = path.resolve(__dirname, './seprateThread.mjs')
 
 // package install
 export async function pi(params: string[], pkg: string) {
-  const text = pkg ? `Installing ${pkg} ...\n` : '正在更新依赖...\n'
-  const successMsg = pkg ? `Installed ${pkg} successfully! 😊` : '更新依赖成功! 😊'
-  const failMsg = pkg ? `Failed to install ${pkg} , v我50 😭` : '更新依赖失败! 😭'
+  const text = pkg ? `Installing ${pkg} ...\n` : 'Updating dependency ...\n'
+  const successMsg = pkg ? `Installed ${pkg} successfully! 😊` : 'Updated dependency successfully! 😊'
+  const failMsg = pkg ? `Failed to install ${pkg} 😭` : 'Failed to update dependency! 😭'
 
   const loading_status = await loading(text)
 
@@ -37,7 +37,7 @@ export async function pui(params: string[], pkg: string) {
   const successMsg = `unInstalled ${pkg} successfully! 😊`
   const failMsg = `Failed to uninstall ${pkg} 😭`
   if (!pkg) {
-    console.log('请输入要卸载的包名')
+    console.log('Need to specify an uninstall package name')
     process.exit(1)
   }
   const loading_status = await loading(text)
@@ -55,7 +55,7 @@ export function prun(params: string[]) {
 }
 
 export function pinit() {
-  console.log('正在初始化项目...')
+  console.log('Initializing project...')
   switch (getPkgTool()) {
     case 'npm':
       jsShell('npm init -y')
@@ -97,7 +97,7 @@ function returnVersion(argv: any[]) {
     jsShell(`gum style \
     --foreground 212 --border-foreground 212 --border double \
     --align center --width 50 --margin "1 2" --padding "2 4" \
-    'pi version:${version}' '请为我的努力点个star🌟'`)
+    'pi version:${version}' 'Please give me a 🌟 for my efforts'`)
     process.exit(0)
   }
   else if (arg === '-h' || arg === '--help') {
@@ -170,7 +170,7 @@ export async function runner() {
       jsShell(`go build ${params}`)
     }
     else {
-      console.log('go mod 项目暂不支持其他命令')
+      console.log('The commands is not supported')
     }
     process.exit()
   }
@@ -201,12 +201,12 @@ export async function runner() {
       jsShell(`cargo build ${params}`)
     }
     else {
-      console.log('Cargo 项目暂不支持其他命令')
+      console.log('The commands is not supported')
     }
     process.exit()
   }
   if (!runMap[exec]) {
-    console.log('命令不存在,请执行pi -h查看帮助')
+    console.log('The command does not exist, please execute pi -h to view the help')
     return
   }
   const pkg = argv.filter(v => !v.startsWith('-')).join(' ')

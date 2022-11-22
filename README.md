@@ -1,49 +1,51 @@
 <span ><p align="center">![kv](/assets/pi.png)</p></span>
+<p align="center"> English | <a href="./README_zh.md">简体中文</a></p>
+<p align="center"><a href="https://www.npmjs.com/package/@simon_he/pi"><img src="https://img.shields.io/npm/v/@simon_he/pi?color=3fb883&amp;label=" alt="NPM version"></a>
 
-## PI
-一个带有自定义loading样式的smart包管理器，让你安装依赖时更加美观:)
+## :lollipop: PI
+A smart package manager with a custom loading style, which makes you install dependencies more beautifully :)
 
-## 聪明的包管理器
-- 支持 go mod 的依赖安装、卸载、执行和打包
-- 支持 Cargo 的依赖安装、卸载、执行和打包
-- 支持 npm 的依赖安装、卸载和执行
-- 支持 pnpm 的依赖安装、卸载和执行
-- 支持 yarn 的依赖安装、卸载和执行
+## :rocket: Smart package manager
+- Supports dependency installation, uninstallation, execution and packaging of go mod
+- Supports Cargo's dependency installation, uninstallation, execution and packaging
+- Support npm dependency installation, uninstallation and execution
+- Support pnpm dependency installation, uninstallation and execution
+- Support yarn dependency installation, uninstallation and execution
 
 
 https://user-images.githubusercontent.com/57086651/203143603-9e78f686-399e-4c3d-ae53-56638501b276.mov
 
 
-## 安装
+## :gear: Install
 ```
   npm i -g @simon_he/pi
 ```
 
-## 使用
+## :open_hands: Usage
 ```
-  # 根据当前目录的环境去分析使用哪种包管理器，go、rust、pnpm、yarn、npm
-  # 安装依赖
+  # According to the environment of the current directory to analyze which package manager to use，go、rust、pnpm、yarn、npm
+  # Install dependencies
   pi xxx
-  # 卸载依赖
+  # Uninstall dependencies
   pui xxx
-  # 执行命令
+  # Execute command
   prun
-  # 初始化
+  # Initialization
   pinit
-  # 打包 - 针对cargo  go
+  # build - for cargo, go
   pbuild
 ```
 
-## 自定义配置
-可以在.zshrc配置loading样式，如下：
+## :bulb: Custom configuration
+You can configure the loading style in .zshrc, as follows：
 ```
-export PI_COLOR=red # loading样式颜色
-export PI_SPINNER=star # loading样式
+export PI_COLOR=red # loadingstyle color
+export PI_SPINNER=star # loadingstyle
 ```
-- 样式的种类70+，来源于[cli-spinners](https://jsfiddle.net/sindresorhus/2eLtsbey/embedded/result/)，可自行选择将名字填入PI_SPINNER中。
-- 颜色可选值：'black' | 'red' | 'green' | 'yellow' | 'blue' | 'magenta' | 'cyan' | 'white' | 'gray', 填入PI_COLOR中
+- 70+ types of styles, from[cli-spinners](https://jsfiddle.net/sindresorhus/2eLtsbey/embedded/result/)，You can choose to fill in the name in PI_SPINNER.
+- Color options: 'black' | 'red' | 'green' | 'yellow' | 'blue' | 'magenta' | 'cyan' | 'white' | 'gray', Fill in PI_COLOR.
 
-## 依赖
+## :battery: Dependency
 - [@antfu/ni](https://github.com/antfu/ni)
 - [ora](https://github.com/sindresorhus/ora)
 - [ccommand](https://github.com/Simon-He95/ccommand)
