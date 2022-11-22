@@ -1,7 +1,7 @@
 import path from 'path'
 import process from 'process'
 import { fileURLToPath } from 'url'
-import { jsShell, useNodeWorker } from 'simon-js-tool'
+import { jsShell, useNodeWorker, getPkgTool } from 'simon-js-tool'
 import type { Color, Spinner } from 'ora'
 import ora from 'ora'
 import { version } from '../package.json'
@@ -16,35 +16,23 @@ const __dirname = path.dirname(__filename)
 const url = path.resolve(__dirname, './seprateThread.mjs')
 
 // package install
-export async function pi(argv: string[]) {
-  returnVersion(argv)
-  const { color, spinner } = await getStyle()
-  const params = argv.join(' ')
-  const pkg = argv.filter(v => !v.startsWith('-')).join(' ')
+export async function pi(params: string[], pkg: string) {
   const text = pkg ? `Installing ${pkg} ...\n` : '正在更新依赖...\n'
   const successMsg = pkg ? `Installed ${pkg} successfully! 😊` : '更新依赖成功! 😊'
   const failMsg = pkg ? `Failed to install ${pkg} , v我50 😭` : '更新依赖失败! 😭'
 
-  const loading = ora({
-    text,
-    spinner,
-    color,
-  }).start()
+  const { succeed, fail } = await loading(text)
 
   const { status } = await useNodeWorker(url, { params, operate: 'install' }) as IJsShell
   if (status === 0)
-    loading.succeed(successMsg)
+    succeed(successMsg)
   else
-    loading.fail(failMsg)
+    fail(failMsg)
   process.exit()
 }
 
 // package uninstall
-export async function pui(argv: string[]) {
-  returnVersion(argv)
-  const { color, spinner } = await getStyle()
-  const params = argv.join(' ')
-  const pkg = argv.filter(v => !v.startsWith('-')).join(' ')
+export async function pui(params: string[], pkg: string) {
   const text = `Uninstalling ${pkg} ...\n`
   const successMsg = `unInstalled ${pkg} successfully! 😊`
   const failMsg = `Failed to uninstall ${pkg} 😭`
@@ -52,25 +40,36 @@ export async function pui(argv: string[]) {
     console.log('请输入要卸载的包名')
     process.exit(1)
   }
-  const loading = ora({
-    text,
-    spinner,
-    color,
-  }).start()
+  const { succeed, fail } = await loading(text)
 
   const { status } = await useNodeWorker(url, { params, operate: 'uninstall' }) as IJsShell
   if (status === 0)
-    loading.succeed(successMsg)
+    succeed(successMsg)
   else
-    loading.fail(failMsg)
+    fail(failMsg)
   process.exit()
 }
 
 // package run script
-export function prun(argv: string[]) {
-  returnVersion(argv)
-  const params = argv.join(' ')
+export function prun(params: string[], pkg?: string) {
   jsShell(`ccommand ${params}`)
+}
+
+export function pinit(params: string[], pkg?: string) {
+  console.log('正在初始化项目...')
+  switch (getPkgTool()) {
+    case 'npm':
+      jsShell('npm init -y')
+      return
+    case 'yarn':
+      jsShell('yarn init -y')
+      return
+    case 'pnpm':
+      jsShell('pnpm init -y')
+      return
+    default:
+      jsShell('npm init -y')
+  }
 }
 
 async function getStyle() {
@@ -106,7 +105,7 @@ function returnVersion(argv: any[]) {
     jsShell('gum style \
     --foreground 212 --border-foreground 212 --border double \
     --align center --width 50 --margin "1 2" --padding "1 1" \
-    \'PI Commands:\' \'pi: install package\' \'pui: uninstall package\' \'prun: run package script\'')
+    \'PI Commands:\' \'pi: install package\' \'pui: uninstall package\' \'prun: run package script\' \'pinit: package init\' \'pbuild: go build | cargo build\'')
     process.exit(0)
   }
 }
@@ -114,6 +113,7 @@ const runMap: Record<string, Function> = {
   pi,
   pui,
   prun,
+  pinit
 }
 
 function isGo() {
@@ -126,23 +126,43 @@ function isRust() {
   return result === '0'
 }
 
+async function loading(text: string) {
+  const { color, spinner } = await getStyle()
+
+  return ora({
+    text,
+    spinner,
+    color,
+  }).start()
+}
+
 export async function runner() {
   const cmd = process.argv[1]
   const last = cmd.lastIndexOf('/') + 1
   const exec = cmd.slice(last, cmd.length)
   const argv = process.argv.slice(2)
+  returnVersion(argv)
+  const params = argv.join(' ')
 
   if (isGo()) {
     if (exec === 'pi') {
-      jsShell(`go get ${argv.join(' ')}`)
+      loading(`Installing ${params} ...\n`)
+      jsShell(`go get ${params}`)
       return
     }
     else if (exec === 'pui') {
-      jsShell(`go clean ${argv.join(' ')}`)
+      loading(`Uninstalling ${params} ...\n`)
+      jsShell(`go clean ${params}`)
       return
     }
     else if (exec === 'prun') {
-      jsShell(`go run ${argv.join(' ')}`)
+      jsShell(`go run ${params}`)
+      return
+    } else if (exec === 'pinit') {
+      jsShell(`go mod init ${params}`)
+      return
+    } else if (exec === 'pbuild') {
+      jsShell(`go build ${params}`)
       return
     }
     console.log('go mod 项目暂不支持其他命令')
@@ -150,15 +170,23 @@ export async function runner() {
   }
   if (isRust()) {
     if (exec === 'pi') {
-      jsShell(`cargo install ${argv.join(' ')}`)
+      loading(`Installing ${params} ...\n`)
+      jsShell(`cargo install ${params}`)
       return
     }
     else if (exec === 'pui') {
-      jsShell(`cargo uninstall ${argv.join(' ')}`)
+      loading(`Uninstalling ${params} ...\n`)
+      jsShell(`cargo uninstall ${params}`)
       return
     }
     else if (exec === 'prun') {
-      jsShell(`cargo run ${argv.join(' ')}`)
+      jsShell(`cargo run ${params}`)
+      return
+    } else if (exec === 'pinit') {
+      jsShell(`cargo init ${params}`)
+      return
+    } else if (exec === 'pbuild') {
+      jsShell(`cargo build ${params}`)
       return
     }
     console.log('Cargo 项目暂不支持其他命令')
@@ -168,8 +196,10 @@ export async function runner() {
     console.log('命令不存在,请执行pi -h查看帮助')
     return
   }
+  const pkg = argv.filter(v => !v.startsWith('-')).join(' ')
   await installDeps()
-  runMap[exec](argv)
+
+  runMap[exec](params, pkg)
 }
 
 runner()
