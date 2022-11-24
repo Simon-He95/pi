@@ -38,7 +38,8 @@
     "pui": "./cli.mjs",
     "prun": "./cli.mjs",
     "pinit": "./cli.mjs",
-    "pbuild": "./cli.mjs"
+    "pbuild": "./cli.mjs",
+    "pfind": "./cli.mjs"
   },
   "files": [
     "dist"

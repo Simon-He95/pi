@@ -52,8 +52,13 @@ export async function pui(params: string[], pkg: string) {
 }
 
 // package run script
-export function prun(params: string[]) {
+export function prun(params: string) {
   jsShell(`ccommand ${params}`)
+}
+
+// workspace find script
+export function pfind(params: string) {
+  jsShell(`ccommand find ${params}`)
 }
 
 export function pinit() {
@@ -115,6 +120,7 @@ const runMap: Record<string, Function> = {
   pui,
   prun,
   pinit,
+  pfind,
 }
 
 function isGo() {
