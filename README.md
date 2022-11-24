@@ -36,6 +36,25 @@ https://user-images.githubusercontent.com/57086651/203143603-9e78f686-399e-4c3d-
   pbuild
 ```
 
+## Power
+The current environment is npm | yarn | pnpm, and it supports passing some args --silent
+
+- prun dev The dev command in the current package.json
+- prun If no command is specified, provide all scripts command options under the current package
+- prun playground, provide all scripts command options under the current package
+
+The current environment is go
+
+- prun message, it will find message.go first, if not found, it will find message/main.go to execute
+
+The current environment is rust
+
+- prun executable cargo run
+
+workspace of pnpm ｜ yarn
+
+- pfind Select the package under the current workspace, and then select the corresponding command
+
 ## :monocle_face: Feature
 ```
 <-- Go -->

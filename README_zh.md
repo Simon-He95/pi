@@ -38,16 +38,22 @@ https://user-images.githubusercontent.com/57086651/203143603-9e78f686-399e-4c3d-
 ```
 
 ## 功能
-- 当前环境是npm | yarn | pnpm, 并且是支持传一些args的 --silent
-prun dev 当前package.json中的dev命令
-prun 如果不指定命令，提供当前package下所有scripts命令选择
-prun playground, 提供当前package下所有scripts命令选择
-- 当前环境是go 
-prun message，会先找message.go，如果没有找到，会找message/main.go来执行
-- 当前环境是rust
-prun 可执行cargo run
-- workspace of pnpm ｜ yarn
-pfind 选择当前workspace下的包，然后选择对应的命令
+当前环境是npm | yarn | pnpm, 并且是支持传一些args的 --silent
+
+- prun dev 当前package.json中的dev命令
+- prun 如果不指定命令，提供当前package下所有scripts命令选择
+- prun playground, 提供当前package下所有scripts命令选择
+
+当前环境是go 
+- prun message，会先找message.go，如果没有找到，会找message/main.go来执行
+
+当前环境是rust
+
+- prun 可执行cargo run
+
+workspace of pnpm ｜ yarn
+
+- pfind 选择当前workspace下的包，然后选择对应的命令
 
 ## :monocle_face: Feature
 ```

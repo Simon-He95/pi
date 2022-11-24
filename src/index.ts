@@ -111,7 +111,7 @@ function returnVersion(argv: any[]) {
     jsShell('gum style \
     --foreground 212 --border-foreground 212 --border double \
     --align center --width 50 --margin "1 2" --padding "1 1" \
-    \'PI Commands:\' \'pi: install package\' \'pui: uninstall package\' \'prun: run package script\' \'pinit: package init\' \'pbuild: go build | cargo build\'')
+    \'PI Commands:\' \'pi: install package\' \'pui: uninstall package\' \'prun: run package script\' \'pinit: package init\' \'pbuild: go build | cargo build\' \'pfind: find monorepo of yarn or pnpm\'')
     process.exit(0)
   }
 }
