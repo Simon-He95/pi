@@ -20,8 +20,8 @@ const url = path.resolve(__dirname, './seprateThread.mjs')
 // package install
 export async function pi(params: string[], pkg: string) {
   const text = pkg ? `Installing ${pkg} ...\n` : 'Updating dependency ...\n'
-  const successMsg = pkg ? `Installed ${pkg} successfully! 😊` : 'Updated dependency successfully! 😊'
-  const failMsg = pkg ? `Failed to install ${pkg} 😭` : 'Failed to update dependency! 😭'
+  const successMsg = pkg ? `\nInstalled ${pkg} successfully! 😊` : 'Updated dependency successfully! 😊'
+  const failMsg = pkg ? `\nFailed to install ${pkg} 😭` : 'Failed to update dependency! 😭'
 
   const loading_status = await loading(text)
 
@@ -36,8 +36,8 @@ export async function pi(params: string[], pkg: string) {
 // package uninstall
 export async function pui(params: string[], pkg: string) {
   const text = `Uninstalling ${pkg} ...\n`
-  const successMsg = `unInstalled ${pkg} successfully! 😊`
-  const failMsg = `Failed to uninstall ${pkg} 😭`
+  const successMsg = `\nUnInstalled ${pkg} successfully! 😊`
+  const failMsg = `\nFailed to uninstall ${pkg} 😭`
   if (!pkg) {
     console.log('Need to specify an uninstall package name')
     process.exit(1)
@@ -198,7 +198,7 @@ export async function runner() {
       const loading_status = await loading(`Installing ${params} ...\n`)
       const { status } = await useNodeWorker(url, `cargo install ${params}`) as IJsShell
       if (status === 0)
-        loading_status.succeed('installed successfully! 😊')
+        loading_status.succeed('Installed successfully! 😊')
       else
         loading_status.fail('Failed to install 😭')
     }
