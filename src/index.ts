@@ -145,6 +145,12 @@ async function loading(text: string) {
   return result
 }
 
+function hasPkg() {
+  const url = path.resolve(rootPath, 'package.json')
+  const { result } = jsShell(`test -f "${url}" && echo "0"|| echo "1"`, 'pipe')
+  return result === '0'
+}
+
 export async function runner() {
   const cmd = process.argv[1]
   const last = cmd.lastIndexOf('/') + 1
@@ -152,85 +158,87 @@ export async function runner() {
   const argv = process.argv.slice(2)
   returnVersion(argv)
   const params = argv.join(' ').trim()
-  if (isGo()) {
-    if (exec === 'pi') {
-      const loading_status = await loading(`Installing ${params} ...\n`)
-      const { status } = await useNodeWorker(url, `go get ${params}`) as IJsShell
-      if (status === 0)
-        loading_status.succeed('Installed successfully! 😊')
-      else
-        loading_status.fail('Failed to install 😭')
-    }
-    else if (exec === 'pui') {
-      const loading_status = await loading(`Uninstalling ${params} ...\n`)
-      const { status } = await useNodeWorker(url, `go clean ${params}`) as IJsShell
-      if (status === 0)
-        loading_status.succeed('Uninstalled successfully! 😊')
-      else
-        loading_status.fail('Failed to uninstall 😭')
-    }
-    else if (exec === 'prun') {
-      const match = params
-        ? params.endsWith('.go')
-          ? [`**/${params}`]
-          : [`**/${params}.go`, `**/${params}/main.go`]
-        : 'main.go'
-      const target = (await fg(match))[0]
-      if (!target) {
-        console.log('No such file')
-        process.exit(1)
+  if (!hasPkg()) {
+    if (isGo()) {
+      if (exec === 'pi') {
+        const loading_status = await loading(`Installing ${params} ...\n`)
+        const { status } = await useNodeWorker(url, `go get ${params}`) as IJsShell
+        if (status === 0)
+          loading_status.succeed('Installed successfully! 😊')
+        else
+          loading_status.fail('Failed to install 😭')
       }
-      jsShell(`go run ${target}`)
+      else if (exec === 'pui') {
+        const loading_status = await loading(`Uninstalling ${params} ...\n`)
+        const { status } = await useNodeWorker(url, `go clean ${params}`) as IJsShell
+        if (status === 0)
+          loading_status.succeed('Uninstalled successfully! 😊')
+        else
+          loading_status.fail('Failed to uninstall 😭')
+      }
+      else if (exec === 'prun') {
+        const match = params
+          ? params.endsWith('.go')
+            ? [`**/${params}`]
+            : [`**/${params}.go`, `**/${params}/main.go`]
+          : 'main.go'
+        const target = (await fg(match))[0]
+        if (!target) {
+          console.log('No such file')
+          process.exit(1)
+        }
+        jsShell(`go run ${target}`)
+      }
+      else if (exec === 'pinit') {
+        jsShell(`go mod init ${params}`)
+      }
+      else if (exec === 'pbuild') {
+        jsShell(`go build ${params}`)
+      }
+      else {
+        console.log('The commands is not supported')
+      }
+      process.exit()
     }
-    else if (exec === 'pinit') {
-      jsShell(`go mod init ${params}`)
+    if (isRust()) {
+      if (exec === 'pi') {
+        const loading_status = await loading(`Installing ${params} ...\n`)
+        const { status } = await useNodeWorker(url, `cargo install ${params}`) as IJsShell
+        if (status === 0)
+          loading_status.succeed('Installed successfully! 😊')
+        else
+          loading_status.fail('Failed to install 😭')
+      }
+      else if (exec === 'pui') {
+        const loading_status = await loading(`Uninstalling ${params} ...\n`)
+        const { status } = await useNodeWorker(url, `cargo uninstall ${params}`) as IJsShell
+        if (status === 0)
+          loading_status.succeed('Uninstalled successfully! 😊')
+        else
+          loading_status.fail('Failed to uninstall 😭')
+      }
+      else if (exec === 'prun') {
+        jsShell(`cargo run ${params}`)
+      }
+      else if (exec === 'pinit') {
+        jsShell(`cargo init ${params}`)
+      }
+      else if (exec === 'pbuild') {
+        jsShell(`cargo build ${params}`)
+      }
+      else {
+        console.log('The commands is not supported')
+      }
+      process.exit()
     }
-    else if (exec === 'pbuild') {
-      jsShell(`go build ${params}`)
+    if (!runMap[exec]) {
+      console.log('The command does not exist, please execute pi -h to view the help')
+      return
     }
-    else {
-      console.log('The commands is not supported')
-    }
-    process.exit()
   }
-  if (isRust()) {
-    if (exec === 'pi') {
-      const loading_status = await loading(`Installing ${params} ...\n`)
-      const { status } = await useNodeWorker(url, `cargo install ${params}`) as IJsShell
-      if (status === 0)
-        loading_status.succeed('Installed successfully! 😊')
-      else
-        loading_status.fail('Failed to install 😭')
-    }
-    else if (exec === 'pui') {
-      const loading_status = await loading(`Uninstalling ${params} ...\n`)
-      const { status } = await useNodeWorker(url, `cargo uninstall ${params}`) as IJsShell
-      if (status === 0)
-        loading_status.succeed('Uninstalled successfully! 😊')
-      else
-        loading_status.fail('Failed to uninstall 😭')
-    }
-    else if (exec === 'prun') {
-      jsShell(`cargo run ${params}`)
-    }
-    else if (exec === 'pinit') {
-      jsShell(`cargo init ${params}`)
-    }
-    else if (exec === 'pbuild') {
-      jsShell(`cargo build ${params}`)
-    }
-    else {
-      console.log('The commands is not supported')
-    }
-    process.exit()
-  }
-  if (!runMap[exec]) {
-    console.log('The command does not exist, please execute pi -h to view the help')
-    return
-  }
+
   const pkg = argv.filter(v => !v.startsWith('-')).join(' ')
   await installDeps()
-
   runMap[exec](params, pkg)
 }
 
