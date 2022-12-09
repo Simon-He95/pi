@@ -1,5 +1,3 @@
-import { jsShell, useProcressNodeWorker } from 'simon-js-tool'
+import { jsShell, useProcressNodeWorker } from 'lazy-js-utils'
 
-useProcressNodeWorker(async command =>
-  jsShell(`${command}`, 'pipe'),
-)
+useProcressNodeWorker(async command => jsShell(`${command}`, 'pipe'))

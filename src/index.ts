@@ -1,7 +1,7 @@
 import path from 'path'
 import process from 'process'
 import { fileURLToPath } from 'url'
-import { getPkgTool, jsShell, useNodeWorker } from 'simon-js-tool'
+import { getPkgTool, jsShell, useNodeWorker } from 'lazy-js-utils'
 import type { Color, Spinner } from 'ora'
 import ora from 'ora'
 import fg from 'fast-glob'
@@ -20,16 +20,19 @@ const url = path.resolve(__dirname, './seprateThread.mjs')
 // package install
 export async function pi(params: string[], pkg: string) {
   const text = pkg ? `Installing ${pkg} ...\n` : 'Updating dependency ...\n'
-  const successMsg = pkg ? `\nInstalled ${pkg} successfully! 😊` : 'Updated dependency successfully! 😊'
-  const failMsg = pkg ? `\nFailed to install ${pkg} 😭` : 'Failed to update dependency! 😭'
+  const successMsg = pkg
+    ? `\nInstalled ${pkg} successfully! 😊`
+    : 'Updated dependency successfully! 😊'
+  const failMsg = pkg
+    ? `\nFailed to install ${pkg} 😭`
+    : 'Failed to update dependency! 😭'
 
   const loading_status = await loading(text)
 
-  const { status } = await useNodeWorker(url, `ni ${params}`) as IJsShell
+  const { status } = (await useNodeWorker(url, `ni ${params}`)) as IJsShell
   if (status === 0)
     loading_status.succeed(successMsg)
-  else
-    loading_status.fail(failMsg)
+  else loading_status.fail(failMsg)
   process.exit()
 }
 
@@ -43,11 +46,10 @@ export async function pui(params: string[], pkg: string) {
     process.exit(1)
   }
   const loading_status = await loading(text)
-  const { status } = await useNodeWorker(url, `nun ${params}`) as IJsShell
+  const { status } = (await useNodeWorker(url, `nun ${params}`)) as IJsShell
   if (status === 0)
     loading_status.succeed(successMsg)
-  else
-    loading_status.fail(failMsg)
+  else loading_status.fail(failMsg)
   process.exit()
 }
 
@@ -81,7 +83,10 @@ export function pinit() {
 async function getStyle() {
   const { result: _color = 'yellow' } = await jsShell('echo $PI_COLOR', 'pipe')
   const color = _color as Color
-  const { result: _spinner = 'star' } = await jsShell('echo $PI_SPINNER', 'pipe')
+  const { result: _spinner = 'star' } = await jsShell(
+    'echo $PI_SPINNER',
+    'pipe',
+  )
   const spinner = _spinner as unknown as Spinner
   return { color, spinner }
 }
@@ -108,10 +113,12 @@ function returnVersion(argv: any[]) {
     process.exit(0)
   }
   else if (arg === '-h' || arg === '--help') {
-    jsShell('gum style \
+    jsShell(
+      'gum style \
     --foreground 212 --border-foreground 212 --border double \
     --align center --width 50 --margin "1 2" --padding "1 1" \
-    \'PI Commands:\' \'pi: install package\' \'pui: uninstall package\' \'prun: run package script\' \'pinit: package init\' \'pbuild: go build | cargo build\' \'pfind: find monorepo of yarn or pnpm\'')
+    \'PI Commands:\' \'pi: install package\' \'pui: uninstall package\' \'prun: run package script\' \'pinit: package init\' \'pbuild: go build | cargo build\' \'pfind: find monorepo of yarn or pnpm\'',
+    )
     process.exit(0)
   }
 }
@@ -125,7 +132,10 @@ const runMap: Record<string, Function> = {
 
 function isGo() {
   const url = path.resolve(rootPath, 'go.mod')
-  const { result } = jsShell(`(test -f "main.go" || test -f "${url}") && echo "0"|| echo "1"`, 'pipe')
+  const { result } = jsShell(
+    `(test -f "main.go" || test -f "${url}") && echo "0"|| echo "1"`,
+    'pipe',
+  )
   return result === '0'
 }
 
@@ -162,19 +172,23 @@ export async function runner() {
     if (isGo()) {
       if (exec === 'pi') {
         const loading_status = await loading(`Installing ${params} ...\n`)
-        const { status } = await useNodeWorker(url, `go get ${params}`) as IJsShell
+        const { status } = (await useNodeWorker(
+          url,
+          `go get ${params}`,
+        )) as IJsShell
         if (status === 0)
           loading_status.succeed('Installed successfully! 😊')
-        else
-          loading_status.fail('Failed to install 😭')
+        else loading_status.fail('Failed to install 😭')
       }
       else if (exec === 'pui') {
         const loading_status = await loading(`Uninstalling ${params} ...\n`)
-        const { status } = await useNodeWorker(url, `go clean ${params}`) as IJsShell
+        const { status } = (await useNodeWorker(
+          url,
+          `go clean ${params}`,
+        )) as IJsShell
         if (status === 0)
           loading_status.succeed('Uninstalled successfully! 😊')
-        else
-          loading_status.fail('Failed to uninstall 😭')
+        else loading_status.fail('Failed to uninstall 😭')
       }
       else if (exec === 'prun') {
         const match = params
@@ -203,19 +217,23 @@ export async function runner() {
     if (isRust()) {
       if (exec === 'pi') {
         const loading_status = await loading(`Installing ${params} ...\n`)
-        const { status } = await useNodeWorker(url, `cargo install ${params}`) as IJsShell
+        const { status } = (await useNodeWorker(
+          url,
+          `cargo install ${params}`,
+        )) as IJsShell
         if (status === 0)
           loading_status.succeed('Installed successfully! 😊')
-        else
-          loading_status.fail('Failed to install 😭')
+        else loading_status.fail('Failed to install 😭')
       }
       else if (exec === 'pui') {
         const loading_status = await loading(`Uninstalling ${params} ...\n`)
-        const { status } = await useNodeWorker(url, `cargo uninstall ${params}`) as IJsShell
+        const { status } = (await useNodeWorker(
+          url,
+          `cargo uninstall ${params}`,
+        )) as IJsShell
         if (status === 0)
           loading_status.succeed('Uninstalled successfully! 😊')
-        else
-          loading_status.fail('Failed to uninstall 😭')
+        else loading_status.fail('Failed to uninstall 😭')
       }
       else if (exec === 'prun') {
         jsShell(`cargo run ${params}`)
@@ -232,7 +250,9 @@ export async function runner() {
       process.exit()
     }
     if (!runMap[exec]) {
-      console.log('The command does not exist, please execute pi -h to view the help')
+      console.log(
+        'The command does not exist, please execute pi -h to view the help',
+      )
       return
     }
   }
