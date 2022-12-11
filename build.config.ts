@@ -1,10 +1,7 @@
 import { defineBuildConfig } from 'unbuild'
 
 export default defineBuildConfig({
-  entries: [
-    'src/index',
-    'src/seprateThread',
-  ],
+  entries: ['src/index', 'src/seprateThread'],
   declaration: true,
   clean: true,
   rollup: {

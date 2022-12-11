@@ -1,7 +1,7 @@
 {
   "extends": "@antfu",
   "rules": {
-    "no-console":"off",
-    "no-multi-str":"off"
+    "no-console": "off",
+    "no-multi-str": "off"
   }
 }
