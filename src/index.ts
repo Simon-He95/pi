@@ -21,10 +21,10 @@ const url = path.resolve(__dirname, './seprateThread.mjs')
 export async function pi(params: string[], pkg: string) {
   const text = pkg ? `Installing ${pkg} ...\n` : 'Updating dependency ...\n'
   const successMsg = pkg
-    ? `\nInstalled ${pkg} successfully! 😊`
+    ? `Installed ${pkg} successfully! 😊`
     : 'Updated dependency successfully! 😊'
   const failMsg = pkg
-    ? `\nFailed to install ${pkg} 😭`
+    ? `Failed to install ${pkg} 😭`
     : 'Failed to update dependency! 😭'
 
   const loading_status = await loading(text)
