@@ -15,7 +15,19 @@ A smart package manager with a custom loading style, which makes you install dep
 - Support pnpm dependency installation, uninstallation and execution
 - Support yarn dependency installation, uninstallation and execution
 
-https://user-images.githubusercontent.com/57086651/203143603-9e78f686-399e-4c3d-ae53-56638501b276.mov
+## Demo
+
+- pi
+  ![gif](/assets/pi.gif)
+
+- prun
+  ![gif](/assets/prun.gif)
+
+- pfind
+  ![gif](/assets/pfind.gif)
+
+- others
+  ![gif](/assets/others.gif)
 
 ## :gear: Install
 

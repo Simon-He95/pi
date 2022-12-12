@@ -15,7 +15,19 @@
 - 支持 pnpm 的依赖安装、卸载和执行
 - 支持 yarn 的依赖安装、卸载和执行
 
-https://user-images.githubusercontent.com/57086651/203143603-9e78f686-399e-4c3d-ae53-56638501b276.mov
+## 例子
+
+- pi
+  ![gif](/assets/pi.gif)
+
+- prun
+  ![gif](/assets/prun.gif)
+
+- pfind
+  ![gif](/assets/pfind.gif)
+
+- others
+  ![gif](/assets/others.gif)
 
 ## :gear: 安装
 
