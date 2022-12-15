@@ -18,7 +18,7 @@ const __dirname = path.dirname(__filename)
 const url = path.resolve(__dirname, './seprateThread.mjs')
 
 // package install
-export async function pi(params: string, pkg: string) {
+export async function pi(params: string, pkg: string, executor = 'ni') {
   const text = pkg ? `Installing ${pkg} ...\n` : 'Updating dependency ...\n'
   const successMsg = pkg
     ? `Installed ${pkg} successfully! 😊`
@@ -28,7 +28,10 @@ export async function pi(params: string, pkg: string) {
     : 'Failed to update dependency! 😭'
 
   const loading_status = await loading(text)
-  const { status } = (await useNodeWorker(url, `ni ${params}`)) as IJsShell
+  const { status } = (await useNodeWorker(
+    url,
+    `${executor} ${params}`,
+  )) as IJsShell
   if (status === 0)
     loading_status.succeed(successMsg)
   else loading_status.fail(failMsg)
@@ -81,7 +84,19 @@ export function pinit() {
 
 export function pil(params: string, pkg: string) {
   const latestPkgname = spaceFormat(params, '@latest ')
-  return pi(latestPkgname, spaceFormat(`${pkg} `, '@latest ').trim())
+  return pi(latestPkgname, pkg ? spaceFormat(`${pkg} `, '@latest ').trim() : '')
+}
+
+export function pu() {
+  return jsShell('nu')
+}
+
+export function pci(params: string, pkg: string) {
+  return pi(params, pkg, 'nci')
+}
+
+export function pa() {
+  return jsShell('na')
 }
 
 async function getStyle() {
@@ -120,8 +135,18 @@ function returnVersion(argv: any[]) {
     jsShell(
       'gum style \
     --foreground 212 --border-foreground 212 --border double \
-    --align center --width 50 --margin "1 2" --padding "1 1" \
-    \'PI Commands:\' \'pi: install package\' \'pui: uninstall package\' \'prun: run package script\' \'pinit: package init\' \'pbuild: go build | cargo build\' \'pfind: find monorepo of yarn or pnpm\'',
+    --align left --width 50 --margin "1 2" --padding "1 1" \
+    \'PI Commands:\'\
+    \'~ pi: install package\'\
+    \'~ pui: uninstall package\'\
+    \'~ prun: run package script\'\
+    \'~ pinit: package init\'\
+    \'~ pbuild: go build | cargo build\' \
+    \'~ pfind: find monorepo of yarn or pnpm\'\
+    \'~ pa: agent alias\'\
+    \'~ pu: package upgrade\'\
+    \'~ pci: package clean install\'\
+    \'~ pil: package latest install\'',
     )
     process.exit(0)
   }
@@ -129,8 +154,11 @@ function returnVersion(argv: any[]) {
 
 const runMap: Record<string, Function> = {
   pi,
+  pa,
   pui,
+  pu,
   pil,
+  pci,
   prun,
   pinit,
   pfind,
