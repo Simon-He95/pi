@@ -1,7 +1,7 @@
 import path from 'path'
 import process from 'process'
 import { fileURLToPath } from 'url'
-import { getPkgTool, jsShell, useNodeWorker } from 'lazy-js-utils'
+import { getPkgTool, jsShell, spaceFormat, useNodeWorker } from 'lazy-js-utils'
 import type { Color, Spinner } from 'ora'
 import ora from 'ora'
 import fg from 'fast-glob'
@@ -18,7 +18,7 @@ const __dirname = path.dirname(__filename)
 const url = path.resolve(__dirname, './seprateThread.mjs')
 
 // package install
-export async function pi(params: string[], pkg: string) {
+export async function pi(params: string, pkg: string) {
   const text = pkg ? `Installing ${pkg} ...\n` : 'Updating dependency ...\n'
   const successMsg = pkg
     ? `Installed ${pkg} successfully! 😊`
@@ -28,7 +28,6 @@ export async function pi(params: string[], pkg: string) {
     : 'Failed to update dependency! 😭'
 
   const loading_status = await loading(text)
-
   const { status } = (await useNodeWorker(url, `ni ${params}`)) as IJsShell
   if (status === 0)
     loading_status.succeed(successMsg)
@@ -55,12 +54,12 @@ export async function pui(params: string[], pkg: string) {
 
 // package run script
 export function prun(params: string) {
-  jsShell(`ccommand ${params}`)
+  return jsShell(`ccommand ${params}`)
 }
 
 // workspace find script
 export function pfind(params: string) {
-  jsShell(`ccommand find ${params}`)
+  return jsShell(`ccommand find ${params}`)
 }
 
 export function pinit() {
@@ -78,6 +77,11 @@ export function pinit() {
     default:
       jsShell('npm init -y')
   }
+}
+
+export function pil(params: string, pkg: string) {
+  const latestPkgname = spaceFormat(params, '@latest ')
+  return pi(latestPkgname, spaceFormat(`${pkg} `, '@latest ').trim())
 }
 
 async function getStyle() {
@@ -122,9 +126,11 @@ function returnVersion(argv: any[]) {
     process.exit(0)
   }
 }
+
 const runMap: Record<string, Function> = {
   pi,
   pui,
+  pil,
   prun,
   pinit,
   pfind,
@@ -165,9 +171,9 @@ export async function runner() {
   const cmd = process.argv[1]
   const last = cmd.lastIndexOf('/') + 1
   const exec = cmd.slice(last, cmd.length)
-  const argv = process.argv.slice(2)
+  const argv: string[] = process.argv.slice(2)
   returnVersion(argv)
-  const params = argv.join(' ').trim()
+  const params = spaceFormat(argv.join(' ')).trim()
   if (!hasPkg()) {
     if (isGo()) {
       if (exec === 'pi') {
@@ -256,7 +262,6 @@ export async function runner() {
       return
     }
   }
-
   const pkg = argv.filter(v => !v.startsWith('-')).join(' ')
   await installDeps()
   runMap[exec](params, pkg)
