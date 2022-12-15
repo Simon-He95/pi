@@ -1,4 +1,4 @@
-<span ><p align="center">![kv](/assets/pi.png)</p></span>
+<span ><p align="center">![kv](/assets/kv.png)</p></span>
 
 <p align="center"><a href="https://www.npmjs.com/package/@simon_he/pi"><img src="https://img.shields.io/npm/v/@simon_he/pi?color=3fb883&amp;label=" alt="NPM version"></a></p>
 <p align="center"><a href="./README.md">English</a> | 简体中文</p>
@@ -18,9 +18,19 @@
 ## 例子
 
 - pi
+  ![img](/assets/pi.png)
+
   ![gif](/assets/pi.gif)
 
+- pui
+  ![img](/assets/pui.png)
+
+- pci
+  ![img](/assets/pci.png)
+
 - prun
+  ![img](/assets/prun.png)
+
   ![gif](/assets/prun.gif)
 
 - pfind
@@ -45,6 +55,8 @@
   pui xxx
   # 执行命令
   prun
+  # 执行workspace中的scripts
+  pfind
   # 初始化
   pinit
   # 打包 - 针对cargo  go

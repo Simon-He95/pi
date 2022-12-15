@@ -1,4 +1,4 @@
-<span ><p align="center">![kv](/assets/pi.png)</p></span>
+<span ><p align="center">![kv](/assets/kv.png)</p></span>
 
 <p align="center"> English | <a href="./README_zh.md">简体中文</a></p>
 <p align="center"><a href="https://www.npmjs.com/package/@simon_he/pi"><img src="https://img.shields.io/npm/v/@simon_he/pi?color=3fb883&amp;label=" alt="NPM version"></a>
@@ -18,9 +18,19 @@ A smart package manager with a custom loading style, which makes you install dep
 ## Demo
 
 - pi
+  ![img](/assets/pi.png)
+
   ![gif](/assets/pi.gif)
 
+- pui
+  ![img](/assets/pui.png)
+
+- pci
+  ![img](/assets/pci.png)
+
 - prun
+  ![img](/assets/prun.png)
+
   ![gif](/assets/prun.gif)
 
 - pfind
@@ -45,10 +55,14 @@ A smart package manager with a custom loading style, which makes you install dep
   pui xxx
   # Execute command
   prun
+  # Execute scripts in workspace
+  pfind
   # Initialization
   pinit
   # build - for cargo, go
   pbuild
+  # pci
+
 ```
 
 ## Power
