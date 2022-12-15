@@ -22,7 +22,7 @@
       "import": "./dist/index.mjs"
     }
   },
-  "main": "./dist/index.mjs",
+  "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "typesVersions": {
@@ -50,8 +50,8 @@
   ],
   "scripts": {
     "postinstall": "simple-git-hooks",
-    "build": "unbuild",
-    "dev": "unbuild --stub",
+    "build": "pkgroll --minify",
+    "dev": "pkgroll --watch",
     "format": "prettier --write --cache .",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -63,7 +63,7 @@
   },
   "dependencies": {
     "fast-glob": "^3.2.12",
-    "lazy-js-utils": "^0.0.7",
+    "lazy-js-utils": "^0.0.8",
     "ora": "^6.1.2"
   },
   "devDependencies": {
@@ -76,6 +76,7 @@
     "esno": "^0.16.3",
     "lint-staged": "^13.1.0",
     "picocolors": "^1.0.0",
+    "pkgroll": "^1.8.0",
     "pnpm": "^7.18.2",
     "prettier": "^2.8.1",
     "rimraf": "^3.0.2",

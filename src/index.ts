@@ -1,6 +1,5 @@
 import path from 'path'
 import process from 'process'
-import { fileURLToPath } from 'url'
 import { getPkgTool, jsShell, spaceFormat, useNodeWorker } from 'lazy-js-utils'
 import type { Color, Spinner } from 'ora'
 import ora from 'ora'
@@ -13,9 +12,6 @@ interface IJsShell {
 }
 
 const rootPath = process.cwd()
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-const url = path.resolve(__dirname, './seprateThread.mjs')
 
 // package install
 export async function pi(params: string, pkg: string, executor = 'ni') {
@@ -28,10 +24,7 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
     : 'Failed to update dependency! 😭'
 
   const loading_status = await loading(text)
-  const { status } = (await useNodeWorker(
-    url,
-    `${executor} ${params}`,
-  )) as IJsShell
+  const { status } = (await useNodeWorker(`${executor} ${params}`)) as IJsShell
   if (status === 0)
     loading_status.succeed(successMsg)
   else loading_status.fail(failMsg)
@@ -48,7 +41,7 @@ export async function pui(params: string[], pkg: string) {
     process.exit(1)
   }
   const loading_status = await loading(text)
-  const { status } = (await useNodeWorker(url, `nun ${params}`)) as IJsShell
+  const { status } = (await useNodeWorker(`nun ${params}`)) as IJsShell
   if (status === 0)
     loading_status.succeed(successMsg)
   else loading_status.fail(failMsg)
@@ -206,10 +199,7 @@ export async function runner() {
     if (isGo()) {
       if (exec === 'pi') {
         const loading_status = await loading(`Installing ${params} ...\n`)
-        const { status } = (await useNodeWorker(
-          url,
-          `go get ${params}`,
-        )) as IJsShell
+        const { status } = (await useNodeWorker(`go get ${params}`)) as IJsShell
         if (status === 0)
           loading_status.succeed('Installed successfully! 😊')
         else loading_status.fail('Failed to install 😭')
@@ -217,7 +207,6 @@ export async function runner() {
       else if (exec === 'pui') {
         const loading_status = await loading(`Uninstalling ${params} ...\n`)
         const { status } = (await useNodeWorker(
-          url,
           `go clean ${params}`,
         )) as IJsShell
         if (status === 0)
@@ -252,7 +241,6 @@ export async function runner() {
       if (exec === 'pi') {
         const loading_status = await loading(`Installing ${params} ...\n`)
         const { status } = (await useNodeWorker(
-          url,
           `cargo install ${params}`,
         )) as IJsShell
         if (status === 0)
@@ -262,7 +250,6 @@ export async function runner() {
       else if (exec === 'pui') {
         const loading_status = await loading(`Uninstalling ${params} ...\n`)
         const { status } = (await useNodeWorker(
-          url,
           `cargo uninstall ${params}`,
         )) as IJsShell
         if (status === 0)

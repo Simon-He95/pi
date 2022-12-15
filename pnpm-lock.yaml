@@ -12,10 +12,11 @@ importers:
       eslint: ^8.29.0
       esno: ^0.16.3
       fast-glob: ^3.2.12
-      lazy-js-utils: ^0.0.7
+      lazy-js-utils: ^0.0.8
       lint-staged: ^13.1.0
       ora: ^6.1.2
       picocolors: ^1.0.0
+      pkgroll: ^1.8.0
       pnpm: ^7.18.2
       prettier: ^2.8.1
       rimraf: ^3.0.2
@@ -26,7 +27,7 @@ importers:
       vitest: ^0.25.8
     dependencies:
       fast-glob: 3.2.12
-      lazy-js-utils: 0.0.7
+      lazy-js-utils: 0.0.8
       ora: 6.1.2
     devDependencies:
       '@antfu/eslint-config': 0.25.2_ha6vam6werchizxrnqvarmz2zu
@@ -38,6 +39,7 @@ importers:
       esno: 0.16.3
       lint-staged: 13.1.0
       picocolors: 1.0.0
+      pkgroll: 1.8.0_typescript@4.9.4
       pnpm: 7.18.2
       prettier: 2.8.1
       rimraf: 3.0.2
@@ -733,6 +735,17 @@ packages:
       is-reference: 1.2.1
       magic-string: 0.25.9
       resolve: 1.22.1
+      rollup: 2.79.1
+    dev: true
+
+  /@rollup/plugin-inject/4.0.4_rollup@2.79.1:
+    resolution: {integrity: sha512-4pbcU4J/nS+zuHk+c+OL3WtmEQhqxlZ9uqfjQMQDOHOPld7PsCd8k5LWs8h5wjwJN7MgnAn768F2sDxEP4eNFQ==}
+    peerDependencies:
+      rollup: ^1.20.0 || ^2.0.0
+    dependencies:
+      '@rollup/pluginutils': 3.1.0_rollup@2.79.1
+      estree-walker: 2.0.2
+      magic-string: 0.25.9
       rollup: 2.79.1
     dev: true
 
@@ -3196,8 +3209,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /lazy-js-utils/0.0.7:
-    resolution: {integrity: sha512-n0WHu/gdEa+ejT9jMmLOj8njC9Y/211QMZo7qdJBfD5m8Y2vtYt4tnOL2B/yTi0oxJSJfT9dBuIi29jm+44Emg==}
+  /lazy-js-utils/0.0.8:
+    resolution: {integrity: sha512-dvBBZxftx3NnhzTnW/8/aSh7mON/swuTNHBiut6mNBPw17KVdA3mkSlnKdZkYV43KO90olgGY9H7XsHpr/WkaA==}
     dependencies:
       '@vueuse/core': 8.9.4_vue@3.2.45
       htmlparser2: 8.0.1
@@ -3751,6 +3764,28 @@ packages:
       jsonc-parser: 3.2.0
       mlly: 1.0.0
       pathe: 1.0.0
+    dev: true
+
+  /pkgroll/1.8.0_typescript@4.9.4:
+    resolution: {integrity: sha512-udmzTqrlFcUxHG+KU+bYZqb1Z/2LFFRGwLg4EuOCe6t52dIFJYrWE7iAqY3/sU9EmwDQqIVoLbxX5NKj1d1h6Q==}
+    hasBin: true
+    peerDependencies:
+      typescript: ^4.1
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      '@rollup/plugin-alias': 3.1.9_rollup@2.79.1
+      '@rollup/plugin-commonjs': 22.0.2_rollup@2.79.1
+      '@rollup/plugin-inject': 4.0.4_rollup@2.79.1
+      '@rollup/plugin-json': 4.1.0_rollup@2.79.1
+      '@rollup/plugin-node-resolve': 13.3.0_rollup@2.79.1
+      '@rollup/plugin-replace': 4.0.0_rollup@2.79.1
+      '@rollup/pluginutils': 4.2.1
+      esbuild: 0.15.18
+      magic-string: 0.26.7
+      rollup: 2.79.1
+      typescript: 4.9.4
     dev: true
 
   /pluralize/8.0.0:
