@@ -83,7 +83,7 @@
     "tsup": "^6.5.0",
     "tsx": "^3.12.1",
     "typescript": "^4.9.4",
-    "unbuild": "^0.7.6",
+    "unbuild": "^0.9.0",
     "vitest": "^0.25.8"
   },
   "simple-git-hooks": {
