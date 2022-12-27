@@ -5,7 +5,7 @@ importers:
   .:
     specifiers:
       '@antfu/eslint-config': ^0.34.0
-      '@antfu/ni': ^0.16.3
+      '@antfu/ni': ^0.18.0
       '@antfu/utils': ^0.7.0
       '@types/node': ^18.11.15
       bumpp: ^8.2.1
@@ -31,7 +31,7 @@ importers:
       ora: 6.1.2
     devDependencies:
       '@antfu/eslint-config': 0.34.0_ha6vam6werchizxrnqvarmz2zu
-      '@antfu/ni': 0.16.3
+      '@antfu/ni': 0.18.8
       '@antfu/utils': 0.7.2
       '@types/node': 18.11.15
       bumpp: 8.2.1
@@ -148,8 +148,8 @@ packages:
       - typescript
     dev: true
 
-  /@antfu/ni/0.16.3:
-    resolution: {integrity: sha512-/C1N/hORSJp1qJHr4oRqQzmWPqB6S42T4HV4dWhXOllPJkcqQA/L40U55Oc7Gq4Gm9pLeCNZn7YYU1kUK2Ekpg==}
+  /@antfu/ni/0.18.8:
+    resolution: {integrity: sha512-0m++AudwQq+wWAz/Ax7g+sh/wFW51HHQ6BtPLsuTAsFIzWB/bv/0COwZE7BRS+u0nqMb6Ks6nlk6cY1TpPDwHg==}
     hasBin: true
     dev: true
 
