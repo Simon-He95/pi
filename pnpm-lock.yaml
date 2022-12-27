@@ -12,7 +12,7 @@ importers:
       eslint: ^8.29.0
       esno: ^0.16.3
       fast-glob: ^3.2.12
-      lazy-js-utils: ^0.0.8
+      lazy-js-utils: ^0.0.10
       lint-staged: ^13.1.0
       ora: ^6.1.2
       picocolors: ^1.0.0
@@ -27,7 +27,7 @@ importers:
       vitest: ^0.25.8
     dependencies:
       fast-glob: 3.2.12
-      lazy-js-utils: 0.0.8
+      lazy-js-utils: 0.0.10
       ora: 6.1.2
     devDependencies:
       '@antfu/eslint-config': 0.25.2_ha6vam6werchizxrnqvarmz2zu
@@ -3288,8 +3288,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /lazy-js-utils/0.0.8:
-    resolution: {integrity: sha512-dvBBZxftx3NnhzTnW/8/aSh7mON/swuTNHBiut6mNBPw17KVdA3mkSlnKdZkYV43KO90olgGY9H7XsHpr/WkaA==}
+  /lazy-js-utils/0.0.10:
+    resolution: {integrity: sha512-BnyM6ih/XP2hkT/kFgthdA6DGzx5pYS+ivtOcyhGP+iQP49CxNUOuiDNeoM1P2sf/i1qFQMlzMON1J6ekUOfqA==}
     dependencies:
       '@vueuse/core': 8.9.4_vue@3.2.45
       htmlparser2: 8.0.1
