@@ -63,7 +63,7 @@
   },
   "dependencies": {
     "fast-glob": "^3.2.12",
-    "lazy-js-utils": "^0.0.8",
+    "lazy-js-utils": "^0.0.10",
     "ora": "^6.1.2"
   },
   "devDependencies": {
