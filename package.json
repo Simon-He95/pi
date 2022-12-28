@@ -62,6 +62,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "build": "^0.1.4",
     "fast-glob": "^3.2.12",
     "lazy-js-utils": "^0.0.10",
     "ora": "^6.1.2"
