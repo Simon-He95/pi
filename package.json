@@ -1,8 +1,8 @@
 {
   "name": "@simon_he/pi",
   "type": "module",
-  "version": "0.0.19",
-  "packageManager": "pnpm@7.20.0",
+  "version": "0.0.20",
+  "packageManager": "pnpm@7.2.1",
   "description": "",
   "author": "Simon He",
   "license": "MIT",
