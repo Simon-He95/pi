@@ -23,8 +23,11 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
     ? `Failed to install ${pkg} 😭`
     : 'Failed to update dependency! 😭'
 
+  const newParams = await getParams(params)
   const loading_status = await loading(text)
-  const { status } = (await useNodeWorker(`${executor} ${params}`)) as IJsShell
+  const { status } = (await useNodeWorker(
+    `${executor} ${newParams}`,
+  )) as IJsShell
   if (status === 0)
     loading_status.succeed(successMsg)
   else loading_status.fail(failMsg)
@@ -188,6 +191,31 @@ function hasPkg() {
   return result === '0'
 }
 
+async function getParams(params: string) {
+  const DW = /-DW/
+  const W = /-W/
+  const Dw = /-Dw/
+  const w = /-w/
+  switch (getPkgTool()) {
+    case 'pnpm':
+      if (DW.test(params))
+        params = params.replace(DW, '-Dw')
+      else if (W.test(params))
+        params = params.replace(W, '-w')
+
+      return params
+    case 'yarn':
+      if (Dw.test(params))
+        params = params.replace(Dw, '-DW')
+      else if (W.test(params))
+        params = params.replace(w, '-W')
+
+      return params
+    default:
+      return params
+  }
+}
+
 export async function runner() {
   const cmd = process.argv[1]
   const last = cmd.lastIndexOf('/') + 1
@@ -279,7 +307,9 @@ export async function runner() {
   }
   const pkg = argv.filter(v => !v.startsWith('-')).join(' ')
   await installDeps()
-  runMap[exec](params, pkg)
+
+  // runMap[exec](params, pkg)
+  runMap.pi(params, pkg)
 }
 
 runner()
