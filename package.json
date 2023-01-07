@@ -35,6 +35,7 @@
   },
   "bin": {
     "pi": "./cli.mjs",
+    "pix": "./cli.mjs",
     "pa": "./cli.mjs",
     "pu": "./cli.mjs",
     "pci": "./cli.mjs",
