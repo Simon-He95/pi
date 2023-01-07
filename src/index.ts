@@ -34,6 +34,16 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
   process.exit()
 }
 
+// npx
+export async function pix(params: string) {
+  switch (getPkgTool()) {
+    case 'bun':
+      return jsShell(`bunx ${params}`)
+    default:
+      return jsShell(`npx ${params}`)
+  }
+}
+
 // package uninstall
 export async function pui(params: string[], pkg: string) {
   const text = `Uninstalling ${pkg} ...\n`
@@ -134,6 +144,7 @@ function returnVersion(argv: any[]) {
     --align left --width 50 --margin "1 2" --padding "1 1" \
     \'PI Commands:\'\
     \'~ pi: install package\'\
+    \'~ pix: npx package\'\
     \'~ pui: uninstall package\'\
     \'~ prun: run package script\'\
     \'~ pinit: package init\'\
@@ -150,6 +161,7 @@ function returnVersion(argv: any[]) {
 
 const runMap: Record<string, Function> = {
   pi,
+  pix,
   pa,
   pui,
   pu,
