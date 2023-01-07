@@ -5,7 +5,7 @@
 
 ## :lollipop: PI
 
-A smart package manager with a custom loading style, which makes you install dependencies more beautifully :)
+A smart package manager with a custom loading style, which makes you install dependencies more beautifully :), and can fuzzy match and find deep-level instructions
 
 ## :rocket: Smart package manager
 
