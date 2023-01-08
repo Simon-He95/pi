@@ -19,11 +19,11 @@
     ".": {
       "types": "./dist/index.d.ts",
       "require": "./dist/index.cjs",
-      "import": "./dist/index.mjs"
+      "import": "./dist/index.js"
     }
   },
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "typesVersions": {
     "*": {
@@ -64,9 +64,7 @@
   },
   "dependencies": {
     "build": "^0.1.4",
-    "fast-glob": "^3.2.12",
-    "lazy-js-utils": "^0.0.10",
-    "ora": "^6.1.2"
+    "fast-glob": "^3.2.12"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.34.0",
@@ -76,7 +74,9 @@
     "bumpp": "^8.2.1",
     "eslint": "^8.29.0",
     "esno": "^0.16.3",
+    "lazy-js-utils": "^0.0.16",
     "lint-staged": "^13.1.0",
+    "ora": "^6.1.2",
     "picocolors": "^1.0.0",
     "pnpm": "^7.18.2",
     "prettier": "^2.8.1",

@@ -1,163 +1,29 @@
-import path from 'path'
 import process from 'process'
-import { getPkgTool, jsShell, spaceFormat, useNodeWorker } from 'lazy-js-utils'
-import type { Color, Spinner } from 'ora'
-import ora from 'ora'
+import {
+  hasPkg,
+  isGo,
+  isRust,
+  jsShell,
+  spaceFormat,
+  useNodeWorker,
+} from 'lazy-js-utils'
 import fg from 'fast-glob'
-import { version } from '../package.json'
-
-interface IJsShell {
-  status: 0 | 1
-  result: string
-}
+import { loading } from './utils'
+import { help } from './help'
+import { installDeps } from './installDeps'
+import { pi } from './pi'
+import { pa } from './pa'
+import { pci } from './pci'
+import { pfind } from './pfind'
+import { pil } from './pil'
+import { pinit } from './pinit'
+import { pix } from './pix'
+import { prun } from './prun'
+import { pu } from './pu'
+import { pui } from './pui'
+import type { IJsShell } from './types'
 
 const rootPath = process.cwd()
-
-// package install
-export async function pi(params: string, pkg: string, executor = 'ni') {
-  const text = pkg ? `Installing ${pkg} ...\n` : 'Updating dependency ...\n'
-  const successMsg = pkg
-    ? `Installed ${pkg} successfully! 😊`
-    : 'Updated dependency successfully! 😊'
-  const failMsg = pkg
-    ? `Failed to install ${pkg} 😭`
-    : 'Failed to update dependency! 😭'
-
-  const newParams = await getParams(params)
-  const loading_status = await loading(text)
-  const { status } = (await useNodeWorker(
-    `${executor} ${newParams}`,
-  )) as IJsShell
-  if (status === 0)
-    loading_status.succeed(successMsg)
-  else loading_status.fail(failMsg)
-  process.exit()
-}
-
-// npx
-export async function pix(params: string) {
-  switch (getPkgTool()) {
-    case 'bun':
-      return jsShell(`bunx ${params}`)
-    default:
-      return jsShell(`npx ${params}`)
-  }
-}
-
-// package uninstall
-export async function pui(params: string[], pkg: string) {
-  const text = `Uninstalling ${pkg} ...\n`
-  const successMsg = `\nUnInstalled ${pkg} successfully! 😊`
-  const failMsg = `\nFailed to uninstall ${pkg} 😭`
-  if (!pkg) {
-    console.log('Need to specify an uninstall package name')
-    process.exit(1)
-  }
-  const loading_status = await loading(text)
-  const { status } = (await useNodeWorker(`nun ${params}`)) as IJsShell
-  if (status === 0)
-    loading_status.succeed(successMsg)
-  else loading_status.fail(failMsg)
-  process.exit()
-}
-
-// package run script
-export function prun(params: string) {
-  return jsShell(`ccommand ${params}`)
-}
-
-// workspace find script
-export function pfind(params: string) {
-  return jsShell(`ccommand find ${params}`)
-}
-
-export function pinit() {
-  console.log('Initializing project...')
-  switch (getPkgTool()) {
-    case 'npm':
-      jsShell('npm init -y')
-      return
-    case 'yarn':
-      jsShell('yarn init -y')
-      return
-    case 'pnpm':
-      jsShell('pnpm init -y')
-      return
-    default:
-      jsShell('npm init -y')
-  }
-}
-
-export function pil(params: string, pkg: string) {
-  const latestPkgname = spaceFormat(params, '@latest ')
-  return pi(latestPkgname, pkg ? spaceFormat(`${pkg} `, '@latest ').trim() : '')
-}
-
-export function pu() {
-  return jsShell('nu')
-}
-
-export function pci(params: string, pkg: string) {
-  return pi(params, pkg, 'nci')
-}
-
-export function pa() {
-  return jsShell('na')
-}
-
-async function getStyle() {
-  const { result: _color = 'yellow' } = await jsShell('echo $PI_COLOR', 'pipe')
-  const color = _color as Color
-  const { result: _spinner = 'star' } = await jsShell(
-    'echo $PI_SPINNER',
-    'pipe',
-  )
-  const spinner = _spinner as unknown as Spinner
-  return { color, spinner }
-}
-
-async function installDeps() {
-  const { status: hasGum } = jsShell('gum -v', 'pipe')
-  if (hasGum === 1)
-    await jsShell('brew install gum', 'pipe')
-  const { status: hasNi } = jsShell('ni -v', 'pipe')
-  if (hasNi === 1)
-    await jsShell('npm i -g @antfu/ni', 'pipe')
-  const { status: hasCcommand } = jsShell('ccommand -v', 'pipe')
-  if (hasCcommand === 1)
-    await jsShell('npm i -g ccommand', 'pipe')
-}
-
-function returnVersion(argv: any[]) {
-  const arg = argv[0]
-  if (arg === '-v' || arg === '--version') {
-    jsShell(`gum style \
-    --foreground 212 --border-foreground 212 --border double \
-    --align center --width 50 --margin "1 2" --padding "2 4" \
-    'pi version:${version}' 'Please give me a 🌟 for my efforts'`)
-    process.exit(0)
-  }
-  else if (arg === '-h' || arg === '--help') {
-    jsShell(
-      'gum style \
-    --foreground 212 --border-foreground 212 --border double \
-    --align left --width 50 --margin "1 2" --padding "1 1" \
-    \'PI Commands:\'\
-    \'~ pi: install package\'\
-    \'~ pix: npx package\'\
-    \'~ pui: uninstall package\'\
-    \'~ prun: run package script\'\
-    \'~ pinit: package init\'\
-    \'~ pbuild: go build | cargo build\' \
-    \'~ pfind: find monorepo of yarn or pnpm\'\
-    \'~ pa: agent alias\'\
-    \'~ pu: package upgrade\'\
-    \'~ pci: package clean install\'\
-    \'~ pil: package latest install\'',
-    )
-    process.exit(0)
-  }
-}
 
 const runMap: Record<string, Function> = {
   pi,
@@ -172,70 +38,14 @@ const runMap: Record<string, Function> = {
   pfind,
 }
 
-function isGo() {
-  const url = path.resolve(rootPath, 'go.mod')
-  const { result } = jsShell(
-    `(test -f "main.go" || test -f "${url}") && echo "0"|| echo "1"`,
-    'pipe',
-  )
-  return result === '0'
-}
-
-function isRust() {
-  const url = path.resolve(rootPath, 'Cargo.toml')
-  const { result } = jsShell(`test -f "${url}" && echo "0"|| echo "1"`, 'pipe')
-  return result === '0'
-}
-
-async function loading(text: string) {
-  const { color, spinner } = await getStyle()
-  const result = ora({
-    text,
-    spinner,
-    color,
-  }).start()
-  return result
-}
-
-function hasPkg() {
-  const url = path.resolve(rootPath, 'package.json')
-  const { result } = jsShell(`test -f "${url}" && echo "0"|| echo "1"`, 'pipe')
-  return result === '0'
-}
-
-async function getParams(params: string) {
-  const DW = /-DW/
-  const W = /-W/
-  const Dw = /-Dw/
-  const w = /-w/
-  switch (getPkgTool()) {
-    case 'pnpm':
-      if (DW.test(params))
-        params = params.replace(DW, '-Dw')
-      else if (W.test(params))
-        params = params.replace(W, '-w')
-
-      return params
-    case 'yarn':
-      if (Dw.test(params))
-        params = params.replace(Dw, '-DW')
-      else if (W.test(params))
-        params = params.replace(w, '-W')
-
-      return params
-    default:
-      return params
-  }
-}
-
-export async function runner() {
+export async function setup() {
   const cmd = process.argv[1]
   const last = cmd.lastIndexOf('/') + 1
   const exec = cmd.slice(last, cmd.length)
   const argv: string[] = process.argv.slice(2)
-  returnVersion(argv)
+  help(argv)
   const params = spaceFormat(argv.join(' ')).trim()
-  if (!hasPkg()) {
+  if (!hasPkg(rootPath)) {
     if (isGo()) {
       if (exec === 'pi') {
         const loading_status = await loading(`Installing ${params} ...\n`)
@@ -323,4 +133,4 @@ export async function runner() {
   runMap[exec](params, pkg)
 }
 
-runner()
+setup()
