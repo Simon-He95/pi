@@ -13,11 +13,11 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
 
   const newParams = await getParams(params)
   const loading_status = await loading(text)
-  const { status } = (await useNodeWorker(
+  const { status, result } = (await useNodeWorker(
     `${executor} ${newParams}`,
   )) as IJsShell
   if (status === 0)
     loading_status.succeed(successMsg)
-  else loading_status.fail(failMsg)
+  else loading_status.fail(result || failMsg)
   process.exit()
 }
