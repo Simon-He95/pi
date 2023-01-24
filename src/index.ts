@@ -21,7 +21,6 @@ import { pix } from './pix'
 import { prun } from './prun'
 import { pu } from './pu'
 import { pui } from './pui'
-import type { IJsShell } from './types'
 
 const rootPath = process.cwd()
 
@@ -49,16 +48,14 @@ export async function setup() {
     if (isGo()) {
       if (exec === 'pi') {
         const loading_status = await loading(`Installing ${params} ...\n`)
-        const { status } = (await useNodeWorker(`go get ${params}`)) as IJsShell
+        const { status } = await useNodeWorker(`go get ${params}`)
         if (status === 0)
           loading_status.succeed('Installed successfully! 😊')
         else loading_status.fail('Failed to install 😭')
       }
       else if (exec === 'pui') {
         const loading_status = await loading(`Uninstalling ${params} ...\n`)
-        const { status } = (await useNodeWorker(
-          `go clean ${params}`,
-        )) as IJsShell
+        const { status } = await useNodeWorker(`go clean ${params}`)
         if (status === 0)
           loading_status.succeed('Uninstalled successfully! 😊')
         else loading_status.fail('Failed to uninstall 😭')
@@ -90,18 +87,14 @@ export async function setup() {
     if (isRust()) {
       if (exec === 'pi') {
         const loading_status = await loading(`Installing ${params} ...\n`)
-        const { status } = (await useNodeWorker(
-          `cargo install ${params}`,
-        )) as IJsShell
+        const { status } = await useNodeWorker(`cargo install ${params}`)
         if (status === 0)
           loading_status.succeed('Installed successfully! 😊')
         else loading_status.fail('Failed to install 😭')
       }
       else if (exec === 'pui') {
         const loading_status = await loading(`Uninstalling ${params} ...\n`)
-        const { status } = (await useNodeWorker(
-          `cargo uninstall ${params}`,
-        )) as IJsShell
+        const { status } = await useNodeWorker(`cargo uninstall ${params}`)
         if (status === 0)
           loading_status.succeed('Uninstalled successfully! 😊')
         else loading_status.fail('Failed to uninstall 😭')

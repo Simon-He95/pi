@@ -1,6 +1,6 @@
+import process from 'process'
 import { useNodeWorker } from 'lazy-js-utils'
 import { getParams, loading } from './utils'
-import type { IJsShell } from './types'
 // package install
 export async function pi(params: string, pkg: string, executor = 'ni') {
   const text = pkg ? `Installing ${pkg} ...\n` : 'Updating dependency ...\n'
@@ -13,11 +13,10 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
 
   const newParams = await getParams(params)
   const loading_status = await loading(text)
-  const { status, result } = (await useNodeWorker(
-    `${executor} ${newParams}`,
-  )) as IJsShell
+  const { status, result } = await useNodeWorker(`${executor} ${newParams}`)
   if (status === 0)
     loading_status.succeed(successMsg)
-  else loading_status.fail(result || failMsg)
+  else loading_status.fail(`${result}\n\n${failMsg}`)
+
   process.exit()
 }
