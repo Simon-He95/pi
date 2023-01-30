@@ -21,6 +21,7 @@ import { pix } from './pix'
 import { prun } from './prun'
 import { pu } from './pu'
 import { pui } from './pui'
+import { pio } from './pio'
 
 const rootPath = process.cwd()
 
@@ -35,6 +36,7 @@ const runMap: Record<string, Function> = {
   prun,
   pinit,
   pfind,
+  pio,
 }
 
 export async function setup() {
