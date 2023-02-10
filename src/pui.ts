@@ -1,6 +1,7 @@
 import { useNodeWorker } from 'lazy-js-utils'
+import color from 'picocolors'
 import { loading } from './utils'
-import type { IJsShell } from './types'
+
 // package uninstall
 export async function pui(params: string[], pkg: string) {
   const text = `Uninstalling ${pkg} ...\n`
@@ -11,9 +12,9 @@ export async function pui(params: string[], pkg: string) {
     process.exit(1)
   }
   const loading_status = await loading(text)
-  const { status } = (await useNodeWorker(`nun ${params}`)) as IJsShell
+  const { status } = await useNodeWorker(`nun ${params}`)
   if (status === 0)
-    loading_status.succeed(successMsg)
-  else loading_status.fail(failMsg)
+    loading_status.succeed(color.green(successMsg))
+  else loading_status.fail(color.red(failMsg))
   process.exit()
 }

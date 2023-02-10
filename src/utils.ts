@@ -32,6 +32,7 @@ export async function loading(text: string) {
     text,
     spinner,
     color,
+    discardStdin: true,
   }).start()
   return result
 }

@@ -7,6 +7,7 @@ import {
   spaceFormat,
   useNodeWorker,
 } from 'lazy-js-utils'
+import color from 'picocolors'
 import fg from 'fast-glob'
 import { loading } from './utils'
 import { help } from './help'
@@ -52,15 +53,15 @@ export async function setup() {
         const loading_status = await loading(`Installing ${params} ...\n`)
         const { status } = await useNodeWorker(`go get ${params}`)
         if (status === 0)
-          loading_status.succeed('Installed successfully! 😊')
-        else loading_status.fail('Failed to install 😭')
+          loading_status.succeed(color.green('Installed successfully! 😊'))
+        else loading_status.fail(color.red('Failed to install 😭'))
       }
       else if (exec === 'pui') {
         const loading_status = await loading(`Uninstalling ${params} ...\n`)
         const { status } = await useNodeWorker(`go clean ${params}`)
         if (status === 0)
-          loading_status.succeed('Uninstalled successfully! 😊')
-        else loading_status.fail('Failed to uninstall 😭')
+          loading_status.succeed(color.green('Uninstalled successfully! 😊'))
+        else loading_status.fail(color.red('Failed to uninstall 😭'))
       }
       else if (exec === 'prun') {
         const match = params
@@ -70,7 +71,7 @@ export async function setup() {
           : 'main.go'
         const target = (await fg(match))[0]
         if (!target) {
-          console.log('No such file')
+          console.log(color.red('No such file'))
           process.exit(1)
         }
         jsShell(`go run ${target}`)
@@ -82,7 +83,7 @@ export async function setup() {
         jsShell(`go build ${params}`)
       }
       else {
-        console.log('The commands is not supported')
+        console.log(color.red('The commands is not supported'))
       }
       process.exit()
     }
@@ -91,15 +92,15 @@ export async function setup() {
         const loading_status = await loading(`Installing ${params} ...\n`)
         const { status } = await useNodeWorker(`cargo install ${params}`)
         if (status === 0)
-          loading_status.succeed('Installed successfully! 😊')
-        else loading_status.fail('Failed to install 😭')
+          loading_status.succeed(color.green('Installed successfully! 😊'))
+        else loading_status.fail(color.red('Failed to install 😭'))
       }
       else if (exec === 'pui') {
         const loading_status = await loading(`Uninstalling ${params} ...\n`)
         const { status } = await useNodeWorker(`cargo uninstall ${params}`)
         if (status === 0)
-          loading_status.succeed('Uninstalled successfully! 😊')
-        else loading_status.fail('Failed to uninstall 😭')
+          loading_status.succeed(color.green('Uninstalled successfully! 😊'))
+        else loading_status.fail(color.red('Failed to uninstall 😭'))
       }
       else if (exec === 'prun') {
         jsShell(`cargo run ${params}`)
@@ -111,13 +112,15 @@ export async function setup() {
         jsShell(`cargo build ${params}`)
       }
       else {
-        console.log('The commands is not supported')
+        console.log(color.red('The commands is not supported'))
       }
       process.exit()
     }
     if (!runMap[exec]) {
       console.log(
-        'The command does not exist, please execute pi -h to view the help',
+        color.yellow(
+          'The command does not exist, please execute pi -h to view the help',
+        ),
       )
       return
     }
