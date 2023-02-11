@@ -1,4 +1,4 @@
-import { getPkgTool, jsShell } from 'lazy-js-utils'
+import { getPkg, getPkgTool, isFile, jsShell } from 'lazy-js-utils'
 import ora from 'ora'
 import type { Color, Spinner } from 'ora'
 
@@ -6,9 +6,15 @@ const DW = /-DW/
 const W = /-W/
 const Dw = /-Dw/
 const w = /-w/
+const D = /-D\s*$/
+const d = /-d\s*$/
+
 export async function getParams(params: string) {
   switch (getPkgTool()) {
     case 'pnpm':
+      if (isFile('./pnpm-workspace.yaml') && d.test(params))
+        return params.replace(D, '-Dw')
+
       if (DW.test(params))
         params = params.replace(DW, '-Dw')
       else if (W.test(params))
@@ -16,6 +22,9 @@ export async function getParams(params: string) {
 
       return params
     case 'yarn':
+      if ((await getPkg())?.workspaces)
+        return params.replace(d, '-DW')
+
       if (Dw.test(params))
         params = params.replace(Dw, '-DW')
       else if (W.test(params))
