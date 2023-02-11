@@ -21,7 +21,8 @@ export async function pio(params: string, pkg: string, executor = 'ni') {
   const loading_status = await loading('')
   if (status === 0)
     loading_status.succeed(color.green(successMsg))
-  else loading_status.fail(color.red(`${result}\n\n${failMsg}`))
+  else
+    loading_status.fail(color.red(result ? `${result}\n\n${failMsg}` : failMsg))
 
   process.exit()
 }

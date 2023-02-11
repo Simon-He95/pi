@@ -21,9 +21,14 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
   })
   const loading_status = await loading('')
 
-  if (status === 0)
+  if (status === 0) {
     loading_status.succeed(colors.green(successMsg))
-  else loading_status.fail(colors.red(`${result}\n\n${failMsg}`))
+  }
+  else {
+    loading_status.fail(
+      colors.red(result ? `${result}\n\n${failMsg}` : failMsg),
+    )
+  }
 
   process.exit()
 }
