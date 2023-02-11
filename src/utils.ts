@@ -12,7 +12,7 @@ const d = /-d\s*$/
 export async function getParams(params: string) {
   switch (getPkgTool()) {
     case 'pnpm':
-      if (isFile('./pnpm-workspace.yaml') && d.test(params))
+      if (isFile('./pnpm-workspace.yaml') && D.test(params))
         return params.replace(D, '-Dw')
 
       if (DW.test(params))
