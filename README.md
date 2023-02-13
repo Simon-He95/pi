@@ -102,6 +102,7 @@ You can configure the loading style in .zshrc, as follows：
 ```
 export PI_COLOR=red # loadingstyle color
 export PI_SPINNER=star # loadingstyle
+export PI_DEFAULT=pnpm # If the current project does not set the installed package manager, you can set the default installation here
 ```
 
 - 70+ types of styles, from [cli-spinners](https://jsfiddle.net/sindresorhus/2eLtsbey/embedded/result/)，You can choose to fill in the name in PI_SPINNER.
@@ -116,7 +117,5 @@ export PI_SPINNER=star # loadingstyle
 ## License
 
 [MIT](./LICENSE) License © 2022 [Simon He](https://github.com/Simon-He95)
-
-## :coffee:
 
 <a href="https://github.com/Simon-He95/sponsor" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" style="height: 51px !important;width: 217px !important;" ></a>

@@ -100,6 +100,7 @@ workspace of pnpm ｜ yarn
 ```
 export PI_COLOR=red # loading样式颜色
 export PI_SPINNER=star # loading样式
+export PI_DEFAULT=pnpm # 如果当前项目并没有设置安装的包管理器可以在这里设置默认的安装
 ```
 
 - 样式的种类 70+，来源于[cli-spinners](https://jsfiddle.net/sindresorhus/2eLtsbey/embedded/result/)，可自行选择将名字填入 PI_SPINNER 中。
@@ -114,7 +115,5 @@ export PI_SPINNER=star # loading样式
 ## License
 
 [MIT](./LICENSE) License © 2022 [Simon He](https://github.com/Simon-He95)
-
-## :coffee:
 
 <a href="https://github.com/Simon-He95/sponsor" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" style="height: 51px !important;width: 217px !important;" ></a>
