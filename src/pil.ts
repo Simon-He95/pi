@@ -4,7 +4,14 @@ import { getParams } from './utils'
 // install @latest
 export async function pil(params: string, pkg: string) {
   const latestPkgname = spaceFormat(params, '@latest ')
-  const newParams = await getParams(latestPkgname)
-
-  return pi(newParams, pkg ? spaceFormat(`${pkg} `, '@latest ').trim() : '')
+  let suffix = ''
+  const reg = /(-[dDwW]+)/g
+  ;(await getParams(latestPkgname)).replace(reg, (v, k) => {
+    suffix += ` ${k}`
+    return v.replace(k, '')
+  })
+  const command = pkg
+    ? spaceFormat(`${pkg} `, '@latest ').trim() + suffix
+    : `${suffix}`
+  return pi(command, command)
 }
