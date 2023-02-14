@@ -5,6 +5,7 @@ import { getParams } from './utils'
 export async function pil(params: string, pkg: string) {
   const latestPkgname = spaceFormat(params, '@latest ')
   const newParams = await getParams(latestPkgname)
+  console.log(newParams)
 
   return pi(newParams, pkg ? spaceFormat(`${pkg} `, '@latest ').trim() : '')
 }

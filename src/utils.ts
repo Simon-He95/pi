@@ -12,8 +12,12 @@ const d = /-d\s*$/
 export async function getParams(params: string) {
   switch (getPkgTool()) {
     case 'pnpm':
-      if (isFile('./pnpm-workspace.yaml') && D.test(params))
-        return params.replace(D, '-Dw')
+      if (isFile('./pnpm-workspace.yaml')) {
+        if (D.test(params))
+          return params.replace(D, '-Dw')
+        if (d.test(params))
+          return params.replace(d, '-Dw')
+      }
 
       if (DW.test(params))
         params = params.replace(DW, '-Dw')
@@ -22,8 +26,12 @@ export async function getParams(params: string) {
 
       return params
     case 'yarn':
-      if ((await getPkg())?.workspaces)
-        return params.replace(d, '-DW')
+      if ((await getPkg())?.workspaces) {
+        if (D.test(params))
+          return params.replace(D, '-DW')
+        if (d.test(params))
+          return params.replace(d, '-DW')
+      }
 
       if (Dw.test(params))
         params = params.replace(Dw, '-DW')
