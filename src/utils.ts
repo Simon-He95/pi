@@ -17,6 +17,7 @@ export async function getParams(params: string) {
           return params.replace(D, '-Dw')
         if (d.test(params))
           return params.replace(d, '-Dw')
+        return `${params} -w`
       }
 
       if (DW.test(params))
@@ -31,6 +32,7 @@ export async function getParams(params: string) {
           return params.replace(D, '-DW')
         if (d.test(params))
           return params.replace(d, '-DW')
+        return `${params} -W`
       }
 
       if (Dw.test(params))
