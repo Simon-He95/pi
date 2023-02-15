@@ -14,6 +14,7 @@ A smart package manager with a custom loading style, which makes you install dep
 - Support npm dependency installation, uninstallation and execution
 - Support pnpm dependency installation, uninstallation and execution
 - Support yarn dependency installation, uninstallation and execution
+- Automatically handle the difference between yarn and pnpm w and W according to the current directory and environment and will repair the monorepo installation
 
 ## Demo
 
