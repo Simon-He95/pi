@@ -1,17 +1,29 @@
+import path from 'path'
 import { getPkg, getPkgTool, isFile, jsShell } from 'lazy-js-utils'
 import ora from 'ora'
 import type { Color, Spinner } from 'ora'
 
-const DW = /-DW/
-const W = /-W/
-const Dw = /-Dw/
-const w = /-w/
+const DW = /-DW\s*$/
+const W = /-W\s*$/
+const Dw = /-Dw\s*$/
+const w = /-w\s*$/
 const D = /-D\s*$/
 const d = /-d\s*$/
 
 export async function getParams(params: string) {
+  const root = process.cwd()
   switch (getPkgTool()) {
     case 'pnpm':
+      if (!isFile(path.resolve(root, './pnpm-workspace.yaml'))) {
+        if (DW.test(params))
+          return params.replace(DW, '-D')
+        if (Dw.test(params))
+          return params.replace(Dw, '-D')
+        if (W.test(params))
+          return params.replace(W, '')
+        if (w.test(params))
+          return params.replace(w, '')
+      }
       if (isFile('./pnpm-workspace.yaml')) {
         if (D.test(params))
           return params.replace(D, '-Dw')
@@ -21,12 +33,23 @@ export async function getParams(params: string) {
       }
 
       if (DW.test(params))
-        params = params.replace(DW, '-Dw')
-      else if (W.test(params))
-        params = params.replace(W, '-w')
+        return params.replace(DW, '-Dw')
+      if (W.test(params))
+        return params.replace(W, '-w')
 
       return params
     case 'yarn':
+      if (!(await getPkg(path.resolve(root, './package.json')))?.workspaces) {
+        if (Dw.test(params))
+          return params.replace(Dw, '-D')
+        if (DW.test(params))
+          return params.replace(DW, '-D')
+        if (W.test(params))
+          return params.replace(W, '')
+        if (w.test(params))
+          return params.replace(w, '')
+      }
+
       if ((await getPkg())?.workspaces) {
         if (D.test(params))
           return params.replace(D, '-DW')
@@ -36,9 +59,9 @@ export async function getParams(params: string) {
       }
 
       if (Dw.test(params))
-        params = params.replace(Dw, '-DW')
-      else if (W.test(params))
-        params = params.replace(w, '-W')
+        return params.replace(Dw, '-DW')
+      if (W.test(params))
+        return params.replace(w, '-W')
       return params
     default:
       return params
