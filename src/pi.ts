@@ -17,17 +17,19 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
   let stdio: any = 'pipe'
   let loading_status: any
   const { result: PI_DEFAULT } = await jsShell('echo $PI_DEFAULT', 'pipe')
-  if (!PI_DEFAULT && (await getPkgTool()) === 'npm') {
-    stdio = 'inherit'
-  }
-  else {
+  const pkgTool = await getPkgTool()
+  if (pkgTool === 'npm') {
     if (PI_DEFAULT)
       executor = `${PI_DEFAULT} install`
+    else stdio = 'inherit'
+  }
+  else {
+    executor = pkgTool
     loading_status = await loading(text)
   }
 
   const { status, result } = await useNodeWorker({
-    params: `${executor} ${newParams}`,
+    params: `${executor}${newParams ? ` ${newParams}` : ''}`,
     stdio,
   })
   if (stdio === 'inherit')
