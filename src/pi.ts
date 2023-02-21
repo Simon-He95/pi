@@ -19,9 +19,13 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
   const { result: PI_DEFAULT } = await jsShell('echo $PI_DEFAULT', 'pipe')
   const pkgTool = await getPkgTool()
   if (pkgTool === 'npm') {
-    if (PI_DEFAULT)
+    if (PI_DEFAULT) {
       executor = `${PI_DEFAULT} install`
-    else stdio = 'inherit'
+      loading_status = await loading(text)
+    }
+    else {
+      stdio = 'inherit'
+    }
   }
   else {
     executor = `${pkgTool} install`
@@ -32,6 +36,7 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
     params: `${executor}${newParams ? ` ${newParams}` : ''}`,
     stdio,
   })
+
   if (stdio === 'inherit')
     loading_status = await loading('')
 
