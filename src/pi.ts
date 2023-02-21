@@ -24,7 +24,7 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
     else stdio = 'inherit'
   }
   else {
-    executor = pkgTool
+    executor = `${pkgTool} install`
     loading_status = await loading(text)
   }
 
