@@ -12,7 +12,7 @@ const d = /-d\s*$/
 
 export async function getParams(params: string) {
   const root = process.cwd()
-  switch (getPkgTool()) {
+  switch (await getPkgTool()) {
     case 'pnpm':
       if (!isFile(path.resolve(root, './pnpm-workspace.yaml'))) {
         if (DW.test(params))
@@ -30,6 +30,8 @@ export async function getParams(params: string) {
         if (d.test(params))
           return params.replace(d, '-Dw')
         if (!params)
+          return params
+        if (w.test(params))
           return params
         return `${params} -w`
       }
@@ -58,6 +60,8 @@ export async function getParams(params: string) {
         if (d.test(params))
           return params.replace(d, '-DW')
         if (!params)
+          return params
+        if (W.test(params))
           return params
         return `${params} -W`
       }
