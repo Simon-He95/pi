@@ -49,5 +49,15 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
     )
   }
 
+  if (result) {
+    // 当前workspace 版本需要自动升级
+    const reg = / No matching version found for ([\w\-\_@\^.]+)/
+    const match = result.match(reg)
+    if (match) {
+      const dep = match[1]
+      jsShell(`pi ${dep}`)
+    }
+  }
+
   process.exit()
 }
