@@ -1,8 +1,8 @@
 import { getPkgTool, jsShell } from 'lazy-js-utils'
 // package init
-export function pinit() {
+export async function pinit() {
   console.log('Initializing project...')
-  switch (getPkgTool()) {
+  switch (await getPkgTool()) {
     case 'npm':
       jsShell('npm init -y')
       return

@@ -18,9 +18,11 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
   let loading_status: any
   const { result: PI_DEFAULT } = await jsShell('echo $PI_DEFAULT', 'pipe')
   const pkgTool = await getPkgTool()
+  const install
+    = PI_DEFAULT === 'yarn' || pkgTool === 'yarn' ? 'add' : 'install'
   if (pkgTool === 'npm') {
     if (PI_DEFAULT) {
-      executor = `${PI_DEFAULT} install`
+      executor = `${PI_DEFAULT} ${install}`
       loading_status = await loading(text)
     }
     else {
@@ -28,7 +30,7 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
     }
   }
   else {
-    executor = `${pkgTool} install`
+    executor = `${pkgTool} ${install}`
     loading_status = await loading(text)
   }
 
