@@ -12,12 +12,22 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
   const failMsg = pkg
     ? `Failed to install ${pkg} 😭`
     : 'Failed to update dependency! 😭'
+  let newParams
+  try {
+    newParams = await getParams(params)
+  }
+  catch (e) {
+    console.log(
+      colors.red(`package.json has not been found in ${process.cwd()}`),
+    )
+    return
+  }
 
-  const newParams = await getParams(params)
   let stdio: any = 'pipe'
   let loading_status: any
   const { result: PI_DEFAULT } = await jsShell('echo $PI_DEFAULT', 'pipe')
   const pkgTool = await getPkgTool()
+
   const install
     = PI_DEFAULT === 'yarn' || pkgTool === 'yarn'
       ? newParams
