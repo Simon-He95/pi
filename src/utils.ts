@@ -78,22 +78,16 @@ export async function getParams(params: string) {
 
 export async function loading(text: string) {
   const { color, spinner } = await getStyle()
-  const result = ora({
+  return ora({
     text,
     spinner,
     color,
     discardStdin: true,
   }).start()
-  return result
 }
 
 export async function getStyle() {
-  const { result: _color = 'yellow' } = await jsShell('echo $PI_COLOR', 'pipe')
-  const color = _color as Color
-  const { result: _spinner = 'star' } = await jsShell(
-    'echo $PI_SPINNER',
-    'pipe',
-  )
-  const spinner = _spinner as unknown as Spinner
-  return { color, spinner }
+  const { result: color = 'yellow' } = await jsShell('echo $PI_COLOR', 'pipe')
+  const { result: spinner = 'star' } = await jsShell('echo $PI_SPINNER', 'pipe')
+  return { color, spinner } as unknown as { color: Color; spinner: Spinner }
 }

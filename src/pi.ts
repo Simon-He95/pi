@@ -5,7 +5,7 @@ import { getParams, loading } from './utils'
 
 // package install
 export async function pi(params: string, pkg: string, executor = 'ni') {
-  const text = pkg ? `Installing ${pkg} ...\n` : 'Updating dependency ...\n'
+  const text = pkg ? `Installing ${pkg} ...` : 'Updating dependency ...'
   const successMsg = pkg
     ? `Installed ${pkg} successfully! 😊`
     : 'Updated dependency successfully! 😊'
