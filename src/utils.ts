@@ -87,7 +87,12 @@ export async function loading(text: string) {
 }
 
 export async function getStyle() {
-  const { result: color = 'yellow' } = await jsShell('echo $PI_COLOR', 'pipe')
-  const { result: spinner = 'star' } = await jsShell('echo $PI_SPINNER', 'pipe')
-  return { color, spinner } as unknown as { color: Color; spinner: Spinner }
+  const [{ result: color }, { result: spinner }] = await Promise.all([
+    jsShell('echo $PI_COLOR', 'pipe'),
+    jsShell('echo $PI_SPINNER', 'pipe'),
+  ])
+  return {
+    color: color || 'yellow',
+    spinner: spinner || 'star',
+  } as unknown as { color: Color; spinner: Spinner }
 }

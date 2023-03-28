@@ -25,15 +25,22 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
 
   let stdio: any = 'pipe'
   let loading_status: any
-  const { result: PI_DEFAULT } = await jsShell('echo $PI_DEFAULT', 'pipe')
-  const pkgTool = await getPkgTool()
+  const [{ result: PI_DEFAULT }, { result: sockets }, pkgTool]
+    = await Promise.all([
+      jsShell('echo $PI_DEFAULT', 'pipe'),
+      jsShell('echo $PI_MaxSockets', 'pipe'),
+      getPkgTool(),
+    ])
 
+  // 开启并发下载值
+  const maxSockets = sockets || 4
   const install
     = PI_DEFAULT === 'yarn' || pkgTool === 'yarn'
       ? newParams
         ? 'add'
         : ''
       : 'install'
+
   if (pkgTool === 'npm') {
     if (PI_DEFAULT) {
       executor = `${PI_DEFAULT} ${install}`
@@ -48,8 +55,15 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
     loading_status = await loading(text)
   }
 
+  const runSockets
+    = pkgTool === 'npm'
+      ? ` --max-sockets=${maxSockets}`
+      : pkgTool === 'yarn'
+        ? ` --mutex network --network-concurrency ${maxSockets}`
+        : ''
+
   const { status, result } = await useNodeWorker({
-    params: `${executor}${newParams ? ` ${newParams}` : ''}`,
+    params: `${executor}${newParams ? ` ${newParams}` : runSockets}`,
     stdio,
   })
 
