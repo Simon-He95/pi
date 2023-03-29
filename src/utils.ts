@@ -1,5 +1,5 @@
 import path from 'path'
-import { getPkg, getPkgTool, isFile, jsShell } from 'lazy-js-utils'
+import { getPkg, getPkgTool, isFile } from 'lazy-js-utils'
 import ora from 'ora'
 import type { Color, Spinner } from 'ora'
 
@@ -87,12 +87,10 @@ export async function loading(text: string) {
 }
 
 export async function getStyle() {
-  const [{ result: color }, { result: spinner }] = await Promise.all([
-    jsShell('echo $PI_COLOR', 'pipe'),
-    jsShell('echo $PI_SPINNER', 'pipe'),
-  ])
+  const { PI_COLOR: color = 'yellow', PI_SPINNER: spinner = 'star' }
+    = process.env
   return {
-    color: color || 'yellow',
-    spinner: spinner || 'star',
+    color,
+    spinner,
   } as unknown as { color: Color; spinner: Spinner }
 }

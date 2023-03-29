@@ -25,12 +25,8 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
 
   let stdio: any = 'pipe'
   let loading_status: any
-  const [{ result: PI_DEFAULT }, { result: sockets }, pkgTool]
-    = await Promise.all([
-      jsShell('echo $PI_DEFAULT', 'pipe'),
-      jsShell('echo $PI_MaxSockets', 'pipe'),
-      getPkgTool(),
-    ])
+  const { PI_DEFAULT, PI_MaxSockets: sockets } = process.env
+  const pkgTool = await getPkgTool()
 
   // 开启并发下载值
   const maxSockets = sockets || 4
