@@ -52,7 +52,7 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
   }
 
   const runSockets
-    = pkgTool === 'npm'
+    = executor.split(' ')[0] === 'npm'
       ? ` --max-sockets=${maxSockets}`
       : pkgTool === 'yarn'
         ? ` --mutex network --network-concurrency ${maxSockets}`
