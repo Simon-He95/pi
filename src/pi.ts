@@ -27,7 +27,6 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
   let loading_status: any
   const { PI_DEFAULT, PI_MaxSockets: sockets } = process.env
   const pkgTool = await getPkgTool()
-
   // 开启并发下载值
   const maxSockets = sockets || 4
   const install
