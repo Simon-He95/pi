@@ -12,17 +12,7 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
   const failMsg = pkg
     ? `Failed to install ${pkg} 😭`
     : 'Failed to update dependency! 😭'
-  let newParams
-  try {
-    newParams = await getParams(params)
-  }
-  catch (e) {
-    console.log(
-      colors.red(`package.json has not been found in ${process.cwd()}`),
-    )
-    return
-  }
-
+  const newParams = executor === 'pil' ? params : await getParams(params)
   let stdio: any = 'pipe'
   let loading_status: any
   const { PI_DEFAULT, PI_MaxSockets: sockets } = process.env
@@ -56,7 +46,6 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
       : pkgTool === 'yarn'
         ? ` --mutex network --network-concurrency ${maxSockets}`
         : ''
-
   const { status, result } = await useNodeWorker({
     params: `${executor}${newParams ? ` ${newParams}` : runSockets}`,
     stdio,
