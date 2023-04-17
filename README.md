@@ -114,6 +114,7 @@ export PI_DEFAULT=pnpm # If the current project does not set the installed packa
 - [@antfu/ni](https://github.com/antfu/ni)
 - [ora](https://github.com/sindresorhus/ora)
 - [ccommand](https://github.com/Simon-He95/ccommand)
+- [cargo](https://github.com/rust-lang/cargo)
 
 ## License
 
