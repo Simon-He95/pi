@@ -112,6 +112,7 @@ export PI_DEFAULT=pnpm # 如果当前项目并没有设置安装的包管理器�
 - [@antfu/ni](https://github.com/antfu/ni)
 - [ora](https://github.com/sindresorhus/ora)
 - [ccommand](https://github.com/Simon-He95/ccommand)
+- [cargo](https://github.com/rust-lang/cargo)
 
 ## License
 
