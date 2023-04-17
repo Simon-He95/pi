@@ -3,6 +3,7 @@ import {
   hasPkg,
   isGo,
   isRust,
+  isWin,
   jsShell,
   spaceFormat,
   useNodeWorker,
@@ -42,7 +43,7 @@ const runMap: Record<string, Function> = {
 
 export async function setup() {
   const cmd = process.argv[1]
-  const last = cmd.lastIndexOf('/') + 1
+  const last = cmd.lastIndexOf(isWin() ? '\\' : '/') + 1
   const exec = cmd.slice(last, cmd.length)
   const argv: string[] = process.argv.slice(2)
   help(argv)
