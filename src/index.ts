@@ -43,8 +43,14 @@ const runMap: Record<string, Function> = {
 
 export async function setup() {
   const cmd = process.argv[1]
-  const last = cmd.lastIndexOf(isWin() ? '\\' : '/') + 1
-  const exec = cmd.slice(last, cmd.length)
+  let exec = ''
+  if (isWin()) {
+    exec = cmd.split('\\').slice(-2, -1)[0]
+  }
+  else {
+    const last = cmd.lastIndexOf(isWin() ? '\\' : '/') + 1
+    exec = cmd.slice(last, cmd.length)
+  }
   const argv: string[] = process.argv.slice(2)
   help(argv)
   const params = spaceFormat(argv.join(' ')).trim()
