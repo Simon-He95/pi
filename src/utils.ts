@@ -10,6 +10,7 @@ const Dw = /\s-Dw/
 const w = /\s-w/
 const D = /\s-D(?!w)/
 const d = /\s-d(?!w)/
+const isZh = process.env.PI_Lang === 'zh'
 
 export async function getParams(params: string) {
   const root = process.cwd()
@@ -75,7 +76,13 @@ export async function getParams(params: string) {
   }
   catch (err) {
     console.log(
-      colors.red(`package.json has not been found in ${process.cwd()}`),
+      colors.red(
+        `${
+          isZh
+            ? 'package.json并不存在,在以下目录中:'
+            : 'package.json has not been found in'
+        } ${process.cwd()}`,
+      ),
     )
     process.exit(1)
   }

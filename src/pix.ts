@@ -2,7 +2,7 @@ import { getPkgTool, jsShell } from 'lazy-js-utils'
 
 // npx
 export async function pix(params: string) {
-  switch (getPkgTool()) {
+  switch (await getPkgTool()) {
     case 'bun':
       return jsShell(`bunx ${params}`)
     default:

@@ -40,6 +40,18 @@
 - others
   ![gif](/assets/others.gif)
 
+## :phone: Language
+
+```
+# 导出环境变量在你的bash或者zsh中
+
+# 中文
+export PI_Lang=zh
+
+# 英文
+export PI_Lang=en
+```
+
 ## :gear: 安装
 
 ```

@@ -40,6 +40,7 @@ const runMap: Record<string, Function> = {
   pfind,
   pio,
 }
+const isZh = process.env.PI_Lang === 'zh'
 
 export async function setup() {
   const cmd = process.argv[1]
@@ -58,18 +59,36 @@ export async function setup() {
   if (!hasPkg(rootPath)) {
     if (isGo()) {
       if (exec === 'pi') {
-        const loading_status = await loading(`Installing ${params} ...\n`)
+        const loading_status = await loading(
+          `${isZh ? '正在为您安装' : 'Installing'} ${params} ...\n`,
+        )
         const { status } = await useNodeWorker(`go get ${params}`)
-        if (status === 0)
-          loading_status.succeed(color.green('Installed successfully! 😊'))
-        else loading_status.fail(color.red('Failed to install 😭'))
+        if (status === 0) {
+          loading_status.succeed(
+            color.green(isZh ? '安装成功! 😊' : 'Installed successfully! 😊'),
+          )
+        }
+        else {
+          loading_status.fail(
+            color.red(isZh ? '安装失败 😭' : 'Failed to install 😭'),
+          )
+        }
       }
       else if (exec === 'pui') {
-        const loading_status = await loading(`Uninstalling ${params} ...\n`)
+        const loading_status = await loading(
+          `${isZh ? '正在为您卸载' : 'Uninstalling'} ${params} ...\n`,
+        )
         const { status } = await useNodeWorker(`go clean ${params}`)
-        if (status === 0)
-          loading_status.succeed(color.green('Uninstalled successfully! 😊'))
-        else loading_status.fail(color.red('Failed to uninstall 😭'))
+        if (status === 0) {
+          loading_status.succeed(
+            color.green(isZh ? '卸载成功! 😊' : 'Uninstalled successfully! 😊'),
+          )
+        }
+        else {
+          loading_status.fail(
+            color.red(isZh ? '卸载失败 😭' : 'Failed to uninstall 😭'),
+          )
+        }
       }
       else if (exec === 'prun') {
         const match = params
@@ -91,24 +110,46 @@ export async function setup() {
         jsShell(`go build ${params}`)
       }
       else {
-        console.log(color.red('The commands is not supported'))
+        console.log(
+          color.red(
+            isZh ? '当前指令还不支持' : 'The commands is not supported',
+          ),
+        )
       }
       process.exit()
     }
     if (isRust()) {
       if (exec === 'pi') {
-        const loading_status = await loading(`Installing ${params} ...\n`)
+        const loading_status = await loading(
+          `${isZh ? '正在为您安装' : 'Installing'} ${params} ...\n`,
+        )
         const { status } = await useNodeWorker(`cargo install ${params}`)
-        if (status === 0)
-          loading_status.succeed(color.green('Installed successfully! 😊'))
-        else loading_status.fail(color.red('Failed to install 😭'))
+        if (status === 0) {
+          loading_status.succeed(
+            color.green(isZh ? '安装成功! 😊' : 'Installed successfully! 😊'),
+          )
+        }
+        else {
+          loading_status.fail(
+            color.red(isZh ? '安装失败 😭' : 'Failed to install 😭'),
+          )
+        }
       }
       else if (exec === 'pui') {
-        const loading_status = await loading(`Uninstalling ${params} ...\n`)
+        const loading_status = await loading(
+          `${isZh ? '正在为您卸载' : 'Uninstalling'} ${params} ...\n`,
+        )
         const { status } = await useNodeWorker(`cargo uninstall ${params}`)
-        if (status === 0)
-          loading_status.succeed(color.green('Uninstalled successfully! 😊'))
-        else loading_status.fail(color.red('Failed to uninstall 😭'))
+        if (status === 0) {
+          loading_status.succeed(
+            color.green(isZh ? '卸载成功! 😊' : 'Uninstalled successfully! 😊'),
+          )
+        }
+        else {
+          loading_status.fail(
+            color.red(isZh ? '卸载失败 😭' : 'Failed to uninstall 😭'),
+          )
+        }
       }
       else if (exec === 'prun') {
         jsShell(`cargo run ${params}`)
@@ -120,14 +161,20 @@ export async function setup() {
         jsShell(`cargo build ${params}`)
       }
       else {
-        console.log(color.red('The commands is not supported'))
+        console.log(
+          color.red(
+            isZh ? '当前指令还不支持' : 'The commands is not supported',
+          ),
+        )
       }
       process.exit()
     }
     if (!runMap[exec]) {
       console.log(
         color.yellow(
-          'The command does not exist, please execute pi -h to view the help',
+          isZh
+            ? '命令不存在，请执行pi -h查看帮助'
+            : 'The command does not exist, please execute pi -h to view the help',
         ),
       )
       return

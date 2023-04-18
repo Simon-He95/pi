@@ -3,15 +3,25 @@ import { getPkgTool, jsShell, useNodeWorker } from 'lazy-js-utils'
 import colors from 'picocolors'
 import { getParams, loading } from './utils'
 
+const isZh = process.env.PI_Lang === 'zh'
+
 // package install
 export async function pi(params: string, pkg: string, executor = 'ni') {
   const text = pkg ? `Installing ${pkg} ...` : 'Updating dependency ...'
   const successMsg = pkg
-    ? `Installed ${pkg} successfully! 😊`
-    : 'Updated dependency successfully! 😊'
+    ? isZh
+      ? `${pkg}安装成功! 😊`
+      : `Installed ${pkg} successfully! 😊`
+    : isZh
+      ? '依赖更新成功! 😊'
+      : 'Updated dependency successfully! 😊'
   const failMsg = pkg
-    ? `Failed to install ${pkg} 😭`
-    : 'Failed to update dependency! 😭'
+    ? isZh
+      ? `${pkg}安装失败 😭`
+      : `Failed to install ${pkg} 😭`
+    : isZh
+      ? '依赖更新失败 😭'
+      : 'Failed to update dependency 😭'
   const newParams = executor === 'pil' ? params : await getParams(params)
   let stdio: any = 'pipe'
   let loading_status: any

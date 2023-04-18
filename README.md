@@ -40,6 +40,18 @@ A smart package manager with a custom loading style, which makes you install dep
 - others
   ![gif](/assets/others.gif)
 
+## :phone: Language
+
+```
+# Export environment variables in your bash or zsh
+
+# Chinese
+export PI_Lang=zh
+
+# English
+export PI_Lang=en
+```
+
 ## :gear: Install
 
 ```
