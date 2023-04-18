@@ -1,52 +1,53 @@
 lockfileVersion: 5.4
 
-specifiers:
-  '@antfu/eslint-config': ^0.34.0
-  '@antfu/ni': ^0.19.0
-  '@antfu/utils': ^0.7.0
-  '@types/node': ^18.11.15
-  build: ^0.1.4
-  bumpp: ^8.2.1
-  eslint: ^8.29.0
-  esno: ^0.16.3
-  fast-glob: ^3.2.12
-  lazy-js-utils: ^0.0.44
-  lint-staged: ^13.1.0
-  ora: ^6.1.2
-  picocolors: ^1.0.0
-  pnpm: ^7.18.2
-  prettier: ^2.8.1
-  rimraf: ^3.0.2
-  tsup: ^6.5.0
-  tsx: ^3.12.1
-  typescript: ^4.9.4
-  unbuild: ^1.0.0
-  vitest: ^0.27.0
+importers:
 
-dependencies:
-  build: 0.1.4
-  fast-glob: 3.2.12
-
-devDependencies:
-  '@antfu/eslint-config': 0.34.0_ha6vam6werchizxrnqvarmz2zu
-  '@antfu/ni': 0.19.0
-  '@antfu/utils': 0.7.2
-  '@types/node': 18.11.15
-  bumpp: 8.2.1
-  eslint: 8.29.0
-  esno: 0.16.3
-  lazy-js-utils: 0.0.44
-  lint-staged: 13.1.0
-  ora: 6.1.2
-  picocolors: 1.0.0
-  pnpm: 7.18.2
-  prettier: 2.8.1
-  rimraf: 3.0.2
-  tsup: 6.5.0_typescript@4.9.4
-  tsx: 3.12.1
-  typescript: 4.9.4
-  unbuild: 1.0.2
-  vitest: 0.27.0
+  .:
+    specifiers:
+      '@antfu/eslint-config': ^0.34.0
+      '@antfu/ni': ^0.19.0
+      '@antfu/utils': ^0.7.0
+      '@types/node': ^18.11.15
+      build: ^0.1.4
+      bumpp: ^8.2.1
+      eslint: ^8.29.0
+      esno: ^0.16.3
+      fast-glob: ^3.2.12
+      lazy-js-utils: ^0.0.45
+      lint-staged: ^13.1.0
+      ora: ^6.1.2
+      picocolors: ^1.0.0
+      pnpm: ^7.18.2
+      prettier: ^2.8.1
+      rimraf: ^3.0.2
+      tsup: ^6.5.0
+      tsx: ^3.12.1
+      typescript: ^4.9.4
+      unbuild: ^1.0.0
+      vitest: ^0.27.0
+    dependencies:
+      build: 0.1.4
+      fast-glob: 3.2.12
+    devDependencies:
+      '@antfu/eslint-config': 0.34.0_ha6vam6werchizxrnqvarmz2zu
+      '@antfu/ni': 0.19.0
+      '@antfu/utils': 0.7.2
+      '@types/node': 18.11.15
+      bumpp: 8.2.1
+      eslint: 8.29.0
+      esno: 0.16.3
+      lazy-js-utils: 0.0.45
+      lint-staged: 13.1.0
+      ora: 6.1.2
+      picocolors: 1.0.0
+      pnpm: 7.18.2
+      prettier: 2.8.1
+      rimraf: 3.0.2
+      tsup: 6.5.0_typescript@4.9.4
+      tsx: 3.12.1
+      typescript: 4.9.4
+      unbuild: 1.0.2
+      vitest: 0.27.0
 
 packages:
 
@@ -3006,8 +3007,8 @@ packages:
       vue: ^3.2.41
     dev: true
 
-  /lazy-js-utils/0.0.44:
-    resolution: {integrity: sha512-qjL46sIc/NldsSWVP/TskCw+8HkxSBoRYwnuRw3onQ3OK4RwDbqgO1bJyE+H4PRlCnjta1aFGo58jIz99qM+gQ==}
+  /lazy-js-utils/0.0.45:
+    resolution: {integrity: sha512-ZY3L6pYFefITackDubcw7u+jlIV+6DkkFPVSxg5HZgv76QkXVa3cP77maw88wOVfYsk3ZfG9VwePfN/uo7X8Rg==}
     peerDependencies:
       vue: ^3.2.41
     dependencies:
