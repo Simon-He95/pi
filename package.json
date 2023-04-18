@@ -64,7 +64,8 @@
   },
   "dependencies": {
     "build": "^0.1.4",
-    "fast-glob": "^3.2.12"
+    "fast-glob": "^3.2.12",
+    "lazy-js-utils": "^0.0.45"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.34.0",
@@ -74,7 +75,6 @@
     "bumpp": "^8.2.1",
     "eslint": "^8.29.0",
     "esno": "^0.16.3",
-    "lazy-js-utils": "^0.0.45",
     "lint-staged": "^13.1.0",
     "ora": "^6.1.2",
     "picocolors": "^1.0.0",
