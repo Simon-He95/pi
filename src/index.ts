@@ -45,10 +45,11 @@ export async function setup() {
   const cmd = process.argv[1]
   let exec = ''
   if (isWin()) {
-    exec = cmd.split('\\').slice(-2, -1)[0]
+    const last = cmd.lastIndexOf('\\') + 1
+    exec = cmd.slice(last, cmd.length).split('.').slice(0, -1).join('.')
   }
   else {
-    const last = cmd.lastIndexOf(isWin() ? '\\' : '/') + 1
+    const last = cmd.lastIndexOf('/') + 1
     exec = cmd.slice(last, cmd.length)
   }
   const argv: string[] = process.argv.slice(2)

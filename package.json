@@ -34,24 +34,24 @@
     }
   },
   "bin": {
-    "pi": "./cli.mjs",
-    "pio": "./cli.mjs",
-    "pix": "./cli.mjs",
-    "pa": "./cli.mjs",
-    "pu": "./cli.mjs",
-    "pci": "./cli.mjs",
-    "pil": "./cli.mjs",
-    "pui": "./cli.mjs",
-    "prun": "./cli.mjs",
-    "pinit": "./cli.mjs",
-    "pbuild": "./cli.mjs",
-    "pfind": "./cli.mjs"
+    "pi": "./pi.mjs",
+    "pio": "./pio.mjs",
+    "pix": "./pix.mjs",
+    "pa": "./pa.mjs",
+    "pu": "./pu.mjs",
+    "pci": "./pci.mjs",
+    "pil": "./pil.mjs",
+    "pui": "./pui.mjs",
+    "prun": "./prun.mjs",
+    "pinit": "./pinit.mjs",
+    "pbuild": "./pbuild.mjs",
+    "pfind": "./pfind.mjs"
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsup ./src/index.ts --format cjs,esm --dts --clean --minify",
+    "build": "tsup ./src/index.ts --format cjs,esm --dts --clean ",
     "dev": "npm run build -- --watch src",
     "format": "prettier --write --cache .",
     "lint": "eslint .",
