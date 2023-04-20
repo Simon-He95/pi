@@ -5,7 +5,7 @@ importers:
   .:
     specifiers:
       '@antfu/eslint-config': ^0.34.0
-      '@antfu/ni': ^0.19.0
+      '@antfu/ni': ^0.21.0
       '@antfu/utils': ^0.7.0
       '@types/node': ^18.11.15
       build: ^0.1.4
@@ -31,7 +31,7 @@ importers:
       lazy-js-utils: 0.0.47
     devDependencies:
       '@antfu/eslint-config': 0.34.0_ha6vam6werchizxrnqvarmz2zu
-      '@antfu/ni': 0.19.0
+      '@antfu/ni': 0.21.3
       '@antfu/utils': 0.7.2
       '@types/node': 18.11.15
       bumpp: 8.2.1
@@ -148,8 +148,8 @@ packages:
       - typescript
     dev: true
 
-  /@antfu/ni/0.19.0:
-    resolution: {integrity: sha512-33VKTuBjoW2canoVMGa4g5oGCg7KK8UVmBBmUKzvQ+Fa69kk2YI8sqt94WCpvSWmW/yD5ZXsD9G9s689b9KwwQ==}
+  /@antfu/ni/0.21.3:
+    resolution: {integrity: sha512-iDtQMeMW1kKV4nzQ+tjYOIPUm6nmh7pJe4sM0kx1jdAChKSCBLStqlgIoo5Tce++p+o8cBiWIzC3jg6oHyjzMA==}
     hasBin: true
     dev: true
 
