@@ -10,14 +10,14 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
   const text = pkg ? `Installing ${pkg} ...` : 'Updating dependency ...'
   const successMsg = pkg
     ? isZh
-      ? `${pkg}安装成功! 😊`
+      ? `${pkg} 安装成功! 😊`
       : `Installed ${pkg} successfully! 😊`
     : isZh
       ? '依赖更新成功! 😊'
       : 'Updated dependency successfully! 😊'
   const failMsg = pkg
     ? isZh
-      ? `${pkg}安装失败 😭`
+      ? `${pkg} 安装失败 😭`
       : `Failed to install ${pkg} 😭`
     : isZh
       ? '依赖更新失败 😭'
@@ -64,9 +64,19 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
     loading_status.succeed(colors.green(successMsg))
   }
   else {
-    loading_status.fail(
-      colors.red(result ? `${result}\n\n${failMsg}` : failMsg),
-    )
+    if (result.indexOf('Not Found - 404')) {
+      const _result = isZh
+        ? `${pkg} 包名可能有误，并不能在npm中搜索到，请检查`
+        : `${pkg} the package name may be wrong, and cannot be found in npm, please check`
+      loading_status.fail(
+        colors.red(result ? `${failMsg}\n${_result}` : failMsg),
+      )
+    }
+    else {
+      loading_status.fail(
+        colors.red(result ? `${failMsg}\n${result}` : failMsg),
+      )
+    }
   }
 
   if (result) {
