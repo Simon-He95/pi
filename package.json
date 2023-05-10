@@ -65,7 +65,7 @@
   "dependencies": {
     "build": "^0.1.4",
     "fast-glob": "^3.2.12",
-    "lazy-js-utils": "^0.0.47"
+    "lazy-js-utils": "^0.0.53"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.34.0",
