@@ -63,20 +63,14 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
   if (status === 0) {
     loading_status.succeed(colors.green(successMsg))
   }
+  else if (result && result.includes('Not Found - 404')) {
+    const _result = isZh
+      ? `${pkg} 包名可能有误，并不能在npm中搜索到，请检查`
+      : `${pkg} the package name may be wrong, and cannot be found in npm, please check`
+    loading_status.fail(colors.red(result ? `${failMsg}\n${_result}` : failMsg))
+  }
   else {
-    if (result.includes('Not Found - 404')) {
-      const _result = isZh
-        ? `${pkg} 包名可能有误，并不能在npm中搜索到，请检查`
-        : `${pkg} the package name may be wrong, and cannot be found in npm, please check`
-      loading_status.fail(
-        colors.red(result ? `${failMsg}\n${_result}` : failMsg),
-      )
-    }
-    else {
-      loading_status.fail(
-        colors.red(result ? `${failMsg}\n${result}` : failMsg),
-      )
-    }
+    loading_status.fail(colors.red(result ? `${failMsg}\n${result}` : failMsg))
   }
 
   if (result) {
