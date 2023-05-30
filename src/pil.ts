@@ -10,7 +10,6 @@ export async function pil(params: string) {
     return ''
   })
   const command = `${latestPkgname}${suffix}`
-  console.log('pil~~')
   return await pi(command, command, 'pil')
 }
 
