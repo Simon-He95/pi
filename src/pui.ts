@@ -16,9 +16,10 @@ export async function pui(params: string[], pkg: string) {
     process.exit(1)
   }
   const loading_status = await loading(text)
-  const { status } = await useNodeWorker(`nun ${params}`)
+  const { status, result } = await useNodeWorker(`nun ${params}`)
   if (status === 0)
     loading_status.succeed(color.green(successMsg))
-  else loading_status.fail(color.red(failMsg))
+  else
+    loading_status.fail(color.red(result ? `${failMsg}\n${result}` : failMsg))
   process.exit()
 }
