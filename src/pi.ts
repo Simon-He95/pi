@@ -78,11 +78,11 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
   if (result) {
     // 当前workspace 版本需要自动升级
     const reg
-      = /ERR_PNPM_NO_MATCHING_VERSION_INSIDE_WORKSPACE  In : No matching version found for ([\w\-\_@\^.]+) inside the workspace/
+      = /ERR_PNPM_NO_MATCHING_VERSION_INSIDE_WORKSPACE  In : No matching version found for\s+([^@]+)/
     const match = result.match(reg)
     if (match) {
       const dep = match[1]
-      jsShell(`pi ${dep}`)
+      jsShell(`pi ${dep}@latest`)
     }
   }
 
