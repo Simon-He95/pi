@@ -4,6 +4,7 @@
     "no-console": "off",
     "no-multi-str": "off",
     "no-irregular-whitespace": "off",
-    "vue/no-irregular-whitespace": "off"
+    "vue/no-irregular-whitespace": "off",
+    "no-mixed-operators": "off"
   }
 }
