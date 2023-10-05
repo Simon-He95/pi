@@ -1,20 +1,35 @@
 import process from 'process'
 import { getPkgTool, jsShell, useNodeWorker } from 'lazy-js-utils'
 import colors from 'picocolors'
-import { getParams, loading } from './utils'
+import { getLatestVersion, getParams, loading } from './utils'
 
 const isZh = process.env.PI_Lang === 'zh'
 
 // package install
 export async function pi(params: string, pkg: string, executor = 'ni') {
   const text = pkg ? `Installing ${pkg} ...` : 'Updating dependency ...'
-  const successMsg = pkg
-    ? isZh
-      ? `${pkg} 安装成功! 😊`
-      : `Installed ${pkg} successfully! 😊`
-    : isZh
-      ? '依赖更新成功! 😊'
-      : 'Updated dependency successfully! 😊'
+  const isLatest = executor === 'pil'
+  let successMsg = ''
+  if (isLatest) {
+    const version = getLatestVersion(pkg)
+    successMsg = pkg
+      ? isZh
+        ? `${pkg} 最新版本：${version} 安装成功! 😊`
+        : `Installed ${pkg} latest version：${version} successfully! 😊`
+      : isZh
+        ? '依赖更新成功! 😊'
+        : 'Updated dependency successfully! 😊'
+  }
+  else {
+    successMsg = pkg
+      ? isZh
+        ? `${pkg} 安装成功! 😊`
+        : `Installed ${pkg} successfully! 😊`
+      : isZh
+        ? '依赖更新成功! 😊'
+        : 'Updated dependency successfully! 😊'
+  }
+
   const failMsg = pkg
     ? isZh
       ? `${pkg} 安装失败 😭`
@@ -22,7 +37,7 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
     : isZh
       ? '依赖更新失败 😭'
       : 'Failed to update dependency 😭'
-  const newParams = executor === 'pil' ? params : await getParams(params)
+  const newParams = isLatest ? params : await getParams(params)
   let stdio: any = 'pipe'
   let loading_status: any
   const { PI_DEFAULT, PI_MaxSockets: sockets } = process.env

@@ -1,5 +1,5 @@
 import path from 'path'
-import { getPkg, getPkgTool, isFile } from 'lazy-js-utils'
+import { getPkg, getPkgTool, isFile, jsShell } from 'lazy-js-utils'
 import ora from 'ora'
 import colors from 'picocolors'
 import type { Color, Spinner } from 'ora'
@@ -105,4 +105,12 @@ export async function getStyle() {
     color,
     spinner,
   } as unknown as { color: Color; spinner: Spinner }
+}
+
+export function getLatestVersion(pkg: string) {
+  const { status, result } = jsShell(`npm view ${pkg}`, 'pipe')
+  if (status === 0)
+    return result.match(/@([^\s]+)/)![1]
+  else
+    throw new Error(result)
 }
