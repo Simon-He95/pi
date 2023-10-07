@@ -9,6 +9,7 @@ const isZh = process.env.PI_Lang === 'zh'
 export async function pi(params: string, pkg: string, executor = 'ni') {
   const text = pkg ? `Installing ${pkg} ...` : 'Updating dependency ...'
   const isLatest = executor === 'pil'
+  const start = Date.now()
   let successMsg = ''
   if (isLatest) {
     const version = getLatestVersion(pkg)
@@ -75,7 +76,9 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
 
   if (stdio === 'inherit')
     loading_status = await loading('')
-
+  const end = Date.now()
+  const costTime = (end - start) / 1000
+  successMsg += colors.blue(` ---- ⏰：${costTime}s`)
   if (status === 0) {
     loading_status.succeed(colors.green(successMsg))
   }
