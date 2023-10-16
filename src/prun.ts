@@ -1,5 +1,5 @@
-import { jsShell } from 'lazy-js-utils'
+import { ccommand } from 'ccommand'
 // package run script
 export function prun(params: string) {
-  return jsShell(`ccommand ${params}`)
+  return ccommand(params)
 }
