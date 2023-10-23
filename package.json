@@ -73,7 +73,7 @@
     "bumpp": "^8.2.1",
     "eslint": "^8.29.0",
     "esno": "^0.16.3",
-    "lazy-js-utils": "^0.0.69",
+    "lazy-js-utils": "latest",
     "lint-staged": "^13.1.0",
     "ora": "^6.1.2",
     "picocolors": "^1.0.0",
