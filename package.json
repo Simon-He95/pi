@@ -65,6 +65,7 @@
     "build": "^0.1.4",
     "ccommand": "latest",
     "fast-glob": "^3.3.1",
+    "lazy-js-utils": "latest",
     "lint": "^0.8.19"
   },
   "devDependencies": {
@@ -73,7 +74,6 @@
     "bumpp": "^8.2.1",
     "eslint": "^8.29.0",
     "esno": "^0.16.3",
-    "lazy-js-utils": "latest",
     "lint-staged": "^13.1.0",
     "ora": "^6.1.2",
     "picocolors": "^1.0.0",
