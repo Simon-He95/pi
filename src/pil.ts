@@ -6,7 +6,7 @@ import { getParams } from './utils'
 export async function pil(params: string) {
   if (!params) {
     // 提供当前所有依赖选择
-    const { dependencies, devDependencies } = await getPkg()
+    const { dependencies = {}, devDependencies = {} } = await getPkg()
 
     const deps = [
       ...Object.keys(dependencies).map(key => `${key}: ${dependencies[key]}`),
