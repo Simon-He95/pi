@@ -62,11 +62,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "build": "^0.1.4",
     "ccommand": "latest",
     "fast-glob": "^3.3.1",
-    "lazy-js-utils": "^0.0.71",
-    "lint": "^0.8.19"
+    "lazy-js-utils": "^0.0.71"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.34.0",
