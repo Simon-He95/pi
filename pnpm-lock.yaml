@@ -28,9 +28,6 @@ devDependencies:
   eslint:
     specifier: ^8.29.0
     version: 8.51.0
-  esno:
-    specifier: ^0.16.3
-    version: 0.16.3
   lint-staged:
     specifier: ^13.1.0
     version: 13.3.0
@@ -2112,13 +2109,6 @@ packages:
       text-table: 0.2.0
     transitivePeerDependencies:
       - supports-color
-    dev: true
-
-  /esno@0.16.3:
-    resolution: {integrity: sha512-6slSBEV1lMKcX13DBifvnDFpNno5WXhw4j/ff7RI0y51BZiDqEe5dNhhjhIQ3iCOQuzsm2MbVzmwqbN78BBhPg==}
-    hasBin: true
-    dependencies:
-      tsx: 3.13.0
     dev: true
 
   /espree@9.6.1:

@@ -19,8 +19,8 @@ export async function pil(params: string) {
         ',',
       )} | sed "s/,/\\n/g" | gum filter --placeholder=" 🤔${
         process.env.PI_Lang === 'zh'
-          ? '请选择一个依赖获取最新版本'
-          : 'Please select a dependency to get the latest version.'
+          ? '请选择一个需要获取最新版本的依赖'
+          : 'Please select a dependency that needs to obtain the latest version.'
       }"`,
       'pipe',
     )
