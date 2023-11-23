@@ -7,7 +7,7 @@ const isZh = process.env.PI_Lang === 'zh'
 
 // package install
 export async function pi(params: string, pkg: string, executor = 'ni') {
-  const text = pkg ? `Installing ${pkg} ...` : 'Updating dependency ...'
+  const text = pkg ? `Installing ${params} ...` : 'Updating dependency ...'
   const isLatest = executor === 'pil'
   const start = Date.now()
   let successMsg = ''
