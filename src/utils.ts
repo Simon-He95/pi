@@ -111,11 +111,16 @@ export function getLatestVersion(pkg: string, isZh = true) {
   const data: string[] = []
 
   for (const p of pkg.replace(/\s+/, ' ').split(' ')) {
-    const { status, result } = jsShell(`npm view ${p}`, 'pipe')
+    const [pName, v] = p.split('$')
+    let { status, result } = jsShell(`npm view ${pName}`, 'pipe')
     if (status === 0) {
+      if (result.startsWith('@'))
+        result = result.slice(1)
       const item = isZh
-        ? `${p} 最新版本：${result.match(/@([^\s]+)/)![1]}`
-        : `Installed ${pkg} latest version：${result.match(/@([^\s]+)/)![1]}`
+        ? `${pName} ${colors.gray(v)} -> ${result.match(/@([^\s]+)/)![1]}`
+        : `Installed ${pName} ${colors.dim(v)} -> latest version：${
+            result.match(/@([^\s]+)/)![1]
+          }`
       data.push(item)
     }
     else {

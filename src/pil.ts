@@ -4,10 +4,10 @@ import { pi } from './pi'
 import { getParams } from './utils'
 // install @latest
 export async function pil(params: string) {
-  if (!params) {
-    // 提供当前所有依赖选择
-    const { dependencies = {}, devDependencies = {} } = await getPkg()
+  // 提供当前所有依赖选择
+  const { dependencies = {}, devDependencies = {} } = await getPkg()
 
+  if (!params) {
     const deps = [
       ...Object.keys(dependencies).map(key => `${key}: ${dependencies[key]}`),
       ...Object.keys(devDependencies).map(
@@ -50,7 +50,14 @@ export async function pil(params: string) {
     suffix += ` ${k}`
     return ''
   })
-
-  const command = `${latestPkgname}${suffix}`
+  latestPkgname = latestPkgname
+    .replaceAll('@latest', '')
+    .split(' ')
+    .map((i) => {
+      const v = dependencies[i] || devDependencies[i]
+      return `${i}$${v}`
+    })
+    .join(' ')
+  const command = `${params}${suffix}`
   return await pi(command, latestPkgname.replaceAll('@latest', ''), 'pil')
 }
