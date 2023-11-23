@@ -17,7 +17,7 @@ export async function pil(params: string) {
     const { result: choose, status } = jsShell(
       `echo ${deps.join(
         ',',
-      )} | sed "s/,/\\n/g" | gum filter --placeholder=" 🤔${
+      )} | sed "s/,/\\n/g" | gum filter --no-limit --placeholder=" 🤔${
         process.env.PI_Lang === 'zh'
           ? '请选择一个需要获取最新版本的依赖'
           : 'Please select a dependency that needs to obtain the latest version.'
@@ -31,31 +31,26 @@ export async function pil(params: string) {
     else if (status !== 0) {
       throw new Error(choose)
     }
-    const name = choose.split(': ')[0]
-    if (name in devDependencies)
-      params = `${name} -D`
-    else params = name
+    const names = choose
+      .trim()
+      .split('\n')
+      .map((i) => {
+        const name = i.split(': ')[0]
+        if (name in devDependencies)
+          return `${name}@latest -D`
+        return `${name}@latest`
+      })
+    params = names.join(' ')
   }
-  let latestPkgname = addLatest(params)
+  let latestPkgname = params
+
   let suffix = ''
   const reg = /\s(-[dDwW]+)/g
-  latestPkgname = (await getParams(latestPkgname)).replace(reg, (_, k) => {
+  latestPkgname = (await getParams(params)).replace(reg, (_, k) => {
     suffix += ` ${k}`
     return ''
   })
-  const command = `${latestPkgname}${suffix}`
-  return await pi(command, command, 'pil')
-}
 
-function addLatest(params: string) {
-  return params
-    .replace(/\s+/g, ' ')
-    .trim()
-    .split(' ')
-    .map((item) => {
-      if (item[0] === '-')
-        return item
-      return `${item}@latest`
-    })
-    .join(' ')
+  const command = `${latestPkgname}${suffix}`
+  return await pi(command, latestPkgname.replaceAll('@latest', ''), 'pil')
 }

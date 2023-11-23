@@ -12,14 +12,7 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
   const start = Date.now()
   let successMsg = ''
   if (isLatest) {
-    const version = getLatestVersion(pkg)
-    successMsg = pkg
-      ? isZh
-        ? `${pkg} 最新版本：${version} 安装成功! 😊`
-        : `Installed ${pkg} latest version：${version} successfully! 😊`
-      : isZh
-        ? '依赖更新成功! 😊'
-        : 'Updated dependency successfully! 😊'
+    successMsg = getLatestVersion(pkg, isZh)
   }
   else {
     successMsg = pkg

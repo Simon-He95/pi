@@ -107,10 +107,20 @@ export async function getStyle() {
   } as unknown as { color: Color; spinner: Spinner }
 }
 
-export function getLatestVersion(pkg: string) {
-  const { status, result } = jsShell(`npm view ${pkg}`, 'pipe')
-  if (status === 0)
-    return result.match(/@([^\s]+)/)![1]
-  else
-    throw new Error(result)
+export function getLatestVersion(pkg: string, isZh = true) {
+  const data: string[] = []
+
+  for (const p of pkg.replace(/\s+/, ' ').split(' ')) {
+    const { status, result } = jsShell(`npm view ${p}`, 'pipe')
+    if (status === 0) {
+      const item = isZh
+        ? `${p} 最新版本：${result.match(/@([^\s]+)/)![1]}`
+        : `Installed ${pkg} latest version：${result.match(/@([^\s]+)/)![1]}`
+      data.push(item)
+    }
+    else {
+      throw new Error(result)
+    }
+  }
+  return `${data.join(' ')}${isZh ? ' 安装成功! 😊' : 'successfully! 😊'}`
 }

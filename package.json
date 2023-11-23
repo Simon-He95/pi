@@ -64,7 +64,7 @@
   "dependencies": {
     "ccommand": "latest",
     "fast-glob": "^3.3.1",
-    "lazy-js-utils": "^0.0.71"
+    "lazy-js-utils": "latest"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.34.0",
