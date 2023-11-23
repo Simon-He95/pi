@@ -4,12 +4,12 @@ import ora from 'ora'
 import colors from 'picocolors'
 import type { Color, Spinner } from 'ora'
 
-const DW = /\s-DW/
-const W = /\s-W/
-const Dw = /\s-Dw/
-const w = /\s-w/
-const D = /\s-D(?!w)/
-const d = /\s-d(?!w)/
+const DW = /\s-DW/g
+const W = /\s-W/g
+const Dw = /\s-Dw/g
+const w = /\s-w/g
+const D = /\s-D(?!w)/g
+const d = /\s-d(?!w)/g
 const isZh = process.env.PI_Lang === 'zh'
 
 export async function getParams(params: string) {

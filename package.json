@@ -63,7 +63,7 @@
   },
   "dependencies": {
     "ccommand": "latest",
-    "fast-glob": "^3.3.1",
+    "fast-glob": "latest",
     "lazy-js-utils": "latest"
   },
   "devDependencies": {

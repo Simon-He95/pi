@@ -6,7 +6,6 @@ import { getParams } from './utils'
 export async function pil(params: string) {
   // 提供当前所有依赖选择
   const { dependencies = {}, devDependencies = {} } = await getPkg()
-
   if (!params) {
     const deps = [
       ...Object.keys(dependencies).map(key => `${key}: ${dependencies[key]}`),
@@ -43,12 +42,15 @@ export async function pil(params: string) {
     params = names.join(' ')
   }
   let latestPkgname = params
-  let suffix = ''
   const reg = /\s(-[dDwW]+)/g
-  params = latestPkgname = (await getParams(params)).replace(reg, (_, k) => {
-    suffix += ` ${k}`
-    return ''
-  })
+  const suffix: string[] = []
+  let command = (latestPkgname = (await getParams(params)).replace(
+    reg,
+    (_, k) => {
+      suffix.push(k)
+      return ''
+    },
+  ))
   latestPkgname = latestPkgname
     .replaceAll('@latest', '')
     .split(' ')
@@ -57,6 +59,10 @@ export async function pil(params: string) {
       return `${i}$${v}`
     })
     .join(' ')
-  const command = `${params}${suffix}`
+  command = command
+    .replace(/\s+/, ' ')
+    .split(' ')
+    .map((i, index) => `${i} ${suffix[index]}`)
+    .join(' ')
   return await pi(command, latestPkgname.replaceAll('@latest', ''), 'pil')
 }
