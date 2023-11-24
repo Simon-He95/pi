@@ -62,7 +62,7 @@ export async function pil(params: string) {
   command = command
     .replace(/\s+/, ' ')
     .split(' ')
-    .map((i, index) => `${i} ${suffix[index]}`)
+    .map((i, index) => `${i} ${suffix[index] || '-s'}`)
     .join(' ')
   return await pi(command, latestPkgname.replaceAll('@latest', ''), 'pil')
 }
