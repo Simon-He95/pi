@@ -71,7 +71,7 @@
     "@types/node": "^18.11.15",
     "bumpp": "^8.2.1",
     "eslint": "^8.29.0",
-    "lint-staged": "^13.1.0",
+    "lint-staged": "^15.0.0",
     "ora": "^6.1.2",
     "picocolors": "^1.0.0",
     "pnpm": "^7.18.2",
