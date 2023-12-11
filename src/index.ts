@@ -62,7 +62,10 @@ export async function setup() {
         const loading_status = await loading(
           `${isZh ? '正在为您安装' : 'Installing'} ${params} ...\n`,
         )
-        const { status } = await useNodeWorker(`go get ${params}`)
+        const { status } = params
+          ? await useNodeWorker(`go get ${params}`)
+          : await useNodeWorker('go mod tidy')
+
         if (status === 0) {
           loading_status.succeed(
             color.green(isZh ? '安装成功! 😊' : 'Installed successfully! 😊'),
