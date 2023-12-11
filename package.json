@@ -62,7 +62,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "ccommand": "latest",
+    "ccommand": "^1.0.53",
     "fast-glob": "latest",
     "lazy-js-utils": "latest"
   },

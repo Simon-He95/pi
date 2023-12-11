@@ -10,6 +10,7 @@ import {
 } from 'lazy-js-utils'
 import color from 'picocolors'
 import fg from 'fast-glob'
+import { ccommand } from 'ccommand'
 import { loading } from './utils'
 import { help } from './help'
 import { installDeps } from './installDeps'
@@ -100,11 +101,8 @@ export async function setup() {
             : [`**/${params}.go`, `**/${params}/main.go`]
           : 'main.go'
         const target = (await fg(match))[0]
-        if (!target) {
-          console.log(color.red('No such file'))
-          process.exit(1)
-        }
-        jsShell(`go run ${target}`)
+
+        return target ? jsShell(`go run ${target}`) : ccommand(params)
       }
       else if (exec === 'pinit') {
         jsShell(`go mod init ${params}`)

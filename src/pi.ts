@@ -10,6 +10,7 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
   const text = pkg ? `Installing ${params} ...` : 'Updating dependency ...'
   const isLatest = executor === 'pil'
   const start = Date.now()
+
   let successMsg = ''
   if (isLatest) {
     successMsg = getLatestVersion(pkg, isZh)
@@ -26,8 +27,8 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
 
   const failMsg = pkg
     ? isZh
-      ? `${pkg} 安装失败 😭`
-      : `Failed to install ${pkg} 😭`
+      ? `${params} 安装失败 😭`
+      : `Failed to install ${params} 😭`
     : isZh
       ? '依赖更新失败 😭'
       : 'Failed to update dependency 😭'
