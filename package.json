@@ -49,6 +49,9 @@
   "files": [
     "dist"
   ],
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "scripts": {
     "build": "tsup ./src/index.ts --format cjs,esm --dts --clean ",
     "dev": "bun build -- --watch src",
@@ -64,7 +67,8 @@
   "dependencies": {
     "ccommand": "^1.0.55",
     "fast-glob": "latest",
-    "lazy-js-utils": "latest"
+    "lazy-js-utils": "latest",
+    "semver": "^7.5.4"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.34.0",

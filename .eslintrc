@@ -5,6 +5,7 @@
     "no-multi-str": "off",
     "no-irregular-whitespace": "off",
     "vue/no-irregular-whitespace": "off",
-    "no-mixed-operators": "off"
+    "no-mixed-operators": "off",
+    "@typescript-eslint/no-var-requires": "off"
   }
 }
