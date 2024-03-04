@@ -2,8 +2,6 @@ import process from 'process'
 import { getPkg, jsShell } from 'lazy-js-utils'
 import colors from 'picocolors'
 
-const semver = require('semver')
-
 export async function detectNode() {
   let pkg
   try {
@@ -15,7 +13,10 @@ export async function detectNode() {
     process.exit(1)
   }
   if (pkg.engines?.node) {
-    const isSafe = semver.satisfies(process.version, pkg.engines.node)
+    const isSafe = require('semver').satisfies(
+      process.version,
+      pkg.engines.node,
+    )
 
     if (!isSafe) {
       const { result, status } = await jsShell(

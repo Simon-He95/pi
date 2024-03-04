@@ -17,11 +17,11 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "require": "./dist/index.cjs",
+      "require": "./dist/index.mjs",
       "import": "./dist/index.js"
     }
   },
-  "main": "./dist/index.cjs",
+  "main": "./dist/index.mjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "typesVersions": {
@@ -67,7 +67,7 @@
   "dependencies": {
     "ccommand": "^1.0.55",
     "fast-glob": "latest",
-    "lazy-js-utils": "latest",
+    "lazy-js-utils": "^0.0.87",
     "semver": "^7.5.4"
   },
   "devDependencies": {
