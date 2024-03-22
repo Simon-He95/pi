@@ -1,5 +1,5 @@
-import { jsShell } from 'lazy-js-utils'
+import { ccommand } from 'ccommand'
 // workspace find script
 export function pfind(params: string) {
-  return jsShell(`ccommand find ${params}`)
+  return ccommand(`find ${params}`)
 }
