@@ -12,8 +12,8 @@ dependencies:
     specifier: latest
     version: 3.3.2
   lazy-js-utils:
-    specifier: ^0.0.87
-    version: 0.0.87(vue@3.3.4)
+    specifier: ^0.0.92
+    version: 0.0.92(vue@3.3.4)
   semver:
     specifier: ^7.6.0
     version: 7.6.0
@@ -2839,13 +2839,12 @@ packages:
       vue: 3.3.4
     dev: false
 
-  /lazy-js-utils@0.0.87(vue@3.3.4):
-    resolution: {integrity: sha512-S5ZDjcc7jSLb926ZT2YDc6t22MLihunMuogFN6bRlnIzYJXtgyp6XRt2J2a/V7pxSDCO5wcV/412TGXgD8PGjA==}
+  /lazy-js-utils@0.0.92(vue@3.3.4):
+    resolution: {integrity: sha512-7lo+PmYlPFNQkdBPrDPp5a1VbrWif9bWanBNefR4ePUINzWyeR2hCVXmGBI/zMgK+qTd1lk4oOMV+T1RojyupA==}
     peerDependencies:
       vue: ^3.2.41
     dependencies:
       htmlparser2: 8.0.2
-      lazy-js-utils: 0.0.37(vue@3.3.4)
       qrcode: 1.5.3
       spark-md5: 3.0.2
       vue: 3.3.4
