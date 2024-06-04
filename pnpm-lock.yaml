@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   ccommand:
-    specifier: ^1.0.55
-    version: 1.0.55(vue@3.3.4)
+    specifier: ^1.0.57
+    version: 1.0.57(vue@3.3.4)
   fast-glob:
     specifier: latest
     version: 3.3.2
@@ -1284,8 +1284,8 @@ packages:
     engines: {node: '>=6'}
     dev: false
 
-  /ccommand@1.0.55(vue@3.3.4):
-    resolution: {integrity: sha512-P6RonAfzAPDMTZksT7ST+p7/YlNQ4TsFubZLqJ4TJ537GgC/4AuRWD0E8HF5e9MEhbU5OY+n3Wbi/62loGTHrg==}
+  /ccommand@1.0.57(vue@3.3.4):
+    resolution: {integrity: sha512-/pkmmbOOfDVEhtYWjHqqRmq+kUnYkQF/Dk0o6o5SKcbkqJzJFasD6+yzx4oWSLL4nK5bVPhJPMKe6W5gzYb/lw==}
     hasBin: true
     dependencies:
       '@simon_he/colorize': 0.0.1
