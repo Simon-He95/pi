@@ -23,7 +23,6 @@ export async function pil(params: string) {
       }"`,
       'pipe',
     )
-    console.log({ choose, status })
     if (status === 130) {
       console.log(pc.dim('已取消'))
       process.exit(0)
@@ -45,7 +44,6 @@ export async function pil(params: string) {
   let latestPkgname = params
   const reg = /\s(-[dDwW]+)/g
   const suffix: string[] = []
-  console.log({ params })
   let command = (latestPkgname = (await getParams(params)).replace(
     reg,
     (_, k) => {
