@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       ccommand:
-        specifier: ^1.0.65
-        version: 1.0.65(vue@3.3.4)
+        specifier: ^1.0.66
+        version: 1.0.66(vue@3.3.4)
       fast-glob:
         specifier: latest
         version: 3.3.2
@@ -736,8 +736,8 @@ packages:
     resolution: {integrity: sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==}
     engines: {node: '>=6'}
 
-  ccommand@1.0.65:
-    resolution: {integrity: sha512-PnsuotWmIKkEW1kE8cO2YcGpyrLq4FZVZamyDpXimRJZN2HDmDQwf4nRX6UA/Eq1Nwnv5+ERDQqqR2b1HqF8kA==}
+  ccommand@1.0.66:
+    resolution: {integrity: sha512-SG5FrXHxIE+3GUA/c20Ap3uortb1b+h2RiIfwOEMWKLF7T+o6z/zf9GTJaUIwI/HLABmCP/dD1Nr2Lw1n7/rKw==}
     hasBin: true
 
   chai@4.3.10:
@@ -3144,7 +3144,7 @@ snapshots:
 
   camelcase@5.3.1: {}
 
-  ccommand@1.0.65(vue@3.3.4):
+  ccommand@1.0.66(vue@3.3.4):
     dependencies:
       '@simon_he/colorize': 0.0.1
       build: 0.1.4
