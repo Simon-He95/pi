@@ -1,4 +1,5 @@
 import process from 'process'
+import { log } from 'console'
 import { getPkgTool, jsShell, useNodeWorker } from 'lazy-js-utils'
 import colors from 'picocolors'
 import { getLatestVersion, getParams, loading } from './utils'
@@ -65,10 +66,31 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
 
   const runSockets
     = executor.split(' ')[0] === 'npm' ? ` --max-sockets=${maxSockets}` : ''
-  const { status, result } = await useNodeWorker({
+  let { status, result } = await useNodeWorker({
     params: `${executor}${newParams ? ` ${newParams}` : runSockets}`,
     stdio,
+    errorExit: false,
   })
+  if (
+    result.includes('pnpm versions with respective Node.js version support')
+  ) {
+    log(result)
+    log(
+      colors.yellow(
+        isZh
+          ? '正在尝试使用 npm 再次执行...'
+          : 'Trying to use npm to run again...',
+      ),
+    )
+    const { status: newStatus, result: newResult } = jsShell(
+      `npm install${newParams ? ` ${newParams}` : runSockets}`,
+      {
+        stdio,
+      },
+    )
+    status = newStatus
+    result = newResult
+  }
 
   if (stdio === 'inherit')
     loading_status = await loading('')
