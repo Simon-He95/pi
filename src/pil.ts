@@ -23,6 +23,7 @@ export async function pil(params: string) {
       }"`,
       'pipe',
     )
+    console.log({ choose, status })
     if (status === 130) {
       console.log(pc.dim('已取消'))
       process.exit(0)
@@ -44,6 +45,7 @@ export async function pil(params: string) {
   let latestPkgname = params
   const reg = /\s(-[dDwW]+)/g
   const suffix: string[] = []
+  console.log({ params })
   let command = (latestPkgname = (await getParams(params)).replace(
     reg,
     (_, k) => {
@@ -51,9 +53,11 @@ export async function pil(params: string) {
       return ''
     },
   ))
+
   latestPkgname = latestPkgname
-    .replaceAll('@latest', '')
+    .replace(/@latest/g, '')
     .split(' ')
+    .filter(Boolean)
     .map((i) => {
       const v = dependencies[i] || devDependencies[i]
       return `${i}$${v}`
@@ -64,5 +68,5 @@ export async function pil(params: string) {
     .split(' ')
     .map((i, index) => `${i} ${suffix[index] || '-s'}`)
     .join(' ')
-  return await pi(command, latestPkgname.replaceAll('@latest', ''), 'pil')
+  return await pi(command, latestPkgname.replace(/@latest/g, ''), 'pil')
 }

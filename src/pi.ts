@@ -13,7 +13,6 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
   const text = pkg ? `Installing ${params} ...` : 'Updating dependency ...'
   const isLatest = executor === 'pil'
   const start = Date.now()
-
   let successMsg = ''
   if (isLatest) {
     successMsg = getLatestVersion(pkg, isZh)
@@ -63,7 +62,6 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
     executor = `${pkgTool} ${install}`
     loading_status = await loading(text)
   }
-
   const runSockets
     = executor.split(' ')[0] === 'npm' ? ` --max-sockets=${maxSockets}` : ''
   let { status, result } = await useNodeWorker({
