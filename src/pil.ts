@@ -33,7 +33,7 @@ export async function pil(params: string) {
     const names = choose
       .trim()
       .split('\n')
-      .map((i) => {
+      .map((i: any) => {
         const name = i.split(': ')[0]
         if (name in devDependencies)
           return `${name}@latest -D`

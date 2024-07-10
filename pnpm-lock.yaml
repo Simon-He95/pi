@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       ccommand:
-        specifier: ^1.0.66
-        version: 1.0.66(vue@3.3.4)
+        specifier: ^1.0.67
+        version: 1.0.67(vue@3.3.4)
       fast-glob:
         specifier: latest
         version: 3.3.2
@@ -736,8 +736,8 @@ packages:
     resolution: {integrity: sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==}
     engines: {node: '>=6'}
 
-  ccommand@1.0.66:
-    resolution: {integrity: sha512-SG5FrXHxIE+3GUA/c20Ap3uortb1b+h2RiIfwOEMWKLF7T+o6z/zf9GTJaUIwI/HLABmCP/dD1Nr2Lw1n7/rKw==}
+  ccommand@1.0.67:
+    resolution: {integrity: sha512-Bib+4aEoCqrlTloYcg7bHfB1oZg2WkGn7wwki4f4/wNka+OBvr0rZ98WsfpBP3XGUHkx0TtuWNi+C67iDz1pSg==}
     hasBin: true
 
   chai@4.3.10:
@@ -1550,6 +1550,11 @@ packages:
 
   lazy-js-utils@0.0.94:
     resolution: {integrity: sha512-GQrlNuz11S+GuTBurQimOjAPRmlQdyVUmBlbbCSKxBnBZjELfAJu0LfUHu3kObk+pBKafl700VbXTUfXqz7oyg==}
+    peerDependencies:
+      vue: ^3.2.41
+
+  lazy-js-utils@0.0.95:
+    resolution: {integrity: sha512-tVPcRxWjFHNeQ72QmnJ4KT2qrsl2/NISL5jLM2GG6FnduMs+LBmSNswnfQYAuFQ1RmkPC4Tnhescbx7eOGH0Mg==}
     peerDependencies:
       vue: ^3.2.41
 
@@ -3144,12 +3149,12 @@ snapshots:
 
   camelcase@5.3.1: {}
 
-  ccommand@1.0.66(vue@3.3.4):
+  ccommand@1.0.67(vue@3.3.4):
     dependencies:
       '@simon_he/colorize': 0.0.1
       build: 0.1.4
       fast-glob: 3.3.2
-      lazy-js-utils: 0.0.94(vue@3.3.4)
+      lazy-js-utils: 0.0.95(vue@3.3.4)
       yamljs: 0.3.0
     transitivePeerDependencies:
       - vue
@@ -4097,6 +4102,13 @@ snapshots:
   kuler@2.0.0: {}
 
   lazy-js-utils@0.0.94(vue@3.3.4):
+    dependencies:
+      htmlparser2: 8.0.2
+      qrcode: 1.5.3
+      spark-md5: 3.0.2
+      vue: 3.3.4
+
+  lazy-js-utils@0.0.95(vue@3.3.4):
     dependencies:
       htmlparser2: 8.0.2
       qrcode: 1.5.3
