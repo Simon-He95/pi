@@ -68,16 +68,16 @@
     "ccommand": "^1.0.62",
     "fast-glob": "latest",
     "lazy-js-utils": "^0.0.94",
-    "semver": "^7.6.0"
+    "semver": "^7.6.2"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.34.2",
-    "@types/node": "^18.19.31",
+    "@types/node": "^18.19.39",
     "bumpp": "^8.2.1",
     "eslint": "^8.57.0",
     "lint-staged": "^13.3.0",
     "ora": "^6.3.1",
-    "picocolors": "^1.0.0",
+    "picocolors": "^1.0.1",
     "pnpm": "^7.33.7",
     "prettier": "^2.8.8",
     "rimraf": "^3.0.2",
