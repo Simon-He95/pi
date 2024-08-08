@@ -127,5 +127,5 @@ export function getLatestVersion(pkg: string, isZh = true) {
       throw new Error(result)
     }
   }
-  return `${data.join(' ')}${isZh ? ' 安装成功! 😊' : 'successfully! 😊'}`
+  return `${data.join(' ')}${isZh ? ' 安装成功! 😊' : ' successfully! 😊'}`
 }
