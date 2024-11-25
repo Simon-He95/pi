@@ -73,7 +73,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "^0.34.2",
     "@types/node": "^18.19.60",
-    "bumpp": "^8.2.1",
+    "bumpp": "^9.0.0",
     "eslint": "^8.57.1",
     "lint-staged": "^13.3.0",
     "ora": "^6.3.1",
