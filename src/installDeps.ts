@@ -1,11 +1,15 @@
-import { isInstallPkg, jsShell } from 'lazy-js-utils'
+import { isInstallPkg, jsShell } from 'lazy-js-utils/dist/node'
 import color from 'picocolors'
 
 // dependency
 export async function installDeps() {
-  if (!isInstallPkg('gum')) {
+  if (!(await isInstallPkg('gum'))) {
     console.log(color.cyan('正在为您安装必要的依赖gum...'))
-    const { status } = await jsShell('brew install gum', 'pipe')
+    const { status } = await jsShell('brew install gum', [
+      'inherit',
+      'pipe',
+      'inherit',
+    ])
     if (status === 0) {
       console.log(color.cyan('gum 安装成功!'))
     }
@@ -18,9 +22,13 @@ export async function installDeps() {
       process.exit(1)
     }
   }
-  if (!isInstallPkg('ni')) {
+  if (!(await isInstallPkg('ni'))) {
     console.log(color.cyan('正在为您安装必要的依赖ni...'))
-    const { status } = await jsShell('npm i -g @antfu/ni', 'pipe')
+    const { status } = await jsShell('npm i -g @antfu/ni', [
+      'inherit',
+      'pipe',
+      'inherit',
+    ])
     if (status === 0) {
       console.log(color.cyan('ni 安装成功!'))
     }

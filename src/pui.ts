@@ -1,4 +1,4 @@
-import { getPkg, jsShell, useNodeWorker } from 'lazy-js-utils'
+import { getPkg, jsShell, useNodeWorker } from 'lazy-js-utils/dist/node'
 import colors from 'picocolors'
 import { loading } from './utils'
 
@@ -18,7 +18,7 @@ export async function pui(params: string, pkg: string) {
         key => `${key}: ${devDependencies[key]}`,
       ),
     ]
-    const { result: choose, status } = jsShell(
+    const { result: choose, status } = await jsShell(
       `echo ${deps.join(
         ',',
       )} | sed "s/,/\\n/g" | gum filter --placeholder=" 🤔${
@@ -26,7 +26,7 @@ export async function pui(params: string, pkg: string) {
           ? '请选择一个需要删除依赖'
           : 'Please select a dependency to get the latest version.'
       }"`,
-      'pipe',
+      ['inherit', 'pipe', 'inherit'],
     )
     if (status === 130) {
       console.log(colors.dim('已取消'))

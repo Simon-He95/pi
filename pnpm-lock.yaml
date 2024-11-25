@@ -9,14 +9,14 @@ importers:
   .:
     dependencies:
       ccommand:
-        specifier: ^1.0.68
-        version: 1.0.68(vue@3.3.4)
+        specifier: ^1.0.69
+        version: 1.0.69(vue@3.3.4)
       fast-glob:
         specifier: latest
         version: 3.3.2
       lazy-js-utils:
-        specifier: ^0.0.94
-        version: 0.0.94(vue@3.3.4)
+        specifier: ^0.1.26
+        version: 0.1.26
       semver:
         specifier: ^7.6.3
         version: 7.6.3
@@ -25,8 +25,8 @@ importers:
         specifier: ^0.34.2
         version: 0.34.2(eslint@8.57.1)(typescript@4.9.5)
       '@types/node':
-        specifier: ^18.19.54
-        version: 18.19.56
+        specifier: ^18.19.60
+        version: 18.19.65
       bumpp:
         specifier: ^8.2.1
         version: 8.2.1
@@ -40,7 +40,7 @@ importers:
         specifier: ^6.3.1
         version: 6.3.1
       picocolors:
-        specifier: ^1.1.0
+        specifier: ^1.1.1
         version: 1.1.1
       pnpm:
         specifier: ^7.33.7
@@ -470,8 +470,8 @@ packages:
   '@types/mdast@3.0.13':
     resolution: {integrity: sha512-HjiGiWedR0DVFkeNljpa6Lv4/IZU1+30VY5d747K7lBudFc3R0Ibr6yJ9lN3BE28VnZyDfLF/VB1Ql1ZIbKrmg==}
 
-  '@types/node@18.19.56':
-    resolution: {integrity: sha512-4EMJlWwwGnVPflJAtM14p9eVSa6BOv5b92mCsh5zcM1UagNtEtrbbtaE6WE1tw2TabavatnwqXjlIpcAEuJJNg==}
+  '@types/node@18.19.65':
+    resolution: {integrity: sha512-Ay5BZuO1UkTmVHzZJNvZKw/E+iB3GQABb6kijEz89w2JrfhNA+M/ebp18pfz9Gqe9ywhMC8AA8yC01lZq48J+Q==}
 
   '@types/normalize-package-data@2.4.2':
     resolution: {integrity: sha512-lqa4UEhhv/2sjjIQgjX8B+RBjj47eo0mzGasklVJ78UKGQY1r0VpB9XHDaZZO9qzEFDdy4MrXLuEaSmPrPSe/A==}
@@ -738,8 +738,8 @@ packages:
     resolution: {integrity: sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==}
     engines: {node: '>=6'}
 
-  ccommand@1.0.68:
-    resolution: {integrity: sha512-JZiqf0mScPA9zUPUhqVeMxHAkw/jtgvvfNYU6/F80jMfteNGAPuAKASfbCAjnPl8CCurLoJOLG6g/6UIY2GXeg==}
+  ccommand@1.0.69:
+    resolution: {integrity: sha512-IcEeEodlVmPi5ycbGajU28x5eP8D9gOg7c5xvEE0NiV9CL3ILLneEn5X23IfAmKIJiPeic35jMpQydnyOH13uA==}
     hasBin: true
 
   chai@4.3.10:
@@ -931,9 +931,6 @@ packages:
 
   enabled@2.0.0:
     resolution: {integrity: sha512-AKrN98kuwOzMIdAizXGI86UFBoo26CL21UM763y1h/GMSJ4/OHU9k2YlsmBpyScFo/wbLzWQJBMCW4+IO3/+OQ==}
-
-  encode-utf8@1.0.3:
-    resolution: {integrity: sha512-ucAnuBEhUK4boH2HjVYG5Q2mQyPorvv0u/ocS+zhdw0S8AlHYY+GOFhP1Gio5z4icpP2ivFSvhtFjQi8+T9ppw==}
 
   entities@4.5.0:
     resolution: {integrity: sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==}
@@ -1551,15 +1548,13 @@ packages:
   kuler@2.0.0:
     resolution: {integrity: sha512-Xq9nH7KlWZmXAtodXDDRE7vs6DU1gTU8zYDHDiWLSip45Egwq3plLHzPn27NgvzL2r1LMPC1vdqh98sQxtqj4A==}
 
-  lazy-js-utils@0.0.94:
-    resolution: {integrity: sha512-GQrlNuz11S+GuTBurQimOjAPRmlQdyVUmBlbbCSKxBnBZjELfAJu0LfUHu3kObk+pBKafl700VbXTUfXqz7oyg==}
-    peerDependencies:
-      vue: ^3.2.41
-
   lazy-js-utils@0.0.95:
     resolution: {integrity: sha512-tVPcRxWjFHNeQ72QmnJ4KT2qrsl2/NISL5jLM2GG6FnduMs+LBmSNswnfQYAuFQ1RmkPC4Tnhescbx7eOGH0Mg==}
     peerDependencies:
       vue: ^3.2.41
+
+  lazy-js-utils@0.1.26:
+    resolution: {integrity: sha512-DHbg+368TqMJCMWhPhqHB2X7pHH/ynd3/WFz0zZBKQUutLQ/32vrKhW1U0c9Li57JCqoGum6MEV1xzE0gVcsxw==}
 
   levn@0.4.1:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
@@ -1899,8 +1894,8 @@ packages:
     resolution: {integrity: sha512-rRV+zQD8tVFys26lAGR9WUuS4iUAngJScM+ZRSKtvl5tKeZ2t5bvdNFdNHBW9FWR4guGHlgmsZ1G7BSm2wTbuA==}
     engines: {node: '>=6'}
 
-  qrcode@1.5.3:
-    resolution: {integrity: sha512-puyri6ApkEHYiVl4CFzo1tDkAZ+ATcnbJrJ6RiBM1Fhctdn/ix9MTE3hRph33omisEbC/2fcfemsseiKgBPKZg==}
+  qrcode@1.5.4:
+    resolution: {integrity: sha512-1ca71Zgiu6ORjHqFBDpnSMTR2ReToX4l1Au1VFLyVeBTFavzQnv5JxMFr3ukHVKpSrSA2MCk0lNJSykjUfz7Zg==}
     engines: {node: '>=10.13.0'}
     hasBin: true
 
@@ -2818,7 +2813,7 @@ snapshots:
     dependencies:
       '@types/unist': 2.0.8
 
-  '@types/node@18.19.56':
+  '@types/node@18.19.65':
     dependencies:
       undici-types: 5.26.5
 
@@ -3152,7 +3147,7 @@ snapshots:
 
   camelcase@5.3.1: {}
 
-  ccommand@1.0.68(vue@3.3.4):
+  ccommand@1.0.69(vue@3.3.4):
     dependencies:
       '@simon_he/colorize': 0.0.1
       build: 0.1.4
@@ -3350,8 +3345,6 @@ snapshots:
   emoji-regex@9.2.2: {}
 
   enabled@2.0.0: {}
-
-  encode-utf8@1.0.3: {}
 
   entities@4.5.0: {}
 
@@ -4104,19 +4097,18 @@ snapshots:
 
   kuler@2.0.0: {}
 
-  lazy-js-utils@0.0.94(vue@3.3.4):
-    dependencies:
-      htmlparser2: 8.0.2
-      qrcode: 1.5.3
-      spark-md5: 3.0.2
-      vue: 3.3.4
-
   lazy-js-utils@0.0.95(vue@3.3.4):
     dependencies:
       htmlparser2: 8.0.2
-      qrcode: 1.5.3
+      qrcode: 1.5.4
       spark-md5: 3.0.2
       vue: 3.3.4
+
+  lazy-js-utils@0.1.26:
+    dependencies:
+      htmlparser2: 8.0.2
+      qrcode: 1.5.4
+      spark-md5: 3.0.2
 
   levn@0.4.1:
     dependencies:
@@ -4466,10 +4458,9 @@ snapshots:
 
   punycode@2.3.0: {}
 
-  qrcode@1.5.3:
+  qrcode@1.5.4:
     dependencies:
       dijkstrajs: 1.0.3
-      encode-utf8: 1.0.3
       pngjs: 5.0.0
       yargs: 15.4.1
 
@@ -4888,7 +4879,7 @@ snapshots:
       spdx-correct: 3.2.0
       spdx-expression-parse: 3.0.1
 
-  vite-node@0.27.3(@types/node@18.19.56):
+  vite-node@0.27.3(@types/node@18.19.65):
     dependencies:
       cac: 6.7.14
       debug: 4.3.4
@@ -4897,7 +4888,7 @@ snapshots:
       picocolors: 1.1.1
       source-map: 0.6.1
       source-map-support: 0.5.21
-      vite: 4.4.11(@types/node@18.19.56)
+      vite: 4.4.11(@types/node@18.19.65)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -4908,20 +4899,20 @@ snapshots:
       - supports-color
       - terser
 
-  vite@4.4.11(@types/node@18.19.56):
+  vite@4.4.11(@types/node@18.19.65):
     dependencies:
       esbuild: 0.18.20
       postcss: 8.4.31
       rollup: 3.29.4
     optionalDependencies:
-      '@types/node': 18.19.56
+      '@types/node': 18.19.65
       fsevents: 2.3.3
 
   vitest@0.27.3:
     dependencies:
       '@types/chai': 4.3.8
       '@types/chai-subset': 1.3.3
-      '@types/node': 18.19.56
+      '@types/node': 18.19.65
       acorn: 8.10.0
       acorn-walk: 8.2.0
       cac: 6.7.14
@@ -4935,8 +4926,8 @@ snapshots:
       tinybench: 2.5.1
       tinypool: 0.3.1
       tinyspy: 1.1.1
-      vite: 4.4.11(@types/node@18.19.56)
-      vite-node: 0.27.3(@types/node@18.19.56)
+      vite: 4.4.11(@types/node@18.19.65)
+      vite-node: 0.27.3(@types/node@18.19.65)
       why-is-node-running: 2.2.2
     transitivePeerDependencies:
       - less

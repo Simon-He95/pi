@@ -1,4 +1,4 @@
-import { getPkg, jsShell } from 'lazy-js-utils'
+import { getPkg, jsShell } from 'lazy-js-utils/dist/node'
 import pc from 'picocolors'
 import { pi } from './pi'
 import { getParams } from './utils'
@@ -13,7 +13,7 @@ export async function pil(params: string) {
         key => `${key}: ${devDependencies[key]}`,
       ),
     ]
-    const { result: choose, status } = jsShell(
+    const { result: choose, status } = await jsShell(
       `echo ${deps.join(
         ',',
       )} | sed "s/,/\\n/g" | gum filter --no-limit --placeholder=" 🤔${
@@ -21,7 +21,9 @@ export async function pil(params: string) {
           ? '请选择一个需要获取最新版本的依赖'
           : 'Please select a dependency that needs to obtain the latest version.'
       }"`,
-      'pipe',
+      {
+        stdio: ['inherit', 'pipe', 'inherit'],
+      },
     )
     if (status === 130) {
       console.log(pc.dim('已取消'))

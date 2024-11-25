@@ -1,4 +1,4 @@
-import { jsShell } from 'lazy-js-utils'
+import { jsShell } from 'lazy-js-utils/dist/node'
 import { version } from '../package.json'
 
 const isZh = process.env.PI_Lang === 'zh'

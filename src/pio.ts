@@ -1,5 +1,5 @@
 import process from 'process'
-import { useNodeWorker } from 'lazy-js-utils'
+import { useNodeWorker } from 'lazy-js-utils/dist/node'
 import color from 'picocolors'
 import { getParams, loading } from './utils'
 

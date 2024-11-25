@@ -1,13 +1,6 @@
 import process from 'process'
-import {
-  hasPkg,
-  isGo,
-  isRust,
-  isWin,
-  jsShell,
-  spaceFormat,
-  useNodeWorker,
-} from 'lazy-js-utils'
+import { hasPkg, jsShell, useNodeWorker } from 'lazy-js-utils/dist/node'
+import { isGo, isRust, isWin, spaceFormat } from 'lazy-js-utils'
 import color from 'picocolors'
 import fg from 'fast-glob'
 import { ccommand } from 'ccommand'
@@ -58,7 +51,7 @@ export async function setup() {
   help(argv)
   const params = spaceFormat(argv.join(' ')).trim()
   if (!hasPkg(rootPath)) {
-    if (isGo()) {
+    if (await isGo()) {
       if (exec === 'pi') {
         const loading_status = await loading(
           `${isZh ? '正在为您安装' : 'Installing'} ${params} ...\n`,
@@ -119,7 +112,7 @@ export async function setup() {
       }
       process.exit()
     }
-    if (isRust()) {
+    if (await isRust()) {
       if (exec === 'pi') {
         const loading_status = await loading(
           `${isZh ? '正在为您安装' : 'Installing'} ${params} ...\n`,

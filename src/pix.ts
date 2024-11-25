@@ -1,4 +1,4 @@
-import { getPkgTool, jsShell } from 'lazy-js-utils'
+import { getPkgTool, jsShell } from 'lazy-js-utils/dist/node'
 
 // npx
 export async function pix(params: string) {

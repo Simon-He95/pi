@@ -1,5 +1,6 @@
 import path from 'path'
-import { getPkg, getPkgTool, isFile, jsShell } from 'lazy-js-utils'
+import { getPkg, getPkgTool, jsShell } from 'lazy-js-utils/dist/node'
+import { isFile } from 'lazy-js-utils'
 import ora from 'ora'
 import colors from 'picocolors'
 import type { Color, Spinner } from 'ora'
@@ -107,12 +108,16 @@ export async function getStyle() {
   } as unknown as { color: Color; spinner: Spinner }
 }
 
-export function getLatestVersion(pkg: string, isZh = true) {
+export async function getLatestVersion(pkg: string, isZh = true) {
   const data: string[] = []
 
   for (const p of pkg.replace(/\s+/, ' ').split(' ')) {
     const [pName, v] = p.split('$')
-    let { status, result } = jsShell(`npm view ${pName}`, 'pipe')
+    let { status, result } = await jsShell(`npm view ${pName}`, [
+      'inherit',
+      'pipe',
+      'inherit',
+    ])
     if (status === 0) {
       if (result.startsWith('@'))
         result = result.slice(1)

@@ -67,7 +67,7 @@
   "dependencies": {
     "ccommand": "^1.0.69",
     "fast-glob": "latest",
-    "lazy-js-utils": "^0.0.94",
+    "lazy-js-utils": "^0.1.26",
     "semver": "^7.6.3"
   },
   "devDependencies": {

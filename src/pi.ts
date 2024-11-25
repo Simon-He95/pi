@@ -1,6 +1,6 @@
 import process from 'process'
 import { log } from 'console'
-import { getPkgTool, jsShell, useNodeWorker } from 'lazy-js-utils'
+import { getPkgTool, jsShell, useNodeWorker } from 'lazy-js-utils/dist/node'
 import colors from 'picocolors'
 import { getLatestVersion, getParams, loading } from './utils'
 import { detectNode } from './detectNode'
@@ -15,7 +15,7 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
   const start = Date.now()
   let successMsg = ''
   if (isLatest) {
-    successMsg = getLatestVersion(pkg, isZh)
+    successMsg = await getLatestVersion(pkg, isZh)
   }
   else {
     successMsg = pkg
@@ -35,7 +35,7 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
       ? '依赖更新失败 😭'
       : 'Failed to update dependency 😭'
   const newParams = isLatest ? params : await getParams(params)
-  let stdio: any = 'pipe'
+  let stdio: any = ['inherit', 'pipe', 'inherit']
   let loading_status: any
   const { PI_DEFAULT, PI_MaxSockets: sockets } = process.env
   const pkgTool = await getPkgTool()
@@ -81,7 +81,7 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
           : 'Trying to use npm to run again...',
       ),
     )
-    const { status: newStatus, result: newResult } = jsShell(
+    const { status: newStatus, result: newResult } = await jsShell(
       `npm install${newParams ? ` ${newParams}` : runSockets}`,
       {
         stdio,

@@ -1,5 +1,5 @@
 import process from 'process'
-import { getPkg, jsShell } from 'lazy-js-utils'
+import { getPkg, jsShell } from 'lazy-js-utils/dist/node'
 import colors from 'picocolors'
 
 export async function detectNode() {
@@ -21,7 +21,7 @@ export async function detectNode() {
     if (!isSafe) {
       const { result, status } = await jsShell(
         `echo "yes\nno" | gum filter --placeholder=" 当前node版本不满足 ${pkg.engines.node}，是否切换node版本"`,
-        'pipe',
+        ['inherit', 'pipe', 'inherit'],
       )
       if (status === 0 && result === 'yes') {
         await jsShell(
@@ -33,7 +33,7 @@ export async function detectNode() {
             fnm use $\{registery% -*}
            fi
           `,
-          'pipe',
+          ['inherit', 'pipe', 'inherit'],
         )
       }
     }
