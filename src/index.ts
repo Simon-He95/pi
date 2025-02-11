@@ -1,5 +1,5 @@
 import process from 'process'
-import path from 'path/posix'
+import path from 'path'
 import {
   hasPkg,
   isGo,
@@ -55,9 +55,10 @@ export async function setup() {
     exec = cmd.slice(last, cmd.length)
   }
   const argv: string[] = process.argv.slice(2)
-  help(argv)
+  await help(argv)
 
   let params = spaceFormat(argv.join(' ')).trim()
+
   if (!(await hasPkg(rootPath))) {
     if (await isGo(rootPath)) {
       if (exec === 'pi') {
@@ -216,7 +217,6 @@ export async function setup() {
   }
   const pkg = argv.filter(v => !v.startsWith('-')).join(' ')
   await installDeps()
-
   runMap[exec](params, pkg)
 }
 

@@ -47,7 +47,6 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
         ? 'add'
         : ''
       : 'install'
-
   if (pkgTool === 'npm') {
     if (PI_DEFAULT) {
       executor = `${PI_DEFAULT} ${install}`

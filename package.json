@@ -25,11 +25,11 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "require": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
       "import": "./dist/index.js"
     }
   },
-  "main": "./dist/index.mjs",
+  "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "typesVersions": {
@@ -72,7 +72,6 @@
   "dependencies": {
     "ccommand": "^1.0.73",
     "fast-glob": "latest",
-    "lazy-js-utils": "^0.1.29",
     "semver": "^7.7.1"
   },
   "devDependencies": {
@@ -80,10 +79,10 @@
     "@types/node": "^18.19.75",
     "bumpp": "^8.2.1",
     "eslint": "^8.57.1",
+    "lazy-js-utils": "^0.1.30",
     "lint-staged": "^13.3.0",
     "ora": "^6.3.1",
     "picocolors": "^1.1.1",
-    "pnpm": "^7.33.7",
     "prettier": "^2.8.8",
     "rimraf": "^3.0.2",
     "tsup": "^6.7.0",
