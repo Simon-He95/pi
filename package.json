@@ -67,12 +67,12 @@
   "dependencies": {
     "ccommand": "^1.0.69",
     "fast-glob": "latest",
-    "lazy-js-utils": "^0.1.26",
-    "semver": "^7.6.3"
+    "lazy-js-utils": "^0.1.29",
+    "semver": "^7.7.1"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.34.2",
-    "@types/node": "^18.19.60",
+    "@types/node": "^18.19.75",
     "bumpp": "^8.2.1",
     "eslint": "^8.57.1",
     "lint-staged": "^13.3.0",

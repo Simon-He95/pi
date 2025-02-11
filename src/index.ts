@@ -1,6 +1,13 @@
 import process from 'process'
-import { hasPkg, jsShell, useNodeWorker } from 'lazy-js-utils/dist/node'
-import { isGo, isRust, isWin, spaceFormat } from 'lazy-js-utils'
+import path from 'path/posix'
+import {
+  hasPkg,
+  isGo,
+  isRust,
+  jsShell,
+  useNodeWorker,
+} from 'lazy-js-utils/dist/node'
+import { isWin, spaceFormat } from 'lazy-js-utils'
 import color from 'picocolors'
 import fg from 'fast-glob'
 import { ccommand } from 'ccommand'
@@ -19,7 +26,7 @@ import { pu } from './pu'
 import { pui } from './pui'
 import { pio } from './pio'
 
-const rootPath = process.cwd()
+let rootPath = process.cwd()
 
 const runMap: Record<string, Function> = {
   pi,
@@ -49,9 +56,9 @@ export async function setup() {
   }
   const argv: string[] = process.argv.slice(2)
   help(argv)
-  const params = spaceFormat(argv.join(' ')).trim()
-  if (!hasPkg(rootPath)) {
-    if (await isGo()) {
+  let params = spaceFormat(argv.join(' ')).trim()
+  if (!(await hasPkg(rootPath))) {
+    if (await isGo(rootPath)) {
       if (exec === 'pi') {
         const loading_status = await loading(
           `${isZh ? '正在为您安装' : 'Installing'} ${params} ...\n`,
@@ -95,13 +102,15 @@ export async function setup() {
           : 'main.go'
         const target = (await fg(match))[0]
 
-        return target ? jsShell(`go run ${target}`) : ccommand(params)
+        return target
+          ? await jsShell(`go run ${target}`, 'inherit')
+          : ccommand(params)
       }
       else if (exec === 'pinit') {
-        jsShell(`go mod init ${params}`)
+        await jsShell(`go mod init ${params}`, 'inherit')
       }
       else if (exec === 'pbuild') {
-        jsShell(`go build ${params}`)
+        await jsShell(`go build ${params}`, 'inherit')
       }
       else {
         console.log(
@@ -112,12 +121,23 @@ export async function setup() {
       }
       process.exit()
     }
-    if (await isRust()) {
+    let projectPath = ''
+    if (params && !(await isRust())) {
+      // 将 params 的第一个参数作为路径合并到 rootPath，剩余部分作为 params
+      projectPath = params.split(' ')[0]
+      rootPath = path.resolve(rootPath, projectPath)
+      params = params.replace(projectPath, '').trim()
+    }
+    if (await isRust(rootPath)) {
       if (exec === 'pi') {
         const loading_status = await loading(
           `${isZh ? '正在为您安装' : 'Installing'} ${params} ...\n`,
         )
-        const { status } = await useNodeWorker(`cargo install ${params}`)
+        const { status } = await useNodeWorker(
+          `cargo install ${params}${
+            projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
+          }`,
+        )
         if (status === 0) {
           loading_status.succeed(
             color.green(isZh ? '安装成功! 😊' : 'Installed successfully! 😊'),
@@ -133,7 +153,11 @@ export async function setup() {
         const loading_status = await loading(
           `${isZh ? '正在为您卸载' : 'Uninstalling'} ${params} ...\n`,
         )
-        const { status } = await useNodeWorker(`cargo uninstall ${params}`)
+        const { status } = await useNodeWorker(
+          `cargo uninstall ${params}${
+            projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
+          }`,
+        )
         if (status === 0) {
           loading_status.succeed(
             color.green(isZh ? '卸载成功! 😊' : 'Uninstalled successfully! 😊'),
@@ -146,13 +170,28 @@ export async function setup() {
         }
       }
       else if (exec === 'prun') {
-        jsShell(`cargo run ${params}`)
+        await jsShell(
+          `cargo run ${params}${
+            projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
+          }`,
+          'inherit',
+        )
       }
       else if (exec === 'pinit') {
-        jsShell(`cargo init ${params}`)
+        await jsShell(
+          `cargo init ${params}${
+            projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
+          }`,
+          'inherit',
+        )
       }
       else if (exec === 'pbuild') {
-        jsShell(`cargo build ${params}`)
+        await jsShell(
+          `cargo build ${params}${
+            projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
+          }`,
+          'inherit',
+        )
       }
       else {
         console.log(
@@ -167,7 +206,7 @@ export async function setup() {
       console.log(
         color.yellow(
           isZh
-            ? '命令不存在，请执行pi -h查看帮助'
+            ? '命令不存在, 请执行 pi -h 查看帮助'
             : 'The command does not exist, please execute pi -h to view the help',
         ),
       )
