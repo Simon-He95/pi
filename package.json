@@ -2,7 +2,7 @@
   "name": "@simon_he/pi",
   "type": "module",
   "version": "0.0.94",
-  "description": "",
+  "description": "A powerful and flexible command-line tool for managing projects.",
   "author": "Simon He",
   "license": "MIT",
   "funding": "https://github.com/sponsors/Simon-He95",
@@ -12,7 +12,15 @@
     "url": "git+https://github.com/Simon-He95/pi.git"
   },
   "bugs": "https://github.com/Simon-He95/pi/issues",
-  "keywords": [],
+  "keywords": [
+    "command-line",
+    "tool",
+    "project-management",
+    "automation",
+    "nodejs",
+    "rust",
+    "go"
+  ],
   "sideEffects": false,
   "exports": {
     ".": {
