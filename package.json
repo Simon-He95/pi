@@ -57,9 +57,6 @@
   "files": [
     "dist"
   ],
-  "engines": {
-    "node": ">=16.0.0"
-  },
   "scripts": {
     "build": "tsup ./src/index.ts --format cjs,esm --dts --clean ",
     "dev": "bun build -- --watch src",
@@ -73,7 +70,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "ccommand": "^1.0.69",
+    "ccommand": "^1.0.73",
     "fast-glob": "latest",
     "lazy-js-utils": "^0.1.29",
     "semver": "^7.7.1"

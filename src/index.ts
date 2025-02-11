@@ -56,6 +56,7 @@ export async function setup() {
   }
   const argv: string[] = process.argv.slice(2)
   help(argv)
+
   let params = spaceFormat(argv.join(' ')).trim()
   if (!(await hasPkg(rootPath))) {
     if (await isGo(rootPath)) {
