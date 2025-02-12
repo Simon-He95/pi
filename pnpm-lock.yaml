@@ -14,9 +14,6 @@ importers:
       fast-glob:
         specifier: latest
         version: 3.3.2
-      lazy-js-utils:
-        specifier: ^0.1.30
-        version: 0.1.30
       semver:
         specifier: ^7.7.1
         version: 7.7.1
@@ -33,6 +30,9 @@ importers:
       eslint:
         specifier: ^8.57.1
         version: 8.57.1
+      lazy-js-utils:
+        specifier: ^0.1.30
+        version: 0.1.30
       lint-staged:
         specifier: ^13.3.0
         version: 13.3.0
