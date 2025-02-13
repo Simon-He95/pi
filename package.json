@@ -78,7 +78,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "^0.34.2",
     "@types/node": "^18.19.75",
-    "bumpp": "^8.2.1",
+    "bumpp": "^10.0.0",
     "eslint": "^8.57.1",
     "lazy-js-utils": "^0.1.30",
     "lint-staged": "^13.3.0",
