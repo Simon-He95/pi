@@ -2,6 +2,7 @@
   "name": "@simon_he/pi",
   "type": "module",
   "version": "0.0.98",
+  "packageManager": "pnpm@9.15.4",
   "description": "A powerful and flexible command-line tool for managing projects.",
   "author": "Simon He",
   "license": "MIT",
