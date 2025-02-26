@@ -1,4 +1,4 @@
-import { getPkg, jsShell } from 'lazy-js-utils/dist/node'
+import { getPkg, jsShell } from 'lazy-js-utils/node'
 import pc from 'picocolors'
 import { pi } from './pi'
 import { getParams } from './utils'

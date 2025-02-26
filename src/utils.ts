@@ -1,5 +1,5 @@
 import path from 'path'
-import { getPkg, getPkgTool, jsShell } from 'lazy-js-utils/dist/node'
+import { getPkg, getPkgTool, jsShell } from 'lazy-js-utils/node'
 import { isFile } from 'lazy-js-utils'
 import ora from 'ora'
 import colors from 'picocolors'

@@ -1,5 +1,5 @@
 import process from 'process'
-import { getPkg, jsShell } from 'lazy-js-utils/dist/node'
+import { getPkg, jsShell } from 'lazy-js-utils/node'
 import colors from 'picocolors'
 
 export async function detectNode() {

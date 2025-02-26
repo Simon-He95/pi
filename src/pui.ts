@@ -1,4 +1,4 @@
-import { getPkg, jsShell, useNodeWorker } from 'lazy-js-utils/dist/node'
+import { getPkg, jsShell, useNodeWorker } from 'lazy-js-utils/node'
 import colors from 'picocolors'
 import { loading } from './utils'
 

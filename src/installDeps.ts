@@ -1,4 +1,4 @@
-import { isInstallPkg, jsShell } from 'lazy-js-utils/dist/node'
+import { isInstallPkg, jsShell } from 'lazy-js-utils/node'
 import color from 'picocolors'
 
 // dependency

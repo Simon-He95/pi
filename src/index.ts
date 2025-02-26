@@ -6,7 +6,7 @@ import {
   isRust,
   jsShell,
   useNodeWorker,
-} from 'lazy-js-utils/dist/node'
+} from 'lazy-js-utils/node'
 import { isWin, spaceFormat } from 'lazy-js-utils'
 import color from 'picocolors'
 import fg from 'fast-glob'

@@ -1,4 +1,4 @@
-import { getPkgTool, jsShell } from 'lazy-js-utils/dist/node'
+import { getPkgTool, jsShell } from 'lazy-js-utils/node'
 // package init
 export async function pinit() {
   console.log('Initializing project...')

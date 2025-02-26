@@ -1,6 +1,6 @@
 import process from 'process'
 import { log } from 'console'
-import { getPkgTool, jsShell, useNodeWorker } from 'lazy-js-utils/dist/node'
+import { getPkgTool, jsShell, useNodeWorker } from 'lazy-js-utils/node'
 import colors from 'picocolors'
 import { getLatestVersion, getParams, loading } from './utils'
 import { detectNode } from './detectNode'

@@ -2,7 +2,7 @@
   "name": "@simon_he/pi",
   "type": "module",
   "version": "0.0.98",
-  "packageManager": "pnpm@9.15.4",
+  "packageManager": "pnpm@9.15.6",
   "description": "A powerful and flexible command-line tool for managing projects.",
   "author": "Simon He",
   "license": "MIT",
@@ -42,24 +42,24 @@
     }
   },
   "bin": {
-    "pi": "./pi.mjs",
-    "pio": "./pio.mjs",
-    "pix": "./pix.mjs",
-    "pa": "./pa.mjs",
-    "pu": "./pu.mjs",
-    "pci": "./pci.mjs",
-    "pil": "./pil.mjs",
-    "pui": "./pui.mjs",
-    "prun": "./prun.mjs",
-    "pinit": "./pinit.mjs",
-    "pbuild": "./pbuild.mjs",
-    "pfind": "./pfind.mjs"
+    "pi": "./pi.js",
+    "pio": "./pio.js",
+    "pix": "./pix.js",
+    "pa": "./pa.js",
+    "pu": "./pu.js",
+    "pci": "./pci.js",
+    "pil": "./pil.js",
+    "pui": "./pui.js",
+    "prun": "./prun.js",
+    "pinit": "./pinit.js",
+    "pbuild": "./pbuild.js",
+    "pfind": "./pfind.js"
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsup ./src/index.ts --format cjs,esm --dts --clean ",
+    "build": "tsup ./src/index.ts --format cjs,esm --clean ",
     "dev": "bun build -- --watch src",
     "format": "prettier --write --cache .",
     "lint": "eslint .",
@@ -71,24 +71,24 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "ccommand": "^1.0.73",
+    "ccommand": "^1.0.74",
     "fast-glob": "latest",
     "semver": "^7.7.1"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.34.2",
-    "@types/node": "^18.19.75",
+    "@types/node": "^18.19.76",
     "bumpp": "^8.2.1",
     "eslint": "^8.57.1",
-    "lazy-js-utils": "^0.1.30",
+    "lazy-js-utils": "^0.1.31",
     "lint-staged": "^13.3.0",
     "ora": "^6.3.1",
     "picocolors": "^1.1.1",
     "prettier": "^2.8.8",
-    "tsup": "^8.0.0",
+    "tsup": "^8.4.0",
     "tsx": "^3.14.0",
     "typescript": "^4.9.5",
-    "vitest": "^3.0.5"
+    "vitest": "^3.0.7"
   },
   "lint-staged": {
     "*.{vue,js,ts,jsx,tsx,md,json}": "eslint . --fix"
