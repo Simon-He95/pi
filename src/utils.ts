@@ -1,4 +1,5 @@
 import path from 'path'
+import process from 'process'
 import { getPkg, getPkgTool, jsShell } from 'lazy-js-utils/node'
 import { isFile } from 'lazy-js-utils'
 import ora from 'ora'
@@ -27,6 +28,8 @@ export async function getParams(params: string) {
             return params.replace(W, '')
           if (w.test(params))
             return params.replace(w, '')
+          if (d.test(params))
+            return params.replace(d, ' -D')
         }
         if (isFile('./pnpm-workspace.yaml')) {
           if (D.test(params))

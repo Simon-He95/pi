@@ -68,6 +68,7 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
     stdio,
     errorExit: false,
   })
+
   if (
     result
     && result.includes('pnpm versions with respective Node.js version support')
