@@ -1,7 +1,7 @@
 {
   "name": "@simon_he/pi",
   "type": "module",
-  "version": "0.0.99",
+  "version": "0.1.0",
   "packageManager": "pnpm@9.15.6",
   "description": "A powerful and flexible command-line tool for managing projects.",
   "author": "Simon He",
