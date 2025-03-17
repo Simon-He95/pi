@@ -2,7 +2,7 @@
   "name": "@simon_he/pi",
   "type": "module",
   "version": "0.1.0",
-  "packageManager": "pnpm@9.15.6",
+  "packageManager": "pnpm@9.15.9",
   "description": "A powerful and flexible command-line tool for managing projects.",
   "author": "Simon He",
   "license": "MIT",
@@ -71,16 +71,16 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "ccommand": "^1.0.74",
+    "ccommand": "^1.0.75",
     "fast-glob": "latest",
     "semver": "^7.7.1"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.34.2",
-    "@types/node": "^18.19.76",
+    "@types/node": "^18.19.80",
     "bumpp": "^8.2.1",
     "eslint": "^8.57.1",
-    "lazy-js-utils": "^0.1.31",
+    "lazy-js-utils": "^0.1.32",
     "lint-staged": "^13.3.0",
     "ora": "^6.3.1",
     "picocolors": "^1.1.1",
@@ -88,7 +88,7 @@
     "tsup": "^8.4.0",
     "tsx": "^3.14.0",
     "typescript": "^4.9.5",
-    "vitest": "^3.0.7"
+    "vitest": "^3.0.8"
   },
   "lint-staged": {
     "*.{vue,js,ts,jsx,tsx,md,json}": "eslint . --fix"
