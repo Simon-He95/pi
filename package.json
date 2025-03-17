@@ -71,8 +71,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "ccommand": "^1.0.75",
+    "ccommand": "^1.0.76",
     "fast-glob": "latest",
+    "lazy-js-utils": "^0.1.33",
     "semver": "^7.7.1"
   },
   "devDependencies": {
@@ -80,7 +81,6 @@
     "@types/node": "^18.19.80",
     "bumpp": "^8.2.1",
     "eslint": "^8.57.1",
-    "lazy-js-utils": "^0.1.32",
     "lint-staged": "^13.3.0",
     "ora": "^6.3.1",
     "picocolors": "^1.1.1",
@@ -88,7 +88,7 @@
     "tsup": "^8.4.0",
     "tsx": "^3.14.0",
     "typescript": "^4.9.5",
-    "vitest": "^3.0.8"
+    "vitest": "^3.0.9"
   },
   "lint-staged": {
     "*.{vue,js,ts,jsx,tsx,md,json}": "eslint . --fix"
