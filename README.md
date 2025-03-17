@@ -1,49 +1,77 @@
-<span ><p align="center">![kv](/assets/kv.png)</p></span>
+<p align="center">
+  <img src="/assets/kv.png" alt="PI - Smart Package Manager">
+</p>
 
-<p align="center"> English | <a href="./README_zh.md">简体中文</a></p>
-<p align="center"><a href="https://www.npmjs.com/package/@simon_he/pi"><img src="https://img.shields.io/npm/v/@simon_he/pi?color=3fb883&amp;label=" alt="NPM version"></a>
+<p align="center">
+  <a href="https://www.npmjs.com/package/@simon_he/pi"><img src="https://img.shields.io/npm/v/@simon_he/pi?color=3fb883&amp;label=" alt="NPM version"></a>
+  <a href="https://www.npmjs.com/package/@simon_he/pi"><img src="https://img.shields.io/npm/dm/@simon_he/pi.svg?color=3fb883&label=" alt="NPM Downloads"></a>
+  <a href="https://github.com/Simon-He95/pi/blob/main/LICENSE"><img src="https://img.shields.io/github/license/Simon-He95/pi?color=3fb883" alt="License"></a>
+</p>
 
-## :lollipop: PI
+<p align="center">English | <a href="./README_zh.md">简体中文</a></p>
 
-A smart package manager with a custom loading style, which makes you install dependencies more beautifully :), and can fuzzy match and find deep-level instructions
+## 📖 Table of Contents
 
-## :rocket: Smart package manager
+- [Introduction](#-pi)
+- [Features](#-smart-package-manager)
+- [Examples](#-examples)
+- [Language Settings](#-language)
+- [Installation](#-installation)
+- [Usage](#-usage)
+- [Supported Features](#-features)
+- [Special Features](#-feature)
+- [Custom Configuration](#-custom-configuration)
+- [Dependencies](#-dependencies)
+- [License](#license)
 
-- Supports dependency installation, uninstallation, execution and packaging of go mod
-- Supports Cargo's dependency installation, uninstallation, execution and packaging
-- Support npm dependency installation, uninstallation and execution
-- Support pnpm dependency installation, uninstallation and execution
-- Support yarn dependency installation, uninstallation and execution
-- Automatically handle the difference between yarn and pnpm w and W according to the current directory and environment and will repair the monorepo installation
+## 🍭 PI
 
-## Demo
+PI is an intelligent package manager with beautiful custom loading styles, providing a better visual experience when installing dependencies. It can intelligently identify project environments, fuzzy match commands, and find deep-nested instructions, greatly improving development efficiency.
 
-- pi
-  ![img](/assets/pi.png)
+## 🚀 Smart Package Manager
 
-  ![gif](/assets/pi.gif)
+PI supports package management for multiple environments:
 
-- pui
-  ![img](/assets/pui.png)
+- ✅ **Go**: Supports dependency installation, uninstallation, execution, and packaging with go mod
+- ✅ **Rust**: Supports dependency installation, uninstallation, execution, and packaging with Cargo
+- ✅ **Node.js**: Supports dependency installation, uninstallation, and execution with npm, pnpm, and yarn
+- ✅ **Python**: Supports Python file execution
+- ✅ **Monorepo**: Automatically identifies and handles differences between yarn and pnpm workspaces, fixing monorepo installation issues
 
-- pci
-  ![img](/assets/pci.png)
+## 📷 Examples
 
-- prun
-  ![img](/assets/prun.png)
+### pi - Install Dependencies
 
-  ![gif](/assets/prun.gif)
+![Install Dependencies Example](/assets/pi.png)
 
-- pfind
-  ![gif](/assets/pfind.gif)
+![Install Dependencies Animation](/assets/pi.gif)
 
-- others
-  ![gif](/assets/others.gif)
+### pui - Uninstall Dependencies
 
-## :phone: Language
+![Uninstall Dependencies Example](/assets/pui.png)
 
-```
-# Export environment variables in your bash or zsh
+### pci - Clear Cache
+
+![Clear Cache Example](/assets/pci.png)
+
+### prun - Run Commands
+
+![Run Commands Example](/assets/prun.png)
+
+![Run Commands Animation](/assets/prun.gif)
+
+### pfind - Find Commands
+
+![Find Commands Animation](/assets/pfind.gif)
+
+### Other Features
+
+![Other Features Animation](/assets/others.gif)
+
+## 📱 Language
+
+```bash
+# Set environment variables in your bash or zsh configuration file
 
 # Chinese
 export PI_Lang=zh

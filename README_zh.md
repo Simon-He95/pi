@@ -1,49 +1,77 @@
-<span ><p align="center">![kv](/assets/kv.png)</p></span>
+<p align="center">
+  <img src="/assets/kv.png" alt="PI - Smart Package Manager">
+</p>
 
-<p align="center"><a href="https://www.npmjs.com/package/@simon_he/pi"><img src="https://img.shields.io/npm/v/@simon_he/pi?color=3fb883&amp;label=" alt="NPM version"></a></p>
+<p align="center">
+  <a href="https://www.npmjs.com/package/@simon_he/pi"><img src="https://img.shields.io/npm/v/@simon_he/pi?color=3fb883&amp;label=" alt="NPM version"></a>
+  <a href="https://www.npmjs.com/package/@simon_he/pi"><img src="https://img.shields.io/npm/dm/@simon_he/pi.svg?color=3fb883&label=" alt="NPM Downloads"></a>
+  <a href="https://github.com/Simon-He95/pi/blob/main/LICENSE"><img src="https://img.shields.io/github/license/Simon-He95/pi?color=3fb883" alt="License"></a>
+</p>
+
 <p align="center"><a href="./README.md">English</a> | 简体中文</p>
 
-## :lollipop: PI
+## 📖 目录
 
-一个带有自定义 loading 样式的 smart 包管理器，让你安装依赖时更加美观:), 并且能够模糊匹配和查找深层级的指令
+- [简介](#-pi)
+- [功能特点](#-聪明的包管理器)
+- [示例展示](#-示例)
+- [语言设置](#-语言)
+- [安装方法](#-安装)
+- [使用方法](#-使用)
+- [支持的功能](#-功能)
+- [特色功能](#-feature)
+- [自定义配置](#-自定义配置)
+- [依赖项](#-依赖)
+- [许可证](#license)
 
-## :rocket: 聪明的包管理器
+## 🍭 PI
 
-- 支持 go mod 的依赖安装、卸载、执行和打包
-- 支持 Cargo 的依赖安装、卸载、执行和打包
-- 支持 npm 的依赖安装、卸载和执行
-- 支持 pnpm 的依赖安装、卸载和执行
-- 支持 yarn 的依赖安装、卸载和执行
-- 自动根据当前目录和环境去处理 yarn 和 pnpm w 和 W 的差异并会修复 monorepo 安装
+PI 是一个智能包管理工具，具有美观的自定义 loading 样式，让你在安装依赖时获得更好的视觉体验。它能够智能识别项目环境、模糊匹配命令，以及查找深层级的指令，大大提高了命令执行效率。
 
-## 例子
+## 🚀 聪明的包管理器
 
-- pi
-  ![img](/assets/pi.png)
+PI 支持多种环境的包管理：
 
-  ![gif](/assets/pi.gif)
+- ✅ **Go**: 支持 go mod 的依赖安装、卸载、执行和打包
+- ✅ **Rust**: 支持 Cargo 的依赖安装、卸载、执行和打包
+- ✅ **Node.js**: 支持 npm、pnpm、yarn 的依赖安装、卸载和执行
+- ✅ **Python**: 支持 Python 文件的执行
+- ✅ **Monorepo**: 自动识别并处理 yarn 和 pnpm 工作区的差异，修复 monorepo 安装问题
 
-- pui
-  ![img](/assets/pui.png)
+## 📷 示例
 
-- pci
-  ![img](/assets/pci.png)
+### pi - 安装依赖
 
-- prun
-  ![img](/assets/prun.png)
+![安装依赖示例](/assets/pi.png)
 
-  ![gif](/assets/prun.gif)
+![安装依赖动画](/assets/pi.gif)
 
-- pfind
-  ![gif](/assets/pfind.gif)
+### pui - 卸载依赖
 
-- others
-  ![gif](/assets/others.gif)
+![卸载依赖示例](/assets/pui.png)
 
-## :phone: Language
+### pci - 清理缓存
 
-```
-# 导出环境变量在你的bash或者zsh中
+![清理缓存示例](/assets/pci.png)
+
+### prun - 运行命令
+
+![运行命令示例](/assets/prun.png)
+
+![运行命令动画](/assets/prun.gif)
+
+### pfind - 查找命令
+
+![查找命令动画](/assets/pfind.gif)
+
+### 其他功能
+
+![其他功能动画](/assets/others.gif)
+
+## 📱 语言
+
+```bash
+# 在你的 bash 或 zsh 配置文件中设置环境变量
 
 # 中文
 export PI_Lang=zh
