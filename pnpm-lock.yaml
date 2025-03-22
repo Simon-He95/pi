@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       ccommand:
-        specifier: ^1.0.77
-        version: 1.0.77
+        specifier: ^1.0.78
+        version: 1.0.78
       fast-glob:
         specifier: latest
         version: 3.3.3
@@ -983,8 +983,8 @@ packages:
     resolution: {integrity: sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==}
     engines: {node: '>=6'}
 
-  ccommand@1.0.77:
-    resolution: {integrity: sha512-nXDNoxrlUrsWyM0ralwLGfk2oSetpLA6EBMgZuKZ6QeXKOG1o3C95wgVXa0k9fsiJ5QireU2XyMOVPz9plyIsQ==}
+  ccommand@1.0.78:
+    resolution: {integrity: sha512-jvl0k+OcT2SdtmaRuAUROXKdiNUXxuzMR7NKaU0Wbg0Kuu/CCLn581FZ3Zbd/MNGQKVOig4w/qlotv0RMUDDKw==}
     hasBin: true
 
   chai@5.2.0:
@@ -3563,7 +3563,7 @@ snapshots:
 
   camelcase@5.3.1: {}
 
-  ccommand@1.0.77:
+  ccommand@1.0.78:
     dependencies:
       '@simon_he/colorize': 0.0.1
       build: 0.1.4
