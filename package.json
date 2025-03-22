@@ -102,7 +102,7 @@
     "@types/node": "^18.19.81",
     "bumpp": "^8.2.1",
     "eslint": "^9.23.0",
-    "lint-staged": "^13.3.0",
+    "lint-staged": "^15.0.0",
     "prettier": "^2.8.8",
     "tsup": "^8.4.0",
     "tsx": "^4.19.3",
