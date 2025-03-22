@@ -5,11 +5,11 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
+    "typeRoots": ["node_modules/lazy-js-utils/dist"],
     "strict": true,
     "strictNullChecks": true,
     "esModuleInterop": true,
     "skipDefaultLibCheck": true,
-    "skipLibCheck": true,
-    "typeRoots": ["node_modules/lazy-js-utils/dist"]
+    "skipLibCheck": true
   }
 }

@@ -1,4 +1,4 @@
-import process from 'process'
+import process from 'node:process'
 import { getPkg, jsShell } from 'lazy-js-utils/node'
 import colors from 'picocolors'
 
@@ -7,12 +7,14 @@ export async function detectNode() {
   try {
     pkg = await getPkg()
   }
-  catch (e: any) {
+  // eslint-disable-next-line unused-imports/no-unused-vars
+  catch (_) {
     const cwd = process.cwd()
     console.log(colors.red(`当前目录: ${cwd} 没有package.json文件`))
     process.exit(1)
   }
   if (pkg.engines?.node) {
+    // eslint-disable-next-line ts/no-require-imports
     const isSafe = require('semver').satisfies(
       process.version,
       pkg.engines.node,

@@ -1,4 +1,4 @@
-import process from 'process'
+import process from 'node:process'
 import { useNodeWorker } from 'lazy-js-utils/node'
 import color from 'picocolors'
 import { getParams, loading } from './utils'

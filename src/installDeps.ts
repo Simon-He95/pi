@@ -1,6 +1,6 @@
+import process from 'node:process'
 import { isInstallPkg, jsShell } from 'lazy-js-utils/node'
 import color from 'picocolors'
-
 // dependency
 export async function installDeps() {
   if (!(await isInstallPkg('gum'))) {

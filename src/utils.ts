@@ -1,10 +1,10 @@
-import path from 'path'
-import process from 'process'
-import { getPkg, getPkgTool, jsShell } from 'lazy-js-utils/node'
-import { isFile } from 'lazy-js-utils'
-import ora from 'ora'
-import colors from 'picocolors'
 import type { Color, Spinner } from 'ora'
+import path from 'node:path'
+import process from 'node:process'
+import { isFile } from 'lazy-js-utils'
+import { getPkg, getPkgTool, jsShell } from 'lazy-js-utils/node'
+// import ora from 'ora'
+import colors from 'picocolors'
 
 const DW = /\s-DW/g
 const W = /\s-W/g
@@ -78,13 +78,13 @@ export async function getParams(params: string) {
         return params
     }
   }
+  // eslint-disable-next-line unused-imports/no-unused-vars
   catch (err) {
     console.log(
       colors.red(
-        `${
-          isZh
-            ? 'package.json并不存在,在以下目录中:'
-            : 'package.json has not been found in'
+        `${isZh
+          ? 'package.json并不存在,在以下目录中:'
+          : 'package.json has not been found in'
         } ${process.cwd()}`,
       ),
     )
@@ -94,6 +94,7 @@ export async function getParams(params: string) {
 
 export async function loading(text: string) {
   const { color, spinner } = await getStyle()
+  const ora = (await import('ora')).default
   return ora({
     text,
     spinner,
@@ -108,7 +109,7 @@ export async function getStyle() {
   return {
     color,
     spinner,
-  } as unknown as { color: Color; spinner: Spinner }
+  } as unknown as { color: Color, spinner: Spinner }
 }
 
 export async function getLatestVersion(pkg: string, isZh = true) {
@@ -125,10 +126,9 @@ export async function getLatestVersion(pkg: string, isZh = true) {
       if (result.startsWith('@'))
         result = result.slice(1)
       const item = isZh
-        ? `${pName} ${colors.gray(v)} -> ${result.match(/@([^\s]+)/)![1]}`
-        : `Installed ${pName} ${colors.dim(v)} -> latest version：${
-            result.match(/@([^\s]+)/)![1]
-          }`
+        ? `${pName} ${colors.gray(v)} -> ${result.match(/@(\S+)/)![1]}`
+        : `Installed ${pName} ${colors.dim(v)} -> latest version：${result.match(/@(\S+)/)![1]
+        }`
       data.push(item)
     }
     else {

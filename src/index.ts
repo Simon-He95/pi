@@ -1,5 +1,8 @@
-import process from 'process'
-import path from 'path'
+import path from 'node:path'
+import process from 'node:process'
+import { ccommand } from 'ccommand'
+import fg from 'fast-glob'
+import { isWin, spaceFormat } from 'lazy-js-utils'
 import {
   hasPkg,
   isGo,
@@ -7,28 +10,25 @@ import {
   jsShell,
   useNodeWorker,
 } from 'lazy-js-utils/node'
-import { isWin, spaceFormat } from 'lazy-js-utils'
 import color from 'picocolors'
-import fg from 'fast-glob'
-import { ccommand } from 'ccommand'
-import { loading } from './utils'
 import { help } from './help'
 import { installDeps } from './installDeps'
-import { pi } from './pi'
 import { pa } from './pa'
 import { pci } from './pci'
 import { pfind } from './pfind'
+import { pi } from './pi'
 import { pil } from './pil'
 import { pinit } from './pinit'
+import { pio } from './pio'
 import { pix } from './pix'
 import { prun } from './prun'
 import { pu } from './pu'
 import { pui } from './pui'
-import { pio } from './pio'
+import { loading } from './utils'
 
 let rootPath = process.cwd()
 
-const runMap: Record<string, Function> = {
+const runMap: Record<string, (...arg: any) => void> = {
   pi,
   pix,
   pa,
@@ -136,8 +136,7 @@ export async function setup() {
           `${isZh ? '正在为您安装' : 'Installing'} ${params} ...\n`,
         )
         const { status } = await useNodeWorker(
-          `cargo install ${params}${
-            projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
+          `cargo install ${params}${projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
           }`,
         )
         if (status === 0) {
@@ -156,8 +155,7 @@ export async function setup() {
           `${isZh ? '正在为您卸载' : 'Uninstalling'} ${params} ...\n`,
         )
         const { status } = await useNodeWorker(
-          `cargo uninstall ${params}${
-            projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
+          `cargo uninstall ${params}${projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
           }`,
         )
         if (status === 0) {
@@ -173,24 +171,21 @@ export async function setup() {
       }
       else if (exec === 'prun') {
         await jsShell(
-          `cargo run ${params}${
-            projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
+          `cargo run ${params}${projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
           }`,
           'inherit',
         )
       }
       else if (exec === 'pinit') {
         await jsShell(
-          `cargo init ${params}${
-            projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
+          `cargo init ${params}${projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
           }`,
           'inherit',
         )
       }
       else if (exec === 'pbuild') {
         await jsShell(
-          `cargo build ${params}${
-            projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
+          `cargo build ${params}${projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
           }`,
           'inherit',
         )

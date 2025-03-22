@@ -1,9 +1,9 @@
-import process from 'process'
-import { log } from 'console'
+import { log } from 'node:console'
+import process from 'node:process'
 import { getPkgTool, jsShell, useNodeWorker } from 'lazy-js-utils/node'
 import colors from 'picocolors'
-import { getLatestVersion, getParams, loading } from './utils'
 import { detectNode } from './detectNode'
+import { getLatestVersion, getParams, loading } from './utils'
 
 const isZh = process.env.PI_Lang === 'zh'
 
@@ -100,7 +100,7 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
     loading_status.succeed(colors.green(successMsg))
   }
   else if (result && result.includes('Not Found - 404')) {
-    const _pkg = result.match(/\/[^\/\:]+:/)?.[0].slice(1, -1)
+    const _pkg = result.match(/\/[^/:]+:/)?.[0].slice(1, -1)
     const _result = isZh
       ? `${_pkg} 包名可能有误或者版本号不存在，并不能在npm中搜索到，请检查`
       : `${_pkg} the package name may be wrong, and cannot be found in npm, please check`
@@ -113,7 +113,7 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
   if (result) {
     // 当前workspace 版本需要自动升级
     const reg
-      = /ERR_PNPM_NO_MATCHING_VERSION_INSIDE_WORKSPACE  In : No matching version found for\s+([^@]+)/
+      = /ERR_PNPM_NO_MATCHING_VERSION_INSIDE_WORKSPACE\u2009 In : No matching version found for\s+([^@]+)/
     const match = result.match(reg)
     if (match) {
       const dep = match[1]

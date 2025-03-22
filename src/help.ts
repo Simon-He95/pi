@@ -1,3 +1,4 @@
+import process from 'node:process'
 import { jsShell } from 'lazy-js-utils/node'
 import { version } from '../package.json'
 

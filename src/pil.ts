@@ -1,3 +1,4 @@
+import process from 'node:process'
 import { getPkg, jsShell } from 'lazy-js-utils/node'
 import pc from 'picocolors'
 import { pi } from './pi'
@@ -44,7 +45,7 @@ export async function pil(params: string) {
     params = names.join(' ')
   }
   let latestPkgname = params
-  const reg = /\s(-[dDwW]+)/g
+  const reg = /\s(-[dw]+)/gi
   const suffix: string[] = []
   let command = (latestPkgname = (await getParams(params)).replace(
     reg,
