@@ -96,7 +96,7 @@
     "semver": "^7.7.1"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.34.2",
+    "@antfu/eslint-config": "^0.43.0",
     "@types/node": "^18.19.81",
     "bumpp": "^8.2.1",
     "eslint": "^8.57.1",
