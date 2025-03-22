@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.1.5",
   "packageManager": "pnpm@9.15.9",
-  "description": "An intelligent cross-platform package manager and CLI tool that autodetects project environments (Node.js, Go, Rust, Python) with beautiful loading animations and smart command execution.",
+  "description": "An intelligent cross-platform package manager and CLI tool that autodetects project environments (Node.mjs, Go, Rust, Python) with beautiful loading animations and smart command execution.",
   "author": {
     "name": "Simon He",
     "url": "https://github.com/Simon-He95"
@@ -46,12 +46,12 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
+      "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     }
   },
   "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "typesVersions": {
     "*": {
@@ -62,18 +62,18 @@
     }
   },
   "bin": {
-    "pi": "./pi.js",
-    "pio": "./pio.js",
-    "pix": "./pix.js",
-    "pa": "./pa.js",
-    "pu": "./pu.js",
-    "pci": "./pci.js",
-    "pil": "./pil.js",
-    "pui": "./pui.js",
-    "prun": "./prun.js",
-    "pinit": "./pinit.js",
-    "pbuild": "./pbuild.js",
-    "pfind": "./pfind.js"
+    "pi": "./pi.mjs",
+    "pio": "./pio.mjs",
+    "pix": "./pix.mjs",
+    "pa": "./pa.mjs",
+    "pu": "./pu.mjs",
+    "pci": "./pci.mjs",
+    "pil": "./pil.mjs",
+    "pui": "./pui.mjs",
+    "prun": "./prun.mjs",
+    "pinit": "./pinit.mjs",
+    "pbuild": "./pbuild.mjs",
+    "pfind": "./pfind.mjs"
   },
   "files": [
     "dist"
@@ -108,6 +108,10 @@
     "tsx": "^4.19.3",
     "typescript": "^4.9.5",
     "vitest": "^3.0.9"
+  },
+  "overrides": {
+    "glob": "^9.3.5",
+    "inflight": "npm:@isaacs/inflight@^1.0.0"
   },
   "lint-staged": {
     "*.{vue,js,ts,jsx,tsx,md,json}": "eslint . --fix"
