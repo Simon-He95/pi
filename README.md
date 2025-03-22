@@ -46,6 +46,10 @@ PI supports package management for multiple environments:
 
 ![Install Dependencies Animation](/assets/pi.gif)
 
+### pil - Install the latest dependencies
+
+![Example of running a command](/assets/prun.png)
+
 ### pui - Uninstall Dependencies
 
 ![Uninstall Dependencies Example](/assets/pui.png)
@@ -97,6 +101,10 @@ export PI_Lang=en
   # Execute command
   prun
   # Execute scripts in workspace
+  # Execute index.js | index.ts in js | ts files or directories
+  # Execute main.go in go files or directories
+  # Execute main.rs in rust files or directories
+  # Execute main.py in python files or directories
   pfind
   # Initialization
   pinit

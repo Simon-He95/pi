@@ -46,6 +46,10 @@ PI 支持多种环境的包管理：
 
 ![安装依赖动画](/assets/pi.gif)
 
+### pil - 安装最新的依赖
+
+![运行命令示例](/assets/prun.png)
+
 ### pui - 卸载依赖
 
 ![卸载依赖示例](/assets/pui.png)
@@ -55,8 +59,6 @@ PI 支持多种环境的包管理：
 ![清理缓存示例](/assets/pci.png)
 
 ### prun - 运行命令
-
-![运行命令示例](/assets/prun.png)
 
 ![运行命令动画](/assets/prun.gif)
 
@@ -96,7 +98,11 @@ export PI_Lang=en
   pui xxx
   # 执行命令
   prun
-  # 执行workspace中的scripts
+  # 执行 workspace 中的 scripts
+  # 执行 js | ts 文件或目录下的 index.js | index.ts
+  # 执行 go 文件或目录下的 main.go
+  # 执行 rust 文件或目录下的 main.rs
+  # 执行 python 文件或目录下的 main.py
   pfind
   # 初始化
   pinit
