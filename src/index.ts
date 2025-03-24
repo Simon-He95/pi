@@ -30,16 +30,27 @@ let rootPath = process.cwd()
 
 const runMap: Record<string, (...arg: any) => void> = {
   pi,
+  'pi.mjs': pi,
   pix,
+  'pix.mjs': pix,
   pa,
+  'pa.mjs': pa,
   pui,
+  'pui.mjs': pui,
   pu,
+  'pu.mjs': pu,
   pil,
+  'pil.mjs': pil,
   pci,
+  'pci.mjs': pci,
   prun,
+  'prun.mjs': prun,
   pinit,
+  'pinit.mjs': pinit,
   pfind,
+  'pfind.mjs': pfind,
   pio,
+  'pio.mjs': pio,
 }
 const isZh = process.env.PI_Lang === 'zh'
 
