@@ -93,14 +93,14 @@
     "ccommand": "^1.0.80",
     "fast-glob": "^3.3.3",
     "lazy-js-utils": "^0.1.37",
-    "ora": "^8.0.0",
+    "ora": "^8.2.0",
     "picocolors": "^1.1.1",
     "semver": "^7.7.1"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.11.0",
-    "@types/node": "^22.0.0",
-    "bumpp": "^10.0.0",
+    "@types/node": "^22.13.13",
+    "bumpp": "^10.1.0",
     "eslint": "^9.23.0",
     "lint-staged": "^13.3.0",
     "prettier": "^2.8.8",
@@ -110,7 +110,7 @@
     "vitest": "^3.0.9"
   },
   "overrides": {
-    "glob": "^11.0.0",
+    "glob": "^11.0.1",
     "inflight": "npm:@isaacs/inflight@^1.0.0"
   },
   "lint-staged": {
