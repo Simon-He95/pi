@@ -36,6 +36,7 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
       : 'Failed to update dependency 😭'
   const newParams = isLatest ? params : await getParams(params)
   let stdio: any = ['inherit', 'pipe', 'inherit']
+  let loading_status: any
   const { PI_DEFAULT, PI_MaxSockets: sockets } = process.env
   const pkgTool = await getPkgTool()
   // 开启并发下载值
@@ -49,6 +50,7 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
   if (pkgTool === 'npm') {
     if (PI_DEFAULT) {
       executor = `${PI_DEFAULT} ${install}`
+      loading_status = await loading(text)
     }
     else {
       stdio = 'inherit'
@@ -57,8 +59,8 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
   }
   else {
     executor = `${pkgTool} ${install}`
+    loading_status = await loading(text)
   }
-  const loading_status = await loading(text)
   const runSockets
     = executor.split(' ')[0] === 'npm' ? ` --max-sockets=${maxSockets}` : ''
   let { status, result } = await useNodeWorker({
@@ -89,6 +91,8 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
     result = newResult
   }
 
+  if (stdio === 'inherit')
+    loading_status = await loading('')
   const end = Date.now()
   const costTime = (end - start) / 1000
   successMsg += colors.blue(` ---- ⏰：${costTime}s`)
