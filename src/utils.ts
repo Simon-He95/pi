@@ -79,7 +79,7 @@ export async function getParams(params: string) {
     }
   }
   // eslint-disable-next-line unused-imports/no-unused-vars
-  catch (err) {
+  catch (_) {
     console.log(
       colors.red(
         `${isZh
@@ -92,13 +92,14 @@ export async function getParams(params: string) {
   }
 }
 
-export async function loading(text: string) {
+export async function loading(text: string, isSilent = false) {
   const { color, spinner } = await getStyle()
   const ora = (await import('ora')).default
   return ora({
     text,
     spinner,
     color,
+    isSilent,
     discardStdin: true,
   }).start()
 }

@@ -2,7 +2,7 @@
   "name": "@simon_he/pi",
   "type": "module",
   "version": "0.1.11",
-  "packageManager": "pnpm@10.7.0",
+  "packageManager": "pnpm@10.7.1",
   "description": "An intelligent cross-platform package manager and CLI tool that autodetects project environments (Node.mjs, Go, Rust, Python) with beautiful loading animations and smart command execution.",
   "author": {
     "name": "Simon He",
@@ -80,7 +80,7 @@
   ],
   "scripts": {
     "build": "tsup ./src/index.ts --format cjs,esm --clean ",
-    "dev": "bun build -- --watch src",
+    "dev": "pnpm build --watch src",
     "format": "prettier --write --cache .",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -92,22 +92,22 @@
   "dependencies": {
     "ccommand": "^1.0.84",
     "fast-glob": "^3.3.3",
-    "lazy-js-utils": "^0.1.37",
+    "lazy-js-utils": "^0.1.39",
     "ora": "^8.2.0",
     "picocolors": "^1.1.1",
     "semver": "^7.7.1"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.11.0",
-    "@types/node": "^22.13.14",
+    "@types/node": "^22.14.0",
     "bumpp": "^10.1.0",
-    "eslint": "^9.23.0",
+    "eslint": "^9.24.0",
     "lint-staged": "^13.3.0",
     "prettier": "^2.8.8",
     "tsup": "^8.4.0",
     "tsx": "^4.19.3",
-    "typescript": "^5.8.2",
-    "vitest": "^3.0.9"
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.1"
   },
   "lint-staged": {
     "*.{vue,js,ts,jsx,tsx,md,json}": "eslint . --fix"

@@ -35,7 +35,8 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
       ? '依赖更新失败 😭'
       : 'Failed to update dependency 😭'
   const newParams = isLatest ? params : await getParams(params)
-  let stdio: any = ['inherit', 'pipe', 'inherit']
+  const isSilent = process.env.PI_SILENT === 'true'
+  let stdio: any = isSilent ? 'inherit' : ['inherit', 'pipe', 'inherit']
   let loading_status: any
   const { PI_DEFAULT, PI_MaxSockets: sockets } = process.env
   const pkgTool = await getPkgTool()
@@ -50,7 +51,7 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
   if (pkgTool === 'npm') {
     if (PI_DEFAULT) {
       executor = `${PI_DEFAULT} ${install}`
-      loading_status = await loading(text)
+      loading_status = await loading(text, isSilent)
     }
     else {
       stdio = 'inherit'
@@ -59,7 +60,7 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
   }
   else {
     executor = `${pkgTool} ${install}`
-    loading_status = await loading(text)
+    loading_status = await loading(text, isSilent)
   }
   const runSockets
     = executor.split(' ')[0] === 'npm' ? ` --max-sockets=${maxSockets}` : ''

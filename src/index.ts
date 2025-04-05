@@ -147,7 +147,8 @@ export async function setup() {
           `${isZh ? '正在为您安装' : 'Installing'} ${params} ...\n`,
         )
         const { status } = await useNodeWorker(
-          `cargo install ${params}${projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
+          `cargo install ${params}${
+            projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
           }`,
         )
         if (status === 0) {
@@ -166,7 +167,8 @@ export async function setup() {
           `${isZh ? '正在为您卸载' : 'Uninstalling'} ${params} ...\n`,
         )
         const { status } = await useNodeWorker(
-          `cargo uninstall ${params}${projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
+          `cargo uninstall ${params}${
+            projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
           }`,
         )
         if (status === 0) {
@@ -182,21 +184,24 @@ export async function setup() {
       }
       else if (exec === 'prun') {
         await jsShell(
-          `cargo run ${params}${projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
+          `cargo run ${params}${
+            projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
           }`,
           'inherit',
         )
       }
       else if (exec === 'pinit') {
         await jsShell(
-          `cargo init ${params}${projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
+          `cargo init ${params}${
+            projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
           }`,
           'inherit',
         )
       }
       else if (exec === 'pbuild') {
         await jsShell(
-          `cargo build ${params}${projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
+          `cargo build ${params}${
+            projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
           }`,
           'inherit',
         )
