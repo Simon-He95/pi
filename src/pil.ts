@@ -47,7 +47,7 @@ export async function pil(params: string) {
   let latestPkgname = params
   const reg = /\s(-[dw]+)/gi
   const suffix: string[] = []
-  let command = (latestPkgname = (await getParams(params)).replace(
+  let command = (latestPkgname = (await getParams(params))!.replace(
     reg,
     (_, k) => {
       suffix.push(k)
@@ -69,5 +69,6 @@ export async function pil(params: string) {
     .split(' ')
     .map((i, index) => `${i} ${suffix[index] || '-s'}`)
     .join(' ')
+
   return await pi(command, latestPkgname.replace(/@latest/g, ''), 'pil')
 }

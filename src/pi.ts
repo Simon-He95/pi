@@ -64,6 +64,7 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
   }
   const runSockets
     = executor.split(' ')[0] === 'npm' ? ` --max-sockets=${maxSockets}` : ''
+  console.log(colors.green(`${executor}${newParams ? ` ${newParams}` : runSockets}`))
   let { status, result } = await useNodeWorker({
     params: `${executor}${newParams ? ` ${newParams}` : runSockets}`,
     stdio,
