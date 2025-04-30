@@ -8,7 +8,7 @@ import { getLatestVersion, getParams, loading } from './utils'
 const isZh = process.env.PI_Lang === 'zh'
 
 // package install
-export async function pi(params: string, pkg: string, executor = 'ni') {
+export async function pi(params: string | string[], pkg: string, executor = 'ni') {
   await detectNode()
   const text = pkg ? `Installing ${params} ...` : 'Updating dependency ...'
   const isLatest = executor === 'pil'
@@ -34,7 +34,6 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
     : isZh
       ? '依赖更新失败 😭'
       : 'Failed to update dependency 😭'
-  const newParams = isLatest ? params : await getParams(params)
   const isSilent = process.env.PI_SILENT === 'true'
   let stdio: any = isSilent ? 'inherit' : ['inherit', 'pipe', 'inherit']
   let loading_status: any
@@ -42,12 +41,7 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
   const pkgTool = await getPkgTool()
   // 开启并发下载值
   const maxSockets = sockets || 4
-  const install
-    = PI_DEFAULT === 'yarn' || pkgTool === 'yarn'
-      ? newParams
-        ? 'add'
-        : ''
-      : 'install'
+  const install = !params ? 'install' : 'add'
   if (pkgTool === 'npm') {
     if (PI_DEFAULT) {
       executor = `${PI_DEFAULT} ${install}`
@@ -62,11 +56,12 @@ export async function pi(params: string, pkg: string, executor = 'ni') {
     executor = `${pkgTool} ${install}`
     loading_status = await loading(text, isSilent)
   }
+  const newParams = isLatest ? '' : await getParams(params as string)
   const runSockets
     = executor.split(' ')[0] === 'npm' ? ` --max-sockets=${maxSockets}` : ''
-  console.log(colors.green(`${executor}${newParams ? ` ${newParams}` : runSockets}`))
+  console.log(colors.green(isLatest ? (params as string[]).map(p => `${executor} ${p}`).join(' & ') : `${executor}${newParams ? ` ${newParams}` : runSockets}`))
   let { status, result } = await useNodeWorker({
-    params: `${executor}${newParams ? ` ${newParams}` : runSockets}`,
+    params: isLatest ? (params as string[]).map(p => `${executor} ${p}`).join(' & ') : `${executor}${newParams ? ` ${newParams}` : runSockets}`,
     stdio,
     errorExit: false,
   })

@@ -17,10 +17,9 @@ export async function pil(params: string) {
     const { result: choose, status } = await jsShell(
       `echo ${deps.join(
         ',',
-      )} | sed "s/,/\\n/g" | gum filter --no-limit --placeholder=" 🤔${
-        process.env.PI_Lang === 'zh'
-          ? '请选择一个需要获取最新版本的依赖'
-          : 'Please select a dependency that needs to obtain the latest version.'
+      )} | sed "s/,/\\n/g" | gum filter --no-limit --placeholder=" 🤔${process.env.PI_Lang === 'zh'
+        ? '请选择一个需要获取最新版本的依赖'
+        : 'Please select a dependency that needs to obtain the latest version.'
       }"`,
       {
         stdio: ['inherit', 'pipe', 'inherit'],
@@ -40,14 +39,14 @@ export async function pil(params: string) {
         const name = i.split(': ')[0]
         if (name in devDependencies)
           return `${name}@latest -D`
-        return `${name}@latest`
+        return `${name}@latest -S`
       })
     params = names.join(' ')
   }
   let latestPkgname = params
-  const reg = /\s(-[dw]+)/gi
+  const reg = /\s(-[dws]+)/gi
   const suffix: string[] = []
-  let command = (latestPkgname = (await getParams(params))!.replace(
+  const command = (latestPkgname = (await getParams(params))!.replace(
     reg,
     (_, k) => {
       suffix.push(k)
@@ -64,11 +63,23 @@ export async function pil(params: string) {
       return `${i}$${v}`
     })
     .join(' ')
-  command = command
-    .replace(/\s+/, ' ')
-    .split(' ')
-    .map((i, index) => `${i} ${suffix[index] || '-s'}`)
-    .join(' ')
 
-  return await pi(command, latestPkgname.replace(/@latest/g, ''), 'pil')
+  // 合并所有的 -S、-D、-DW、-W、-s、-d 等的结果
+  const group: Record<string, string[]> = {}
+  const items = command
+    .replace(/\s+/, ' ')
+    .trim()
+    .split(' ')
+    .map((i, idx) => [i, suffix[idx] || '-s'])
+
+  for (const [pkg, flag] of items) {
+    if (!group[flag])
+      group[flag] = []
+    group[flag].push(pkg)
+  }
+
+  const cmds = Object.entries(group)
+    .map(([flag, pkgs]) => `${pkgs.join(' ')} ${flag}`)
+
+  return await pi(cmds, latestPkgname.replace(/@latest/g, ''), 'pil')
 }
