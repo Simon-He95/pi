@@ -9,9 +9,9 @@ export async function pil(params: string) {
   const { dependencies = {}, devDependencies = {} } = await getPkg()
   if (!params) {
     const deps = [
-      ...Object.keys(dependencies).map(key => `${key}: ${dependencies[key]}`),
+      ...Object.keys(dependencies).map(key => `${key}: ${dependencies[key].replace(/([><~])/g, '\\$1')}`),
       ...Object.keys(devDependencies).map(
-        key => `${key}: ${devDependencies[key]}`,
+        key => `${key}: ${devDependencies[key].replace(/([><~])/g, '\\$1')}`,
       ),
     ]
     const { result: choose, status } = await jsShell(
