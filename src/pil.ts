@@ -17,7 +17,7 @@ export async function pil(params: string) {
     const { result: choose, status } = await jsShell(
       `echo ${deps.join(
         ',',
-      )} | sed "s/,/\\n/g" | gum filter --no-limit --placeholder=" 🤔${process.env.PI_Lang === 'zh'
+      )} | sed "s/,/\\n/g" | gum filter --no-limit --strict=false --placeholder=" 🤔${process.env.PI_Lang === 'zh'
         ? '请选择一个需要获取最新版本的依赖'
         : 'Please select a dependency that needs to obtain the latest version.'
       }"`,
@@ -25,6 +25,7 @@ export async function pil(params: string) {
         stdio: ['inherit', 'pipe', 'inherit'],
       },
     )
+
     if (status === 130) {
       console.log(pc.dim('已取消'))
       process.exit(0)
