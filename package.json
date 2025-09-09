@@ -2,7 +2,7 @@
   "name": "@simon_he/pi",
   "type": "module",
   "version": "0.1.17",
-  "packageManager": "pnpm@10.12.1",
+  "packageManager": "pnpm@10.15.1",
   "description": "An intelligent cross-platform package manager and CLI tool that autodetects project environments (Node.mjs, Go, Rust, Python) with beautiful loading animations and smart command execution.",
   "author": {
     "name": "Simon He",
@@ -90,23 +90,23 @@
     "test": "vitest"
   },
   "dependencies": {
-    "ccommand": "^1.0.85",
+    "ccommand": "^1.0.86",
     "fast-glob": "^3.3.3",
-    "lazy-js-utils": "^0.1.44",
+    "lazy-js-utils": "^0.1.47",
     "ora": "^8.2.0",
     "picocolors": "^1.1.1",
     "semver": "^7.7.2"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^4.15.0",
-    "@types/node": "^22.15.31",
-    "bumpp": "^10.2.0",
-    "eslint": "^9.29.0",
+    "@antfu/eslint-config": "^4.19.0",
+    "@types/node": "^22.18.1",
+    "bumpp": "^10.2.3",
+    "eslint": "^9.35.0",
     "lint-staged": "^13.3.0",
     "prettier": "^2.8.8",
     "tsup": "^8.5.0",
-    "tsx": "^4.20.3",
-    "typescript": "^5.8.3",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2",
     "vitest": "^3.2.4"
   },
   "lint-staged": {
