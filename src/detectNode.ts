@@ -7,8 +7,7 @@ export async function detectNode() {
   try {
     pkg = await getPkg()
   }
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  catch (_) {
+  catch {
     const cwd = process.cwd()
     console.log(colors.red(`当前目录: ${cwd} 没有package.json文件`))
     process.exit(1)

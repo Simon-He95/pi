@@ -78,13 +78,13 @@ export async function getParams(params: string) {
         return params
     }
   }
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  catch (_) {
+  catch {
     console.log(
       colors.red(
-        `${isZh
-          ? 'package.json并不存在,在以下目录中:'
-          : 'package.json has not been found in'
+        `${
+          isZh
+            ? 'package.json并不存在,在以下目录中:'
+            : 'package.json has not been found in'
         } ${process.cwd()}`,
       ),
     )
@@ -128,7 +128,8 @@ export async function getLatestVersion(pkg: string, isZh = true) {
         result = result.slice(1)
       const item = isZh
         ? `${pName} ${colors.gray(v)} -> ${result.match(/@(\S+)/)![1]}`
-        : `Installed ${pName} ${colors.dim(v)} -> latest version：${result.match(/@(\S+)/)![1]
+        : `Installed ${pName} ${colors.dim(v)} -> latest version：${
+          result.match(/@(\S+)/)![1]
         }`
       data.push(item)
     }

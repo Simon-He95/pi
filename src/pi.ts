@@ -8,7 +8,11 @@ import { getLatestVersion, getParams, loading } from './utils'
 const isZh = process.env.PI_Lang === 'zh'
 
 // package install
-export async function pi(params: string | string[], pkg: string, executor = 'ni') {
+export async function pi(
+  params: string | string[],
+  pkg: string,
+  executor = 'ni',
+) {
   await detectNode()
   const text = pkg ? `Installing ${params} ...` : 'Updating dependency ...'
   const isLatest = executor === 'pil'
@@ -59,9 +63,17 @@ export async function pi(params: string | string[], pkg: string, executor = 'ni'
   const newParams = isLatest ? '' : await getParams(params as string)
   const runSockets
     = executor.split(' ')[0] === 'npm' ? ` --max-sockets=${maxSockets}` : ''
-  console.log(colors.green(isLatest ? (params as string[]).map(p => `${executor} ${p}`).join(' & ') : `${executor}${newParams ? ` ${newParams}` : runSockets}`))
+  console.log(
+    colors.green(
+      isLatest
+        ? (params as string[]).map(p => `${executor} ${p}`).join(' & ')
+        : `${executor}${newParams ? ` ${newParams}` : runSockets}`,
+    ),
+  )
   let { status, result } = await useNodeWorker({
-    params: isLatest ? (params as string[]).map(p => `${executor} ${p}`).join(' & ') : `${executor}${newParams ? ` ${newParams}` : runSockets}`,
+    params: isLatest
+      ? (params as string[]).map(p => `${executor} ${p}`).join(' & ')
+      : `${executor}${newParams ? ` ${newParams}` : runSockets}`,
     stdio,
     errorExit: false,
   })

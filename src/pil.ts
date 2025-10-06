@@ -9,7 +9,9 @@ export async function pil(params: string) {
   const { dependencies = {}, devDependencies = {} } = await getPkg()
   if (!params) {
     const deps = [
-      ...Object.keys(dependencies).map(key => `${key}: ${dependencies[key].replace(/([><~])/g, '\\$1')}`),
+      ...Object.keys(dependencies).map(
+        key => `${key}: ${dependencies[key].replace(/([><~])/g, '\\$1')}`,
+      ),
       ...Object.keys(devDependencies).map(
         key => `${key}: ${devDependencies[key].replace(/([><~])/g, '\\$1')}`,
       ),
@@ -17,9 +19,10 @@ export async function pil(params: string) {
     const { result: choose, status } = await jsShell(
       `echo ${deps.join(
         ',',
-      )} | sed "s/,/\\n/g" | gum filter --no-limit --placeholder=" 🤔${process.env.PI_Lang === 'zh'
-        ? '请选择一个需要获取最新版本的依赖'
-        : 'Please select a dependency that needs to obtain the latest version.'
+      )} | sed "s/,/\\n/g" | gum filter --no-limit --placeholder=" 🤔${
+        process.env.PI_Lang === 'zh'
+          ? '请选择一个需要获取最新版本的依赖'
+          : 'Please select a dependency that needs to obtain the latest version.'
       }"`,
       {
         stdio: ['inherit', 'pipe', 'inherit'],
@@ -79,8 +82,9 @@ export async function pil(params: string) {
     group[flag].push(pkg)
   }
 
-  const cmds = Object.entries(group)
-    .map(([flag, pkgs]) => `${pkgs.join(' ')} ${flag}`)
+  const cmds = Object.entries(group).map(
+    ([flag, pkgs]) => `${pkgs.join(' ')} ${flag}`,
+  )
 
   return await pi(cmds, latestPkgname.replace(/@latest/g, ''), 'pil')
 }
