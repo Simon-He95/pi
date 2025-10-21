@@ -16,7 +16,7 @@ importers:
         version: 3.3.3
       lazy-js-utils:
         specifier: ^0.1.47
-        version: 0.1.47
+        version: 0.1.49
       ora:
         specifier: ^8.2.0
         version: 8.2.0
@@ -1557,8 +1557,8 @@ packages:
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
 
-  lazy-js-utils@0.1.47:
-    resolution: {integrity: sha512-iuN5+LyWlpY/VJ3wPSkCGr17S9sDHgkhY0D93SaaWD51iKsQ8ScKP6K5EmXK6yqRmHOu0qYNvMyeS7mGzz/Y+g==}
+  lazy-js-utils@0.1.49:
+    resolution: {integrity: sha512-N1e7JzopzFRBynzmh78kQfVD9o1nC8WaeB7TqnFm4yHs+6LgxvC3H/9HffaTkHYXMHR9oNcI+l5CbGSV4nKlHQ==}
 
   levn@0.4.1:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
@@ -3294,7 +3294,7 @@ snapshots:
     dependencies:
       '@simon_he/colorize': 0.0.1
       fast-glob: 3.3.3
-      lazy-js-utils: 0.1.47
+      lazy-js-utils: 0.1.49
       picocolors: 1.1.1
       terminal-link: 3.0.0
       yamljs: 0.3.0
@@ -4033,7 +4033,7 @@ snapshots:
     dependencies:
       json-buffer: 3.0.1
 
-  lazy-js-utils@0.1.47:
+  lazy-js-utils@0.1.49:
     dependencies:
       htmlparser2: 8.0.2
       qrcode: 1.5.4
