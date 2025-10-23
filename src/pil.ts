@@ -69,22 +69,59 @@ export async function pil(params: string) {
     .join(' ')
 
   // 合并所有的 -S、-D、-DW、-W、-s、-d 等的结果
-  const group: Record<string, string[]> = {}
-  const items = command
-    .replace(/\s+/, ' ')
-    .trim()
-    .split(' ')
-    .map((i, idx) => [i, suffix[idx] || '-s'])
+  // 规则：
+  // - 每个包可有自己的标志（如 -D、-Dw、-DW），若缺失则为“普通依赖”（不追加任何标志）
+  // - 若存在全局 workspace 标志（-w 或 -W），将其与每个包的标志合并：'' -> -w/-W，-D -> -Dw/-DW
+  // - 忽略 -s/-S（仅作占位，不向真实命令透传）
+  const tokens = command.replace(/\s+/, ' ').trim().split(' ').filter(Boolean)
+  const pkgs = tokens.filter(t => !t.startsWith('-'))
 
-  for (const [pkg, flag] of items) {
-    if (!group[flag])
-      group[flag] = []
-    group[flag].push(pkg)
+  // 拆分后缀：识别全局 workspace 标志（-w/-W），其余按顺序分配给包
+  let globalWorkspaceFlag: string | null = null
+  const perFlags: Array<string | undefined> = []
+  let assignIdx = 0
+  for (const f of suffix) {
+    if (/^-(?:w|W)$/.test(f)) {
+      globalWorkspaceFlag = f
+      continue
+    }
+    perFlags[assignIdx++] = f
   }
 
-  const cmds = Object.entries(group).map(
-    ([flag, pkgs]) => `${pkgs.join(' ')} ${flag}`,
-  )
+  const normalizeFlag = (f: string | undefined): string => {
+    if (!f)
+      return ''
+    // 丢弃 -s/-S
+    if (/^-s$/i.test(f) || /^-S$/.test(f))
+      return ''
+    return f
+  }
+
+  const combineWorkspace = (f: string, w: string | null): string => {
+    if (!w)
+      return f
+    if (/w/i.test(f))
+      return f
+    if (!f)
+      return w
+    if (/d/i.test(f))
+      return `-D${w.slice(1)}` // -D + w/W => -Dw 或 -DW
+    return w
+  }
+
+  const finalFlags = pkgs.map((_, i) => combineWorkspace(normalizeFlag(perFlags[i]), globalWorkspaceFlag))
+
+  // 分组聚合
+  const group: Record<string, string[]> = {}
+  pkgs.forEach((p, i) => {
+    const key = finalFlags[i] || ''
+    if (!group[key])
+      group[key] = []
+    group[key].push(p)
+  })
+
+  // 生成命令，空标志不透传
+  const cmds = Object.entries(group).map(([flag, list]) => `${list.join(' ')}${flag ? ` ${flag}` : ''}`)
 
   return await pi(cmds, latestPkgname.replace(/@latest/g, ''), 'pil')
 }

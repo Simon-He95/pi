@@ -57,6 +57,9 @@ export async function getParams(params: string) {
             return params.replace(W, '')
           if (w.test(params))
             return params.replace(w, '')
+          // Normalize lowercase -d to -D in non-workspace yarn projects
+          if (d.test(params))
+            return params.replace(d, ' -D')
         }
 
         if ((await getPkg())?.workspaces) {
@@ -72,10 +75,11 @@ export async function getParams(params: string) {
         if (Dw.test(params))
           return params.replace(Dw, ' -DW')
         if (W.test(params))
-          return params.replace(w, ' -W')
+          return params.replace(W, ' -W')
         return params
       default:
-        return params
+        // Normalize lowercase -d to -D for npm or any other package manager fallback
+        return d.test(params) ? params.replace(d, ' -D') : params
     }
   }
   catch {
