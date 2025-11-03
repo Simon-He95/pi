@@ -12,7 +12,8 @@ vi.mock('lazy-js-utils/node', () => ({
 }))
 
 vi.mock('lazy-js-utils', () => ({
-  isFile: (p: string) => (p.includes('pnpm-workspace.yaml') ? pnpmWorkspace : false),
+  isFile: (p: string) =>
+    p.includes('pnpm-workspace.yaml') ? pnpmWorkspace : false,
 }))
 
 // Import after mocks

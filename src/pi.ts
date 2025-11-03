@@ -3,7 +3,7 @@ import process from 'node:process'
 import { getPkgTool, jsShell, useNodeWorker } from 'lazy-js-utils/node'
 import colors from 'picocolors'
 import { detectNode } from './detectNode'
-import { getLatestVersion, getParams, loading } from './utils'
+import { getLatestVersion, getParams, loading, pushHistory } from './utils'
 
 const isZh = process.env.PI_Lang === 'zh'
 
@@ -63,13 +63,9 @@ export async function pi(
   const newParams = isLatest ? '' : await getParams(params as string)
   const runSockets
     = executor.split(' ')[0] === 'npm' ? ` --max-sockets=${maxSockets}` : ''
-  console.log(
-    colors.green(
-      isLatest
-        ? (params as string[]).map(p => `${executor} ${p}`).join(' & ')
-        : `${executor}${newParams ? ` ${newParams}` : runSockets}`,
-    ),
-  )
+  const runCmd = isLatest
+    ? (params as string[]).map(p => `${executor} ${p}`).join(' & ')
+    : `${executor}${newParams ? ` ${newParams}` : runSockets}`
   let { status, result } = await useNodeWorker({
     params: isLatest
       ? (params as string[]).map(p => `${executor} ${p}`).join(' & ')
@@ -107,6 +103,7 @@ export async function pi(
   successMsg += colors.blue(` ---- ⏰：${costTime}s`)
   if (status === 0) {
     loading_status.succeed(colors.green(successMsg))
+    pushHistory(runCmd)
   }
   else if (result && result.includes('Not Found - 404')) {
     const _pkg = result.match(/\/[^/:]+:/)?.[0].slice(1, -1)

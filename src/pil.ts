@@ -109,7 +109,9 @@ export async function pil(params: string) {
     return w
   }
 
-  const finalFlags = pkgs.map((_, i) => combineWorkspace(normalizeFlag(perFlags[i]), globalWorkspaceFlag))
+  const finalFlags = pkgs.map((_, i) =>
+    combineWorkspace(normalizeFlag(perFlags[i]), globalWorkspaceFlag),
+  )
 
   // 分组聚合
   const group: Record<string, string[]> = {}
@@ -121,7 +123,9 @@ export async function pil(params: string) {
   })
 
   // 生成命令，空标志不透传
-  const cmds = Object.entries(group).map(([flag, list]) => `${list.join(' ')}${flag ? ` ${flag}` : ''}`)
+  const cmds = Object.entries(group).map(
+    ([flag, list]) => `${list.join(' ')}${flag ? ` ${flag}` : ''}`,
+  )
 
   return await pi(cmds, latestPkgname.replace(/@latest/g, ''), 'pil')
 }
