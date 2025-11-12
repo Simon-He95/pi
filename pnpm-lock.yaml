@@ -29,10 +29,10 @@ importers:
     devDependencies:
       '@antfu/eslint-config':
         specifier: ^4.19.0
-        version: 4.19.0(@vue/compiler-sfc@3.5.13)(eslint@9.39.0(jiti@2.6.1))(typescript@5.9.3)(vitest@4.0.8(@types/debug@4.1.12)(@types/node@22.19.0)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1))
+        version: 4.19.0(@vue/compiler-sfc@3.5.13)(eslint@9.39.0(jiti@2.6.1))(typescript@5.9.3)(vitest@4.0.8(@types/debug@4.1.12)(@types/node@22.19.1)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1))
       '@types/node':
         specifier: ^22.19.0
-        version: 22.19.0
+        version: 22.19.1
       bumpp:
         specifier: ^10.3.1
         version: 10.3.1
@@ -56,7 +56,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^4.0.0
-        version: 4.0.8(@types/debug@4.1.12)(@types/node@22.19.0)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1)
+        version: 4.0.8(@types/debug@4.1.12)(@types/node@22.19.1)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1)
 
 packages:
 
@@ -835,8 +835,8 @@ packages:
   '@types/ms@2.1.0':
     resolution: {integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==}
 
-  '@types/node@22.19.0':
-    resolution: {integrity: sha512-xpr/lmLPQEj+TUnHmR+Ab91/glhJvsqcjB+yY0Ix9GO70H6Lb4FHH5GeqdOE5btAx7eIMwuHkp4H2MSkLcqWbA==}
+  '@types/node@22.19.1':
+    resolution: {integrity: sha512-LCCV0HdSZZZb34qifBsyWlUmok6W7ouER+oQIGBScS8EsZsQbrtFTUrDX4hOl+CS6p7cnNC4td+qrSVGSCTUfQ==}
 
   '@types/unist@3.0.3':
     resolution: {integrity: sha512-ko/gIFJRv177XgZsZcBwnqJN5x/Gien8qNOn0D5bQU/zAzVf9Zt3BlcUiLqhV9y4ARk0GbT3tnUiPNgnTXzc/Q==}
@@ -2806,7 +2806,7 @@ packages:
 
 snapshots:
 
-  '@antfu/eslint-config@4.19.0(@vue/compiler-sfc@3.5.13)(eslint@9.39.0(jiti@2.6.1))(typescript@5.9.3)(vitest@4.0.8(@types/debug@4.1.12)(@types/node@22.19.0)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1))':
+  '@antfu/eslint-config@4.19.0(@vue/compiler-sfc@3.5.13)(eslint@9.39.0(jiti@2.6.1))(typescript@5.9.3)(vitest@4.0.8(@types/debug@4.1.12)(@types/node@22.19.1)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1))':
     dependencies:
       '@antfu/install-pkg': 1.1.0
       '@clack/prompts': 0.11.0
@@ -2815,7 +2815,7 @@ snapshots:
       '@stylistic/eslint-plugin': 5.3.1(eslint@9.39.0(jiti@2.6.1))
       '@typescript-eslint/eslint-plugin': 8.43.0(@typescript-eslint/parser@8.43.0(eslint@9.39.0(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.0(jiti@2.6.1))(typescript@5.9.3)
       '@typescript-eslint/parser': 8.43.0(eslint@9.39.0(jiti@2.6.1))(typescript@5.9.3)
-      '@vitest/eslint-plugin': 1.3.9(eslint@9.39.0(jiti@2.6.1))(typescript@5.9.3)(vitest@4.0.8(@types/debug@4.1.12)(@types/node@22.19.0)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1))
+      '@vitest/eslint-plugin': 1.3.9(eslint@9.39.0(jiti@2.6.1))(typescript@5.9.3)(vitest@4.0.8(@types/debug@4.1.12)(@types/node@22.19.1)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1))
       ansis: 4.1.0
       cac: 6.7.14
       eslint: 9.39.0(jiti@2.6.1)
@@ -3357,7 +3357,7 @@ snapshots:
 
   '@types/ms@2.1.0': {}
 
-  '@types/node@22.19.0':
+  '@types/node@22.19.1':
     dependencies:
       undici-types: 6.21.0
 
@@ -3508,14 +3508,14 @@ snapshots:
       '@typescript-eslint/types': 8.43.0
       eslint-visitor-keys: 4.2.1
 
-  '@vitest/eslint-plugin@1.3.9(eslint@9.39.0(jiti@2.6.1))(typescript@5.9.3)(vitest@4.0.8(@types/debug@4.1.12)(@types/node@22.19.0)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1))':
+  '@vitest/eslint-plugin@1.3.9(eslint@9.39.0(jiti@2.6.1))(typescript@5.9.3)(vitest@4.0.8(@types/debug@4.1.12)(@types/node@22.19.1)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1))':
     dependencies:
       '@typescript-eslint/scope-manager': 8.43.0
       '@typescript-eslint/utils': 8.34.1(eslint@9.39.0(jiti@2.6.1))(typescript@5.9.3)
       eslint: 9.39.0(jiti@2.6.1)
     optionalDependencies:
       typescript: 5.9.3
-      vitest: 4.0.8(@types/debug@4.1.12)(@types/node@22.19.0)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1)
+      vitest: 4.0.8(@types/debug@4.1.12)(@types/node@22.19.1)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -3528,13 +3528,13 @@ snapshots:
       chai: 6.2.0
       tinyrainbow: 3.0.3
 
-  '@vitest/mocker@4.0.8(vite@7.2.2(@types/node@22.19.0)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1))':
+  '@vitest/mocker@4.0.8(vite@7.2.2(@types/node@22.19.1)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1))':
     dependencies:
       '@vitest/spy': 4.0.8
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      vite: 7.2.2(@types/node@22.19.0)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1)
+      vite: 7.2.2(@types/node@22.19.1)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1)
 
   '@vitest/pretty-format@4.0.8':
     dependencies:
@@ -5466,7 +5466,7 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  vite@7.2.2(@types/node@22.19.0)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1):
+  vite@7.2.2(@types/node@22.19.1)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1):
     dependencies:
       esbuild: 0.25.12
       fdir: 6.5.0(picomatch@4.0.3)
@@ -5475,16 +5475,16 @@ snapshots:
       rollup: 4.52.5
       tinyglobby: 0.2.15
     optionalDependencies:
-      '@types/node': 22.19.0
+      '@types/node': 22.19.1
       fsevents: 2.3.3
       jiti: 2.6.1
       tsx: 4.20.6
       yaml: 2.8.1
 
-  vitest@4.0.8(@types/debug@4.1.12)(@types/node@22.19.0)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1):
+  vitest@4.0.8(@types/debug@4.1.12)(@types/node@22.19.1)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1):
     dependencies:
       '@vitest/expect': 4.0.8
-      '@vitest/mocker': 4.0.8(vite@7.2.2(@types/node@22.19.0)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1))
+      '@vitest/mocker': 4.0.8(vite@7.2.2(@types/node@22.19.1)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1))
       '@vitest/pretty-format': 4.0.8
       '@vitest/runner': 4.0.8
       '@vitest/snapshot': 4.0.8
@@ -5501,11 +5501,11 @@ snapshots:
       tinyexec: 0.3.2
       tinyglobby: 0.2.15
       tinyrainbow: 3.0.3
-      vite: 7.2.2(@types/node@22.19.0)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1)
+      vite: 7.2.2(@types/node@22.19.1)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1)
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/debug': 4.1.12
-      '@types/node': 22.19.0
+      '@types/node': 22.19.1
     transitivePeerDependencies:
       - jiti
       - less
