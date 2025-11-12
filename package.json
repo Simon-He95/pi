@@ -99,7 +99,7 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.19.0",
-    "@types/node": "^22.19.0",
+    "@types/node": "^24.0.0",
     "bumpp": "^10.3.1",
     "eslint": "^9.39.0",
     "lint-staged": "^13.3.0",
