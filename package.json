@@ -103,7 +103,7 @@
     "bumpp": "^10.3.1",
     "eslint": "^9.39.0",
     "lint-staged": "^13.3.0",
-    "prettier": "^2.8.8",
+    "prettier": "^3.0.0",
     "tsup": "^8.5.0",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3",
