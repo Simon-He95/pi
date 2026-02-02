@@ -1,6 +1,5 @@
 import path from 'node:path'
 import process from 'node:process'
-import { ccommand } from 'ccommand'
 import fg from 'fast-glob'
 import { isWin, spaceFormat } from 'lazy-js-utils'
 import {
@@ -24,11 +23,12 @@ import { pix } from './pix'
 import { prun } from './prun'
 import { pu } from './pu'
 import { pui } from './pui'
+import { localRequire } from './require'
 import { loading } from './utils'
 
 let rootPath = process.cwd()
 
-const runMap: Record<string, (...arg: any) => void> = {
+const runMap: Record<string, (...arg: any) => Promise<void> | void> = {
   pi,
   'pi.mjs': pi,
   pix,
@@ -70,7 +70,8 @@ export async function setup() {
 
   let params = spaceFormat(argv.join(' ')).trim()
 
-  if (!(await hasPkg(rootPath))) {
+  const hasPackage = await hasPkg(rootPath)
+  if (!hasPackage) {
     if (await isGo(rootPath)) {
       if (exec === 'pi') {
         const loading_status = await loading(
@@ -115,9 +116,10 @@ export async function setup() {
           : 'main.go'
         const target = (await fg(match))[0]
 
-        return target
-          ? await jsShell(`go run ${target}`, 'inherit')
-          : ccommand(params)
+        if (target)
+          return await jsShell(`go run ${target}`, 'inherit')
+        const { ccommand } = localRequire('ccommand')
+        return ccommand(params)
       }
       else if (exec === 'pinit') {
         await jsShell(`go mod init ${params}`, 'inherit')
@@ -215,7 +217,19 @@ export async function setup() {
       }
       process.exit()
     }
-    if (!runMap[exec]) {
+  }
+  const handler = runMap[exec]
+  if (!handler) {
+    if (exec === 'pbuild' || exec === 'pbuild.mjs') {
+      console.log(
+        color.yellow(
+          isZh
+            ? 'pbuild 仅支持 Go/Rust 项目（go build / cargo build）。'
+            : 'pbuild is only supported for Go/Rust projects (go build / cargo build).',
+        ),
+      )
+    }
+    else {
       console.log(
         color.yellow(
           isZh
@@ -223,12 +237,17 @@ export async function setup() {
             : 'The command does not exist, please execute pi -h to view the help',
         ),
       )
-      return
     }
+    return
   }
   const pkg = argv.filter(v => !v.startsWith('-')).join(' ')
   await installDeps()
-  runMap[exec](params, pkg)
+  await handler(params, pkg)
 }
 
-setup()
+if (!process.env.PI_TEST) {
+  setup().catch((error) => {
+    console.error(error)
+    process.exit(1)
+  })
+}

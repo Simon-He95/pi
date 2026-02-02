@@ -4,15 +4,15 @@ export async function pinit() {
   console.log('Initializing project...')
   switch (await getPkgTool()) {
     case 'npm':
-      jsShell('npm init -y')
+      await jsShell('npm init -y')
       return
     case 'yarn':
-      jsShell('yarn init -y')
+      await jsShell('yarn init -y')
       return
     case 'pnpm':
-      jsShell('pnpm init -y')
+      await jsShell('pnpm init -y')
       return
     default:
-      jsShell('npm init -y')
+      await jsShell('npm init -y')
   }
 }

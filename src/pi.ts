@@ -63,16 +63,36 @@ export async function pi(
   const newParams = isLatest ? '' : await getParams(params as string)
   const runSockets
     = executor.split(' ')[0] === 'npm' ? ` --max-sockets=${maxSockets}` : ''
-  const runCmd = isLatest
-    ? (params as string[]).map(p => `${executor} ${p}`).join(' & ')
-    : `${executor}${newParams ? ` ${newParams}` : runSockets}`
-  let { status, result } = await useNodeWorker({
-    params: isLatest
-      ? (params as string[]).map(p => `${executor} ${p}`).join(' & ')
-      : `${executor}${newParams ? ` ${newParams}` : runSockets}`,
-    stdio,
-    errorExit: false,
-  })
+  const latestParams = Array.isArray(params)
+    ? params
+    : params
+      ? [params]
+      : []
+  const cmdList = isLatest
+    ? latestParams.map(p => `${executor} ${p}`)
+    : [`${executor}${newParams ? ` ${newParams}` : runSockets}`]
+  const runCmd = isLatest ? cmdList.join(' & ') : cmdList[0]
+  const runCommands = async (commands: string[]) => {
+    const results = await Promise.all(
+      commands.map(command =>
+        useNodeWorker({
+          params: command,
+          stdio,
+          errorExit: false,
+        }),
+      ),
+    )
+    const failed = results.find(r => r.status !== 0)
+    const merged = results
+      .map(r => r.result)
+      .filter(Boolean)
+      .join('\n')
+    return {
+      status: failed ? failed.status : 0,
+      result: failed?.result || merged,
+    }
+  }
+  let { status, result } = await runCommands(cmdList)
 
   if (
     result
@@ -86,14 +106,19 @@ export async function pi(
           : 'Trying to use npm to run again...',
       ),
     )
-    const { status: newStatus, result: newResult } = await jsShell(
-      `npm install${newParams ? ` ${newParams}` : runSockets}`,
-      {
-        stdio,
-      },
+    const fallbackCommands = isLatest
+      ? latestParams.map(p => `npm install ${p}`)
+      : [`npm install${newParams ? ` ${newParams}` : runSockets}`]
+    const fallbackResults = await Promise.all(
+      fallbackCommands.map(command => jsShell(command, { stdio })),
     )
-    status = newStatus
-    result = newResult
+    const fallbackFailed = fallbackResults.find(r => r.status !== 0)
+    const fallbackMerged = fallbackResults
+      .map(r => r.result)
+      .filter(Boolean)
+      .join('\n')
+    status = fallbackFailed ? fallbackFailed.status : 0
+    result = fallbackFailed?.result || fallbackMerged
   }
 
   if (stdio === 'inherit')

@@ -1,6 +1,8 @@
 import process from 'node:process'
-import { getPkg, jsShell } from 'lazy-js-utils/node'
+import { getPkg, isInstallPkg, jsShell } from 'lazy-js-utils/node'
 import colors from 'picocolors'
+
+const isZh = process.env.PI_Lang === 'zh'
 
 export async function detectNode() {
   let pkg
@@ -13,13 +15,32 @@ export async function detectNode() {
     process.exit(1)
   }
   if (pkg.engines?.node) {
-    // eslint-disable-next-line ts/no-require-imports
-    const isSafe = require('semver').satisfies(
-      process.version,
-      pkg.engines.node,
-    )
+    const semver = await import('semver')
+    const satisfies
+      = (semver as any).satisfies || (semver as any).default?.satisfies
+    if (!satisfies)
+      return
+    const isSafe = satisfies(process.version, pkg.engines.node)
 
     if (!isSafe) {
+      const hasGum = await isInstallPkg('gum')
+      const hasFnm = await isInstallPkg('fnm')
+      if (!hasGum || !hasFnm) {
+        const missing = [
+          !hasGum ? 'gum' : '',
+          !hasFnm ? 'fnm' : '',
+        ]
+          .filter(Boolean)
+          .join(', ')
+        console.log(
+          colors.yellow(
+            isZh
+              ? `当前 node 版本不满足 ${pkg.engines.node}，未检测到 ${missing}，请手动切换版本。`
+              : `Current Node version does not satisfy ${pkg.engines.node}. Missing ${missing}. Please switch manually.`,
+          ),
+        )
+        return
+      }
       const { result, status } = await jsShell(
         `echo "yes\nno" | gum filter --placeholder=" 当前node版本不满足 ${pkg.engines.node}，是否切换node版本"`,
         ['inherit', 'pipe', 'inherit'],

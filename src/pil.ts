@@ -1,13 +1,24 @@
 import process from 'node:process'
-import { getPkg, jsShell } from 'lazy-js-utils/node'
+import { getPkg, isInstallPkg, jsShell } from 'lazy-js-utils/node'
 import pc from 'picocolors'
 import { pi } from './pi'
 import { getParams } from './utils'
 // install @latest
 export async function pil(params: string) {
+  const isZh = process.env.PI_Lang === 'zh'
   // 提供当前所有依赖选择
   const { dependencies = {}, devDependencies = {} } = await getPkg()
   if (!params) {
+    if (!(await isInstallPkg('gum'))) {
+      console.log(
+        pc.yellow(
+          isZh
+            ? '未检测到 gum，请先安装 gum 后再选择依赖。'
+            : 'gum not found. Please install gum before selecting dependencies.',
+        ),
+      )
+      process.exit(1)
+    }
     const deps = [
       ...Object.keys(dependencies).map(
         key => `${key}: ${dependencies[key].replace(/([><~])/g, '\\$1')}`,
