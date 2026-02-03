@@ -23,7 +23,7 @@ import { pix } from './pix'
 import { prun } from './prun'
 import { pu } from './pu'
 import { pui } from './pui'
-import { localRequire } from './require'
+import { getCcommand } from './require'
 import { loading } from './utils'
 
 let rootPath = process.cwd()
@@ -118,7 +118,7 @@ export async function setup() {
 
         if (target)
           return await jsShell(`go run ${target}`, 'inherit')
-        const { ccommand } = localRequire('ccommand')
+        const { ccommand } = getCcommand()
         return ccommand(params)
       }
       else if (exec === 'pinit') {

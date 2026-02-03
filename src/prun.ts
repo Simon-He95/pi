@@ -1,7 +1,7 @@
-import { localRequire } from './require'
+import { getCcommand } from './require'
 
 // package run script
 export function prun(params: string) {
-  const { ccommand } = localRequire('ccommand')
+  const { ccommand } = getCcommand()
   return ccommand(params)
 }
