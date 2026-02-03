@@ -1,10 +1,6 @@
 import { createRequire } from 'node:module'
-import path from 'node:path'
-import process from 'node:process'
+import { fileURLToPath } from 'node:url'
 
-const entry = process.argv[1]
-const base = entry
-  ? path.resolve(entry)
-  : path.join(process.cwd(), 'index.js')
+const base = fileURLToPath(import.meta.url)
 
 export const localRequire = createRequire(base)
