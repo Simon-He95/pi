@@ -16,7 +16,7 @@ importers:
         version: 3.3.3
       lazy-js-utils:
         specifier: ^0.1.49
-        version: 0.1.49
+        version: 0.1.50
       ora:
         specifier: ^8.2.0
         version: 8.2.0
@@ -138,8 +138,8 @@ packages:
     resolution: {integrity: sha512-I4YnARytXC2RzkLNVnf5qFNFMzp679qZpmtw/V3Jt2uGnWiIxyJtaukjG7R8pSx8nG2NamICpGfljQsogj+FbQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
 
-  '@babel/parser@7.28.4':
-    resolution: {integrity: sha512-yZbBqeM6TkpP9du/I2pUZnJsRMGGvOuIrhjzC1AwHwW+6he4mni6Bp/m8ijn0iOuZuPI2BfkCoSRunpyjnrQKg==}
+  '@babel/parser@7.29.0':
+    resolution: {integrity: sha512-IyDgFV5GeDUVX4YdF/3CPULtVGSXXMLh1xVIgdCgxApktqnQV0r7/8Nqthg+8YLGaAtdyIlo2qIdZrbCv4+7ww==}
     engines: {node: '>=6.0.0'}
     hasBin: true
 
@@ -148,8 +148,8 @@ packages:
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
 
-  '@babel/types@7.28.4':
-    resolution: {integrity: sha512-bkFqkLhh3pMBUQQkpVgWDWq/lqzc2678eUyDlTBhRqhCHFguYYGM0Efga7tYk4TogG/3x0EEl66/OQ+WGbWB/Q==}
+  '@babel/types@7.29.0':
+    resolution: {integrity: sha512-LwdZHpScM4Qz8Xw2iKSzS+cfglZzJGvofQICy7W7v4caru4EaAmyUuO6BGrbyQ2mYV11W0U8j5mBhd14dd3B0A==}
     engines: {node: '>=6.9.0'}
 
   '@babel/types@8.0.0-beta.4':
@@ -1701,7 +1701,7 @@ packages:
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   globals@14.0.0:
     resolution: {integrity: sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==}
@@ -1855,8 +1855,8 @@ packages:
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
 
-  lazy-js-utils@0.1.49:
-    resolution: {integrity: sha512-N1e7JzopzFRBynzmh78kQfVD9o1nC8WaeB7TqnFm4yHs+6LgxvC3H/9HffaTkHYXMHR9oNcI+l5CbGSV4nKlHQ==}
+  lazy-js-utils@0.1.50:
+    resolution: {integrity: sha512-sVgYtSiS+uQ4U6eDwPpTw8e8z8Z1+XjFKgzjJH3swtKpJOWkTgmMKLb9YAQdGU8QSp9fAnEWbjVufHs8go48uw==}
 
   levn@0.4.1:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
@@ -2841,15 +2841,15 @@ snapshots:
 
   '@babel/helper-validator-identifier@8.0.0-rc.1': {}
 
-  '@babel/parser@7.28.4':
+  '@babel/parser@7.29.0':
     dependencies:
-      '@babel/types': 7.28.4
+      '@babel/types': 7.29.0
 
   '@babel/parser@8.0.0-beta.4':
     dependencies:
       '@babel/types': 8.0.0-beta.4
 
-  '@babel/types@7.28.4':
+  '@babel/types@7.29.0':
     dependencies:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.28.5
@@ -3531,7 +3531,7 @@ snapshots:
 
   '@vue/compiler-core@3.5.13':
     dependencies:
-      '@babel/parser': 7.28.4
+      '@babel/parser': 7.29.0
       '@vue/shared': 3.5.13
       entities: 4.5.0
       estree-walker: 2.0.2
@@ -3544,7 +3544,7 @@ snapshots:
 
   '@vue/compiler-sfc@3.5.13':
     dependencies:
-      '@babel/parser': 7.28.4
+      '@babel/parser': 7.29.0
       '@vue/compiler-core': 3.5.13
       '@vue/compiler-dom': 3.5.13
       '@vue/compiler-ssr': 3.5.13
@@ -3684,7 +3684,7 @@ snapshots:
     dependencies:
       '@simon_he/colorize': 0.0.1
       fast-glob: 3.3.3
-      lazy-js-utils: 0.1.49
+      lazy-js-utils: 0.1.50
       picocolors: 1.1.1
       terminal-link: 3.0.0
       yamljs: 0.3.0
@@ -4439,7 +4439,7 @@ snapshots:
     dependencies:
       json-buffer: 3.0.1
 
-  lazy-js-utils@0.1.49:
+  lazy-js-utils@0.1.50:
     dependencies:
       htmlparser2: 8.0.2
       qrcode: 1.5.4
