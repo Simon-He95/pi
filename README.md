@@ -114,6 +114,42 @@ export PI_Lang=en
 
 ```
 
+## Shell Integration (prun)
+
+```
+# zsh
+eval "$(prun --init zsh)"
+
+# bash
+eval "$(prun --init bash)"
+
+# fish
+eval (prun --init fish)
+```
+
+> Note: This lets the command selected by prun be available immediately in your shell history (press ↑ to recall).
+
+Auto integration (built-in):
+
+- In interactive shells, the first `prun` run will append the right line to your shell rc (zsh: `~/.zshrc`, bash: `~/.bashrc`, fish: `~/.config/fish/config.fish`).
+- Disable with `PI_NO_AUTO_INIT=1` (or set `PI_AUTO_INIT=0`).
+- Open a new terminal (or source the rc file) after the first run.
+
+Make it persistent:
+
+```
+# zsh
+echo 'eval "$(prun --init zsh)"' >> ~/.zshrc
+
+# bash
+echo 'eval "$(prun --init bash)"' >> ~/.bashrc
+
+# fish
+echo 'prun --init fish | source' >> ~/.config/fish/config.fish
+```
+
+Reload your shell config (or open a new terminal) after adding the line.
+
 ## Power
 
 The current environment is npm | yarn | pnpm, and it supports passing some args --silent

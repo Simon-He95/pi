@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       ccommand:
-        specifier: ^1.0.90
-        version: 1.0.90
+        specifier: ^1.0.91
+        version: 1.0.91
       fast-glob:
         specifier: ^3.3.3
         version: 3.3.3
@@ -1128,8 +1128,8 @@ packages:
   caniuse-lite@1.0.30001767:
     resolution: {integrity: sha512-34+zUAMhSH+r+9eKmYG+k2Rpt8XttfE4yXAjoZvkAPs15xcYQhyBYdalJ65BzivAvGRMViEjy6oKr/S91loekQ==}
 
-  ccommand@1.0.90:
-    resolution: {integrity: sha512-omuZqwN6ScEGp9TUi9TCbx3IaosQHBNZxlfeylI7/d51yKB1wr41h5bIMTVQ6OPUiG6Yq5r1XF+Q82HHEsZyOw==}
+  ccommand@1.0.91:
+    resolution: {integrity: sha512-F1Lfzba73uGrvp7SPh/b9J+GXNz9StunS5hc+0gcbqrsoLvusHg8vDuA34MhgoabUfiGcy2+6sTa6W7kd/Gq3Q==}
     hasBin: true
 
   ccount@2.0.1:
@@ -1701,7 +1701,7 @@ packages:
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   globals@14.0.0:
     resolution: {integrity: sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==}
@@ -3680,7 +3680,7 @@ snapshots:
 
   caniuse-lite@1.0.30001767: {}
 
-  ccommand@1.0.90:
+  ccommand@1.0.91:
     dependencies:
       '@simon_he/colorize': 0.0.1
       fast-glob: 3.3.3

@@ -20,7 +20,7 @@ import { pil } from './pil'
 import { pinit } from './pinit'
 import { pio } from './pio'
 import { pix } from './pix'
-import { prun } from './prun'
+import { printPrunInit, prun } from './prun'
 import { pu } from './pu'
 import { pui } from './pui'
 import { getCcommand } from './require'
@@ -67,6 +67,11 @@ export async function setup() {
   }
   const argv: string[] = process.argv.slice(2)
   await help(argv)
+
+  if ((exec === 'prun' || exec === 'prun.mjs') && argv[0] === '--init') {
+    printPrunInit(argv.slice(1))
+    return
+  }
 
   let params = spaceFormat(argv.join(' ')).trim()
 

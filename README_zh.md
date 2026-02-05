@@ -110,6 +110,42 @@ export PI_Lang=en
   pbuild
 ```
 
+## Shell 集成（prun）
+
+```
+# zsh
+eval "$(prun --init zsh)"
+
+# bash
+eval "$(prun --init bash)"
+
+# fish
+eval (prun --init fish)
+```
+
+> 说明：这样 prun 选择的命令会立即写入并刷新当前 shell 的历史记录（按 ↑ 可直接取回）。
+
+自动集成（内置）：
+
+- 交互式终端下首次执行 `prun` 会自动把对应配置写入 shell 配置文件（zsh: `~/.zshrc`, bash: `~/.bashrc`, fish: `~/.config/fish/config.fish`）。
+- 可通过 `PI_NO_AUTO_INIT=1` 禁用（或设置 `PI_AUTO_INIT=0`）。
+- 写入后请重新打开终端（或手动 source 对应配置文件）。
+
+持久化（写入配置文件）：
+
+```
+# zsh
+echo 'eval "$(prun --init zsh)"' >> ~/.zshrc
+
+# bash
+echo 'eval "$(prun --init bash)"' >> ~/.bashrc
+
+# fish
+echo 'prun --init fish | source' >> ~/.config/fish/config.fish
+```
+
+写入后请重新加载配置文件，或打开一个新的终端窗口。
+
 ## 功能
 
 当前环境是 npm | yarn | pnpm, 并且是支持传一些 args 的 --silent
