@@ -93,7 +93,7 @@
     "ccommand": "^1.0.90",
     "fast-glob": "^3.3.3",
     "lazy-js-utils": "^0.1.49",
-    "ora": "^8.2.0",
+    "ora": "^9.0.0",
     "picocolors": "^1.1.1",
     "semver": "^7.7.3"
   },
