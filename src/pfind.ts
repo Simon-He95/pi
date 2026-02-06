@@ -1,7 +1,29 @@
+import process from 'node:process'
 import { getCcommand } from './require'
 
+function isNoHistory(value?: string) {
+  if (!value)
+    return false
+  const normalized = value.toLowerCase()
+  return normalized === '1' || normalized === 'true' || normalized === 'yes'
+}
+
 // workspace find script
-export function pfind(params: string) {
+export async function pfind(params: string) {
+  const hadNoHistoryEnv = process.env.CCOMMAND_NO_HISTORY != null || process.env.NO_HISTORY != null
+  const initialNoHistory = process.env.CCOMMAND_NO_HISTORY ?? process.env.NO_HISTORY
+  const shouldWriteHistory = !(hadNoHistoryEnv && isNoHistory(initialNoHistory))
   const { ccommand } = getCcommand()
-  return ccommand(`find ${params}`)
+  const prevNoHistory = process.env.CCOMMAND_NO_HISTORY
+  if (shouldWriteHistory)
+    delete process.env.CCOMMAND_NO_HISTORY
+  try {
+    await ccommand(`find ${params}`)
+  }
+  finally {
+    if (prevNoHistory == null)
+      delete process.env.CCOMMAND_NO_HISTORY
+    else
+      process.env.CCOMMAND_NO_HISTORY = prevNoHistory
+  }
 }
