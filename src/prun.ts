@@ -36,6 +36,7 @@ const isZh = process.env.PI_Lang === 'zh'
 const safeShellValue = /^[\w./:@%+=,-]+$/
 const ansiEscape = String.fromCharCode(0x1B)
 const ansiRegex = new RegExp(`${ansiEscape}\\[[0-9;]*m`, 'g')
+const statusSuffixes = ['run successfully', '运行成功', 'run error', '运行失败']
 
 function stripAnsi(value: string) {
   return value.replace(ansiRegex, '')
@@ -110,6 +111,18 @@ function stripTrailingNonAscii(value: string) {
   return end === value.length ? value : value.slice(0, end)
 }
 
+function stripStatusSuffix(value: string) {
+  const trimmed = value.trim()
+  const lower = trimmed.toLowerCase()
+  for (const suffix of statusSuffixes) {
+    const suffixLower = suffix.toLowerCase()
+    if (lower.endsWith(suffixLower)) {
+      return trimmed.slice(0, trimmed.length - suffix.length).trimEnd()
+    }
+  }
+  return trimmed
+}
+
 function extractShortcutCommand(logs: string[]) {
   for (let i = logs.length - 1; i >= 0; i--) {
     const line = stripAnsi(logs[i]).trim()
@@ -126,13 +139,14 @@ function extractShortcutCommand(logs: string[]) {
     }
     const clean = stripTrailingNonAscii(line).trim()
     const unquoted = clean.replace(/^['"]|['"]$/g, '')
-    if (unquoted.startsWith('prun '))
-      return unquoted
-    if (unquoted === 'prun')
-      return unquoted
-    const idx = unquoted.lastIndexOf('prun ')
+    const sanitized = stripStatusSuffix(unquoted)
+    if (sanitized.startsWith('prun '))
+      return sanitized
+    if (sanitized === 'prun')
+      return sanitized
+    const idx = sanitized.lastIndexOf('prun ')
     if (idx !== -1)
-      return unquoted.slice(idx).trim()
+      return sanitized.slice(idx).trim()
   }
   return ''
 }
