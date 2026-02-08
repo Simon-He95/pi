@@ -1,6 +1,8 @@
 import process from 'node:process'
-import { getPkg, jsShell, useNodeWorker } from 'lazy-js-utils/node'
+import { getPkg, useNodeWorker } from 'lazy-js-utils/node'
 import colors from 'picocolors'
+import { getRemoveCommand, resolvePkgTool } from './pkgManager'
+import { isInteractive, ttySelect } from './tty'
 import { loading } from './utils'
 
 const isZh = process.env.PI_Lang === 'zh'
@@ -19,22 +21,27 @@ export async function pui(params: string, pkg: string) {
         key => `${key}: ${devDependencies[key]}`,
       ),
     ]
-    const { result: choose, status } = await jsShell(
-      `echo ${deps.join(
-        ',',
-      )} | sed "s/,/\\n/g" | gum filter --placeholder=" 🤔${
+    if (!isInteractive()) {
+      console.log(
+        colors.yellow(
+          isZh
+            ? '当前不是交互式终端，请直接传入要卸载的依赖。'
+            : 'No interactive TTY detected, please pass the dependency name directly.',
+        ),
+      )
+      process.exit(1)
+    }
+    const choose = await ttySelect(
+      deps,
+      ` 🤔${
         process.env.PI_Lang === 'zh'
           ? '请选择一个需要删除依赖'
-          : 'Please select a dependency to get the latest version.'
-      }"`,
-      ['inherit', 'pipe', 'inherit'],
+          : 'Please select a dependency to uninstall.'
+      }`,
     )
-    if (status === 130) {
+    if (!choose) {
       console.log(colors.dim('已取消'))
       process.exit(0)
-    }
-    else if (status !== 0) {
-      throw new Error(choose)
     }
     pkg = params = choose.split(': ')[0]
   }
@@ -55,7 +62,9 @@ export async function pui(params: string, pkg: string) {
     process.exit(1)
   }
   const loading_status = await loading(text)
-  const { status, result } = await useNodeWorker(`nun ${params}`)
+  const { tool } = await resolvePkgTool()
+  const removeCmd = getRemoveCommand(tool)
+  const { status, result } = await useNodeWorker(`${removeCmd} ${params}`)
   const end = Date.now()
   const costTime = (end - start) / 1000
   successMsg += colors.blue(` ---- ⏰：${costTime}s`)

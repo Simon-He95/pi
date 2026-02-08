@@ -11,7 +11,6 @@ import {
 } from 'lazy-js-utils/node'
 import color from 'picocolors'
 import { help } from './help'
-import { installDeps } from './installDeps'
 import { pa } from './pa'
 import { pci } from './pci'
 import { pfind } from './pfind'
@@ -246,7 +245,6 @@ export async function setup() {
     return
   }
   const pkg = argv.filter(v => !v.startsWith('-')).join(' ')
-  await installDeps()
   await handler(params, pkg)
 }
 

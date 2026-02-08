@@ -1,8 +1,9 @@
 import { log } from 'node:console'
 import process from 'node:process'
-import { getPkgTool, jsShell, useNodeWorker } from 'lazy-js-utils/node'
+import { jsShell, useNodeWorker } from 'lazy-js-utils/node'
 import colors from 'picocolors'
 import { detectNode } from './detectNode'
+import { getInstallCommand, resolvePkgTool } from './pkgManager'
 import { getLatestVersion, getParams, loading, pushHistory } from './utils'
 
 const isZh = process.env.PI_Lang === 'zh'
@@ -11,7 +12,7 @@ const isZh = process.env.PI_Lang === 'zh'
 export async function pi(
   params: string | string[],
   pkg: string,
-  executor = 'ni',
+  executor = 'pi',
 ) {
   await detectNode()
   const text = pkg ? `Installing ${params} ...` : 'Updating dependency ...'
@@ -42,27 +43,19 @@ export async function pi(
   let stdio: any = isSilent ? 'inherit' : ['inherit', 'pipe', 'inherit']
   let loading_status: any
   const { PI_DEFAULT, PI_MaxSockets: sockets } = process.env
-  const pkgTool = await getPkgTool()
+  const { detected, tool } = await resolvePkgTool()
   // 开启并发下载值
   const maxSockets = sockets || 4
-  const install = !params ? 'install' : 'add'
-  if (pkgTool === 'npm') {
-    if (PI_DEFAULT) {
-      executor = `${PI_DEFAULT} ${install}`
-      loading_status = await loading(text, isSilent)
-    }
-    else {
-      stdio = 'inherit'
-      executor = 'ni'
-    }
+  if (detected === 'npm' && !PI_DEFAULT) {
+    stdio = 'inherit'
   }
   else {
-    executor = `${pkgTool} ${install}`
     loading_status = await loading(text, isSilent)
   }
+  executor = getInstallCommand(tool, Boolean(params))
   const newParams = isLatest ? '' : await getParams(params as string)
   const runSockets
-    = executor.split(' ')[0] === 'npm' ? ` --max-sockets=${maxSockets}` : ''
+    = tool === 'npm' ? ` --max-sockets=${maxSockets}` : ''
   const latestParams = Array.isArray(params)
     ? params
     : params

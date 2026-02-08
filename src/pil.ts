@@ -1,7 +1,8 @@
 import process from 'node:process'
-import { getPkg, isInstallPkg, jsShell } from 'lazy-js-utils/node'
+import { getPkg } from 'lazy-js-utils/node'
 import pc from 'picocolors'
 import { pi } from './pi'
+import { isInteractive, ttyMultiSelect } from './tty'
 import { getParams } from './utils'
 // install @latest
 export async function pil(params: string) {
@@ -9,53 +10,43 @@ export async function pil(params: string) {
   // 提供当前所有依赖选择
   const { dependencies = {}, devDependencies = {} } = await getPkg()
   if (!params) {
-    if (!(await isInstallPkg('gum'))) {
+    if (!isInteractive()) {
       console.log(
         pc.yellow(
           isZh
-            ? '未检测到 gum，请先安装 gum 后再选择依赖。'
-            : 'gum not found. Please install gum before selecting dependencies.',
+            ? '当前不是交互式终端，请直接传入要升级的依赖。'
+            : 'No interactive TTY detected, please pass the dependency names directly.',
         ),
       )
       process.exit(1)
     }
     const deps = [
       ...Object.keys(dependencies).map(
-        key => `${key}: ${dependencies[key].replace(/([><~])/g, '\\$1')}`,
+        key => `${key}: ${dependencies[key]}`,
       ),
       ...Object.keys(devDependencies).map(
-        key => `${key}: ${devDependencies[key].replace(/([><~])/g, '\\$1')}`,
+        key => `${key}: ${devDependencies[key]}`,
       ),
     ]
-    const { result: choose, status } = await jsShell(
-      `echo ${deps.join(
-        ',',
-      )} | sed "s/,/\\n/g" | gum filter --no-limit --placeholder=" 🤔${
+    const choose = await ttyMultiSelect(
+      deps,
+      ` 🤔${
         process.env.PI_Lang === 'zh'
           ? '请选择一个需要获取最新版本的依赖'
           : 'Please select a dependency that needs to obtain the latest version.'
-      }"`,
-      {
-        stdio: ['inherit', 'pipe', 'inherit'],
-      },
+      }`,
     )
 
-    if (status === 130) {
+    if (!choose || choose.length === 0) {
       console.log(pc.dim('已取消'))
       process.exit(0)
     }
-    else if (status !== 0) {
-      throw new Error(choose)
-    }
-    const names = choose
-      .trim()
-      .split('\n')
-      .map((i: any) => {
-        const name = i.split(': ')[0]
-        if (name in devDependencies)
-          return `${name}@latest -D`
-        return `${name}@latest -S`
-      })
+    const names = choose.map((i: string) => {
+      const name = i.split(': ')[0]
+      if (name in devDependencies)
+        return `${name}@latest -D`
+      return `${name}@latest -S`
+    })
     params = names.join(' ')
   }
   let latestPkgname = params
