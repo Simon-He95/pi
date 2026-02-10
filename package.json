@@ -1,7 +1,7 @@
 {
   "name": "@simon_he/pi",
   "type": "module",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "packageManager": "pnpm@10.29.1",
   "description": "An intelligent cross-platform package manager and CLI tool that autodetects project environments (Node.mjs, Go, Rust, Python) with beautiful loading animations and smart command execution.",
   "author": {
