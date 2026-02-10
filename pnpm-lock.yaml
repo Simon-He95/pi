@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       ccommand:
-        specifier: ^1.1.4
-        version: 1.1.4
+        specifier: ^1.1.5
+        version: 1.1.5
       fast-glob:
         specifier: ^3.3.3
         version: 3.3.3
@@ -1088,8 +1088,8 @@ packages:
   caniuse-lite@1.0.30001767:
     resolution: {integrity: sha512-34+zUAMhSH+r+9eKmYG+k2Rpt8XttfE4yXAjoZvkAPs15xcYQhyBYdalJ65BzivAvGRMViEjy6oKr/S91loekQ==}
 
-  ccommand@1.1.4:
-    resolution: {integrity: sha512-pmPNP34HNcwWPKGktXZuDb3UizGzdm5dYqx9HczZZyZdZOjUw84601D5xFIxNrEKLuok+2lK23ps+qDYOflZBQ==}
+  ccommand@1.1.5:
+    resolution: {integrity: sha512-RsGJTk53g2q/G+fjWvGdTsRq9PDMDSjNfuqn6kInElnfNQYEenDMF6bOksqo8mzCm7ggddIaFHtpWdSp1uXjug==}
     hasBin: true
 
   ccount@2.0.1:
@@ -3582,7 +3582,7 @@ snapshots:
 
   caniuse-lite@1.0.30001767: {}
 
-  ccommand@1.1.4:
+  ccommand@1.1.5:
     dependencies:
       '@simon_he/colorize': 0.0.1
       fast-glob: 3.3.3
