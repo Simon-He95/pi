@@ -13,10 +13,12 @@ export async function pfind(params: string) {
   const hadNoHistoryEnv = process.env.CCOMMAND_NO_HISTORY != null || process.env.NO_HISTORY != null
   const initialNoHistory = process.env.CCOMMAND_NO_HISTORY ?? process.env.NO_HISTORY
   const shouldWriteHistory = !(hadNoHistoryEnv && isNoHistory(initialNoHistory))
-  const { ccommand } = getCcommand()
   const prevNoHistory = process.env.CCOMMAND_NO_HISTORY
   if (shouldWriteHistory)
     delete process.env.CCOMMAND_NO_HISTORY
+  else
+    process.env.CCOMMAND_NO_HISTORY = '1'
+  const { ccommand } = getCcommand()
   try {
     await ccommand(`find ${params}`)
   }
