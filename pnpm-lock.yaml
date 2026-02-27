@@ -9,14 +9,14 @@ importers:
   .:
     dependencies:
       ccommand:
-        specifier: ^1.1.6
-        version: 1.1.6
+        specifier: ^1.1.7
+        version: 1.1.7
       fast-glob:
         specifier: ^3.3.3
         version: 3.3.3
       lazy-js-utils:
-        specifier: ^0.1.50
-        version: 0.1.50
+        specifier: ^0.1.51
+        version: 0.1.51
       ora:
         specifier: ^8.2.0
         version: 8.2.0
@@ -1088,8 +1088,8 @@ packages:
   caniuse-lite@1.0.30001767:
     resolution: {integrity: sha512-34+zUAMhSH+r+9eKmYG+k2Rpt8XttfE4yXAjoZvkAPs15xcYQhyBYdalJ65BzivAvGRMViEjy6oKr/S91loekQ==}
 
-  ccommand@1.1.6:
-    resolution: {integrity: sha512-jsww4FRcZMpsWoBONDEjbBE+jVqdMxaZALmXUV2o540scGiR73DSlb6XTB5c6cVebXKSvYxQ9HvFghK+Do1V9g==}
+  ccommand@1.1.7:
+    resolution: {integrity: sha512-k07oNonekMf5aHP1yxtXxwfiL67UPjmu0lRraVGU/z/e6i1RhfmoBa6Ej2ZJaFiS8t6NyR6eJzZxnQHuP5398w==}
     hasBin: true
 
   ccount@2.0.1:
@@ -1815,8 +1815,8 @@ packages:
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
 
-  lazy-js-utils@0.1.50:
-    resolution: {integrity: sha512-sVgYtSiS+uQ4U6eDwPpTw8e8z8Z1+XjFKgzjJH3swtKpJOWkTgmMKLb9YAQdGU8QSp9fAnEWbjVufHs8go48uw==}
+  lazy-js-utils@0.1.51:
+    resolution: {integrity: sha512-SRAOveyHFIXARGOZ6ncdr5HGBBD3l+pPFR0l0SOox+oKJ+ufy1853hjP3W2Ee99ICzwdgZ8NjczK6WXbiyoDvA==}
 
   levn@0.4.1:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
@@ -3582,11 +3582,11 @@ snapshots:
 
   caniuse-lite@1.0.30001767: {}
 
-  ccommand@1.1.6:
+  ccommand@1.1.7:
     dependencies:
       '@simon_he/colorize': 0.0.1
       fast-glob: 3.3.3
-      lazy-js-utils: 0.1.50
+      lazy-js-utils: 0.1.51
       picocolors: 1.1.1
       terminal-link: 3.0.0
       yamljs: 0.3.0
@@ -4341,7 +4341,7 @@ snapshots:
     dependencies:
       json-buffer: 3.0.1
 
-  lazy-js-utils@0.1.50:
+  lazy-js-utils@0.1.51:
     dependencies:
       htmlparser2: 8.0.2
       qrcode: 1.5.4
