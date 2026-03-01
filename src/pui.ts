@@ -33,7 +33,7 @@ export async function pui(params: string, pkg: string) {
     }
     const choose = await ttySelect(
       deps,
-      ` 🤔${
+      `🤔${
         process.env.PI_Lang === 'zh'
           ? '请选择一个需要删除依赖'
           : 'Please select a dependency to uninstall.'
@@ -43,7 +43,7 @@ export async function pui(params: string, pkg: string) {
       console.log(colors.dim('已取消'))
       process.exit(0)
     }
-    pkg = params = choose.split(': ')[0]
+    pkg = params = choose!.split(': ')[0]
   }
 
   const start = Date.now()

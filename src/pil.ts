@@ -30,7 +30,7 @@ export async function pil(params: string) {
     ]
     const choose = await ttyMultiSelect(
       deps,
-      ` 🤔${
+      `🤔${
         process.env.PI_Lang === 'zh'
           ? '请选择一个需要获取最新版本的依赖'
           : 'Please select a dependency that needs to obtain the latest version.'
@@ -41,7 +41,7 @@ export async function pil(params: string) {
       console.log(pc.dim('已取消'))
       process.exit(0)
     }
-    const names = choose.map((i: string) => {
+    const names = choose!.map((i: string) => {
       const name = i.split(': ')[0]
       if (name in devDependencies)
         return `${name}@latest -D`

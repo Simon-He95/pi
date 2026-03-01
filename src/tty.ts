@@ -1,3 +1,4 @@
+import type { Buffer } from 'node:buffer'
 import process from 'node:process'
 import readline from 'node:readline'
 import pc from 'picocolors'
@@ -84,18 +85,46 @@ function getMatchIndices(option: string, query: string) {
   return indices
 }
 
-function highlightMatch(option: string, query: string, active: boolean) {
-  if (!query)
-    return active ? pc.cyan(option) : option
-  const matchSet = new Set(getMatchIndices(option, query))
+function highlightMatchTruncated(
+  option: string,
+  query: string,
+  active: boolean,
+  maxWidth: number = Number.POSITIVE_INFINITY,
+) {
+  if (maxWidth <= 0)
+    return ''
+
+  const matchSet = query ? new Set(getMatchIndices(option, query)) : null
   let output = ''
+  let width = 0
+  let truncated = false
+  const ellipsis = '…'
+  const ellipsisWidth = charWidth(ellipsis)
+
+  const limit = Number.isFinite(maxWidth)
+    ? Math.max(0, maxWidth - ellipsisWidth)
+    : maxWidth
+
   for (let i = 0; i < option.length; i++) {
     const ch = option[i]
-    if (matchSet.has(i))
+    const w = charWidth(ch)
+    if (Number.isFinite(limit) && width + w > limit) {
+      truncated = true
+      break
+    }
+    if (matchSet && matchSet.has(i))
       output += pc.bold(pc.yellow(ch))
     else
       output += active ? pc.cyan(ch) : ch
+    width += w
   }
+
+  if (truncated) {
+    if (maxWidth <= ellipsisWidth)
+      return pc.dim(ellipsis)
+    output += pc.dim(ellipsis)
+  }
+
   return output
 }
 
@@ -141,10 +170,110 @@ async function runSelect(options: string[], config: SelectConfig) {
 
   const stdin = process.stdin
   const stdout = process.stdout
+
+  let columns = stdout.columns || 80
+  let rows = stdout.rows || 24
+  const updateDimensions = () => {
+    columns = stdout.columns || 80
+    rows = stdout.rows || 24
+  }
+  updateDimensions()
+
+  const requestCursorPosition = async (): Promise<{ row: number, col: number } | null> => {
+    return await new Promise((resolve) => {
+      let buffer = ''
+      let timer: ReturnType<typeof setTimeout> | undefined
+
+      const tryParseCursorPosition = (input: string): { row: number, col: number } | null => {
+        const esc = '\u001B['
+        const start = input.lastIndexOf(esc)
+        if (start === -1)
+          return null
+
+        let i = start + esc.length
+        let rowStr = ''
+        while (i < input.length && input[i] >= '0' && input[i] <= '9')
+          rowStr += input[i++]
+        if (!rowStr || input[i] !== ';')
+          return null
+        i++
+        let colStr = ''
+        while (i < input.length && input[i] >= '0' && input[i] <= '9')
+          colStr += input[i++]
+        if (!colStr || input[i] !== 'R')
+          return null
+
+        return { row: Number(rowStr), col: Number(colStr) }
+      }
+
+      function onData(chunk: Buffer | string) {
+        buffer += chunk.toString('utf8')
+        const parsed = tryParseCursorPosition(buffer)
+        if (parsed) {
+          cleanup()
+          resolve(parsed)
+        }
+      }
+
+      function cleanup() {
+        if (timer)
+          clearTimeout(timer)
+        stdin.off('data', onData)
+      }
+
+      timer = setTimeout(() => {
+        cleanup()
+        resolve(null)
+      }, 80)
+
+      stdin.on('data', onData)
+      stdout.write('\x1B[6n')
+    })
+  }
+
   // Speed up ESC handling; default timeout makes ESC feel laggy.
   readline.emitKeypressEvents(stdin, { escapeCodeTimeout: 50 } as any)
   if (stdin.isTTY)
     stdin.setRawMode(true)
+
+  // Hide cursor during interactive selection.
+  stdout.write('\x1B[?25l')
+
+  // Anchor the UI at the current cursor position on the main screen.
+  // This avoids relying on save/restore cursor (ESC[s / ESC[u]), which can
+  // become invalid after scroll.
+  let anchor = await requestCursorPosition()
+  if (anchor) {
+    // If the cursor is too close to the bottom, we'd only be able to render a
+    // tiny window (sometimes just 1 option). Shift the anchor upward so that
+    // we can render a larger window without scrolling.
+    const prompt = '> '
+    const header = `? ${config.placeholder}`
+    const hint = config.mode === 'multiple'
+      ? (isZh
+          ? '↑/↓ 选择，空格标记，Tab 补全，/ 搜索，回车确认，Esc 取消'
+          : 'Use ↑/↓ to move, Space to toggle, Tab to complete, / to search, Enter to confirm, Esc to cancel')
+      : (isZh
+          ? '↑/↓ 选择，Tab 补全，/ 搜索，回车确认，Esc 取消'
+          : 'Use ↑/↓ to move, Tab to complete, / to search, Enter to confirm, Esc to cancel')
+    const hintLine = `${hint} (1/${options.length})`
+    const headerRows = rowCount(header, columns)
+    const inputRows = rowCount(`${prompt}`, columns)
+    const hintRows = rowCount(hintLine, columns)
+    const minVisibleTarget = 10
+    const ellipsisReserve = 2
+    const minNeeded = headerRows + inputRows + hintRows + minVisibleTarget + ellipsisReserve
+
+    if (rows >= minNeeded) {
+      const maxAnchorRow = Math.max(1, rows - minNeeded + 1)
+      if (anchor.row > maxAnchorRow)
+        anchor = { ...anchor, row: maxAnchorRow, col: 1 }
+    }
+    else {
+      // Terminal itself is too small; still try to maximize available space.
+      anchor = { ...anchor, row: 1, col: 1 }
+    }
+  }
 
   let query = ''
   let inputCursor = 0
@@ -152,17 +281,6 @@ async function runSelect(options: string[], config: SelectConfig) {
   let cursor = 0
   const selected = new Set<string>()
   let searchMode = false
-  let anchorSet = false
-
-  let columns = stdout.columns || 80
-  let rows = stdout.rows || 24
-  let maxVisible = Math.max(5, rows - 4)
-
-  const updateDimensions = () => {
-    columns = stdout.columns || 80
-    rows = stdout.rows || 24
-    maxVisible = Math.max(5, rows - 4)
-  }
 
   const updateFiltered = () => {
     filtered = filterOptions(options, query)
@@ -179,13 +297,48 @@ async function runSelect(options: string[], config: SelectConfig) {
     const prompt = searchMode ? '/ ' : '> '
     const header = `? ${config.placeholder}`
     const inputLine = `${prompt}${query}`
-    const hint = config.mode === 'multiple'
-      ? (isZh
-          ? '↑/↓ 选择，空格标记，Tab 补全，/ 搜索，回车确认，Esc 取消'
-          : 'Use ↑/↓ to move, Space to toggle, Tab to complete, / to search, Enter to confirm, Esc to cancel')
-      : (isZh
-          ? '↑/↓ 选择，Tab 补全，/ 搜索，回车确认，Esc 取消'
-          : 'Use ↑/↓ to move, Tab to complete, / to search, Enter to confirm, Esc to cancel')
+    const hintLine = (() => {
+      const position = ` (${Math.min(cursor + 1, filtered.length)}/${filtered.length})`
+      if (config.mode === 'multiple') {
+        if (isZh) {
+          return (
+            pc.dim('↑/↓ 选择，')
+            + pc.bold(pc.cyan('空格'))
+            + pc.dim(' 标记，Tab 补全，/ 搜索，回车确认，Esc 取消')
+            + pc.dim(position)
+          )
+        }
+        return (
+          pc.dim('Use ↑/↓ to move, ')
+          + pc.bold(pc.cyan('Space'))
+          + pc.dim(' to toggle, Tab to complete, / to search, Enter to confirm, Esc to cancel')
+          + pc.dim(position)
+        )
+      }
+      const hint = isZh
+        ? '↑/↓ 选择，Tab 补全，/ 搜索，回车确认，Esc 取消'
+        : 'Use ↑/↓ to move, Tab to complete, / to search, Enter to confirm, Esc to cancel'
+      return pc.dim(`${hint}${position}`)
+    })()
+
+    const headerRows = rowCount(header, columns)
+    const inputRows = rowCount(inputLine, columns)
+    const hintRows = rowCount(stripAnsi(hintLine), columns)
+    const availableBelow = anchor ? Math.max(1, rows - anchor.row + 1) : rows
+    const optionAreaRows = Math.max(1, availableBelow - headerRows - inputRows - hintRows)
+
+    // Visible window sizing:
+    // - If everything fits, show all.
+    // - If it doesn't fit, enable scrolling and try to show as many as possible,
+    //   with a minimum target of 10 options (best-effort; clamped to avoid scroll).
+    const needsScroll = filtered.length > optionAreaRows
+    const minVisibleTarget = 10
+    const ellipsisReserve = needsScroll ? 2 : 0
+    const maxVisibleRaw = needsScroll
+      ? Math.max(minVisibleTarget, optionAreaRows - ellipsisReserve)
+      : filtered.length
+    const maxVisible = Math.max(1, Math.min(maxVisibleRaw, optionAreaRows, filtered.length))
+
     const lines: string[] = [header, inputLine]
 
     if (filtered.length === 0) {
@@ -206,7 +359,14 @@ async function runSelect(options: string[], config: SelectConfig) {
             : '[ ] '
           : ''
         const indicator = active ? '>' : ' '
-        const renderedOption = highlightMatch(option, query, active)
+        const prefixPlain = `${indicator} ${prefix}`
+        const optionWidth = Math.max(0, columns - stringWidth(prefixPlain))
+        const renderedOption = highlightMatchTruncated(
+          option,
+          query,
+          active,
+          optionWidth,
+        )
         const renderedPrefix = active ? pc.cyan(prefix) : prefix
         const renderedIndicator = active ? pc.cyan(indicator) : indicator
         const content = `${renderedIndicator} ${renderedPrefix}${renderedOption}`
@@ -215,27 +375,29 @@ async function runSelect(options: string[], config: SelectConfig) {
       if (window.end < filtered.length)
         lines.push(pc.dim('…'))
     }
-    lines.push(pc.dim(`${hint} (${Math.min(cursor + 1, filtered.length)}/${filtered.length})`))
+    lines.push(hintLine)
 
-    if (!anchorSet) {
-      readline.cursorTo(stdout, 0)
-      stdout.write('\x1B[s')
-      anchorSet = true
+    if (anchor) {
+      stdout.write(`\x1B[${anchor.row};1H`)
     }
     else {
-      stdout.write('\x1B[u')
       readline.cursorTo(stdout, 0)
-      readline.clearScreenDown(stdout)
     }
-
+    readline.clearScreenDown(stdout)
     stdout.write(lines.join('\n'))
-    const headerRows = rowCount(header, columns)
-    const inputRowOffset = Math.floor((prompt.length + inputCursor) / columns)
-    const inputCol = (prompt.length + inputCursor) % columns
+
+    const promptWidth = stringWidth(prompt)
+    const beforeCursor = query.slice(0, inputCursor)
+    const beforeWidth = stringWidth(beforeCursor)
+    const inputRowOffset = Math.floor((promptWidth + beforeWidth) / columns)
+    const inputCol = (promptWidth + beforeWidth) % columns
     const targetRowOffset = headerRows + inputRowOffset
-    stdout.write('\x1B[u')
-    readline.moveCursor(stdout, 0, targetRowOffset)
-    readline.cursorTo(stdout, inputCol)
+    if (anchor) {
+      stdout.write(`\x1B[${anchor.row + targetRowOffset};${inputCol + 1}H`)
+    }
+    else {
+      readline.cursorTo(stdout, inputCol)
+    }
   }
 
   return new Promise<string | string[] | null>((resolve) => {
@@ -248,12 +410,11 @@ async function runSelect(options: string[], config: SelectConfig) {
       stdin.off('keypress', onKeypress)
       process.off('SIGWINCH', onResize)
       stdout.write('\x1B[?25h')
-      if (anchorSet) {
-        stdout.write('\x1B[u')
+      if (anchor)
+        stdout.write(`\x1B[${anchor.row};1H`)
+      else
         readline.cursorTo(stdout, 0)
-        readline.clearScreenDown(stdout)
-        anchorSet = false
-      }
+      readline.clearScreenDown(stdout)
       stdout.write('\n')
       resolve(value)
     }
@@ -379,11 +540,6 @@ async function runSelect(options: string[], config: SelectConfig) {
 
     onResize = () => {
       updateDimensions()
-      if (anchorSet) {
-        stdout.write('\x1B[u')
-        readline.cursorTo(stdout, 0)
-        stdout.write('\x1B[s')
-      }
       render()
     }
 

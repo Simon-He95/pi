@@ -16,12 +16,55 @@ const D = /\s-D(?!w)/g
 const d = /\s-d(?!w)/g
 const isZh = process.env.PI_Lang === 'zh'
 export const log = console.log
+
+function normalizeDir(dir: string) {
+  return path.resolve(dir)
+}
+
+function isSameDir(a: string, b: string) {
+  return normalizeDir(a) === normalizeDir(b)
+}
+
+function findUpSync(startDir: string, predicate: (dir: string) => boolean) {
+  let current = normalizeDir(startDir)
+  while (true) {
+    if (predicate(current))
+      return current
+    const parent = path.dirname(current)
+    if (parent === current)
+      return null
+    current = parent
+  }
+}
+
+async function findUpAsync(
+  startDir: string,
+  predicate: (dir: string) => Promise<boolean>,
+) {
+  let current = normalizeDir(startDir)
+  while (true) {
+    if (await predicate(current))
+      return current
+    const parent = path.dirname(current)
+    if (parent === current)
+      return null
+    current = parent
+  }
+}
+
 export async function getParams(params: string) {
-  const root = process.cwd()
+  const cwd = process.cwd()
   try {
     switch (await getPkgTool()) {
       case 'pnpm':
-        if (!isFile(path.resolve(root, './pnpm-workspace.yaml'))) {
+      {
+        const pnpmWorkspaceRoot = findUpSync(cwd, dir =>
+          isFile(path.join(dir, 'pnpm-workspace.yaml')))
+        const inPnpmWorkspace = Boolean(pnpmWorkspaceRoot)
+        const isPnpmWorkspaceRoot
+          = pnpmWorkspaceRoot ? isSameDir(pnpmWorkspaceRoot, cwd) : false
+
+        if (!inPnpmWorkspace) {
           if (DW.test(params))
             return params.replace(DW, ' -D')
           if (Dw.test(params))
@@ -32,25 +75,50 @@ export async function getParams(params: string) {
             return params.replace(w, '')
           if (d.test(params))
             return params.replace(d, ' -D')
-        }
-        if (isFile('./pnpm-workspace.yaml')) {
-          if (D.test(params))
-            return params.replace(D, ' -Dw')
-          if (d.test(params))
-            return params.replace(d, ' -Dw')
-          if (!params || Dw.test(params) || w.test(params))
-            return params
-          return `${params} -w`
+          return params
         }
 
-        if (DW.test(params))
-          return params.replace(DW, ' -Dw')
-        if (W.test(params))
-          return params.replace(W, ' -w')
+        // In pnpm workspace: keep/normalize workspace flags.
+        let out = params
+        if (DW.test(out))
+          out = out.replace(DW, ' -Dw')
+        if (W.test(out))
+          out = out.replace(W, ' -w')
 
-        return params
+        // In workspace root, pnpm requires -w to add to root.
+        if (isPnpmWorkspaceRoot) {
+          if (D.test(out))
+            out = out.replace(D, ' -Dw')
+          if (d.test(out))
+            out = out.replace(d, ' -Dw')
+          if (!out || Dw.test(out) || w.test(out))
+            return out
+          return `${out} -w`
+        }
+
+        // In workspace package dir: do not auto-append -w.
+        if (d.test(out))
+          out = out.replace(d, ' -D')
+        return out
+      }
       case 'yarn':
-        if (!(await getPkg(path.resolve(root, './package.json')))?.workspaces) {
+      {
+        const yarnWorkspaceRoot = await findUpAsync(cwd, async (dir) => {
+          try {
+            return Boolean(
+              (await getPkg(path.join(dir, 'package.json')))?.workspaces,
+            )
+          }
+          catch {
+            return false
+          }
+        })
+
+        const inYarnWorkspace = Boolean(yarnWorkspaceRoot)
+        const isYarnWorkspaceRoot
+          = yarnWorkspaceRoot ? isSameDir(yarnWorkspaceRoot, cwd) : false
+
+        if (!inYarnWorkspace) {
           if (Dw.test(params))
             return params.replace(Dw, ' -D')
           if (DW.test(params))
@@ -62,23 +130,33 @@ export async function getParams(params: string) {
           // Normalize lowercase -d to -D in non-workspace yarn projects
           if (d.test(params))
             return params.replace(d, ' -D')
+          return params
         }
 
-        if ((await getPkg())?.workspaces) {
-          if (D.test(params))
-            return params.replace(D, ' -DW')
-          if (d.test(params))
-            return params.replace(d, ' -DW')
-          if (!params || W.test(params) || DW.test(params))
-            return params
-          return `${params} -W`
+        let out = params
+        // Treat pnpm-style -w as yarn-style -W.
+        if (w.test(out))
+          out = out.replace(w, ' -W')
+        if (Dw.test(out))
+          out = out.replace(Dw, ' -DW')
+        if (W.test(out))
+          out = out.replace(W, ' -W')
+
+        if (isYarnWorkspaceRoot) {
+          if (D.test(out))
+            out = out.replace(D, ' -DW')
+          if (d.test(out))
+            out = out.replace(d, ' -DW')
+          if (!out || W.test(out) || DW.test(out))
+            return out
+          return `${out} -W`
         }
 
-        if (Dw.test(params))
-          return params.replace(Dw, ' -DW')
-        if (W.test(params))
-          return params.replace(W, ' -W')
-        return params
+        // In workspace package dir: don't auto-append -W.
+        if (d.test(out))
+          out = out.replace(d, ' -D')
+        return out
+      }
       default:
         // Normalize lowercase -d to -D for npm or any other package manager fallback
         return d.test(params) ? params.replace(d, ' -D') : params
