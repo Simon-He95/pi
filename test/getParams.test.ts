@@ -59,4 +59,11 @@ describe('getParams flag mapping', () => {
     const res = await getParams('foo -d')
     expect(res).toBe('foo -D')
   })
+
+  it('infer pnpm workspace when detected npm: -d -> -Dw', async () => {
+    pkgTool = 'npm'
+    pnpmWorkspace = true
+    const res = await getParams('foo -d')
+    expect(res).toBe('foo -Dw')
+  })
 })

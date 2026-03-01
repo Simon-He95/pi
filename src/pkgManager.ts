@@ -1,10 +1,59 @@
+import path from 'node:path'
 import process from 'node:process'
+import { isFile } from 'lazy-js-utils'
 import { getPkgTool } from 'lazy-js-utils/node'
 
 export type PkgTool = string
 
+function normalizeDir(dir: string) {
+  return path.resolve(dir)
+}
+
+function findUpSync(startDir: string, predicate: (dir: string) => boolean) {
+  let current = normalizeDir(startDir)
+  while (true) {
+    if (predicate(current))
+      return current
+    const parent = path.dirname(current)
+    if (parent === current)
+      return null
+    current = parent
+  }
+}
+
+function inferToolFromRepoLayout(cwd: string): PkgTool | null {
+  // Prefer pnpm when a pnpm workspace/lockfile exists in any parent.
+  if (
+    findUpSync(cwd, dir =>
+      isFile(path.join(dir, 'pnpm-workspace.yaml'))
+      || isFile(path.join(dir, 'pnpm-lock.yaml')))
+  ) {
+    return 'pnpm'
+  }
+
+  // Yarn classic / berry.
+  if (
+    findUpSync(cwd, dir =>
+      isFile(path.join(dir, 'yarn.lock'))
+      || isFile(path.join(dir, '.yarnrc.yml')))
+  ) {
+    return 'yarn'
+  }
+
+  // Bun.
+  if (findUpSync(cwd, dir => isFile(path.join(dir, 'bun.lockb'))))
+    return 'bun'
+
+  return null
+}
+
 export async function resolvePkgTool() {
-  const detected = (await getPkgTool()) || 'npm'
+  let detected = (await getPkgTool()) || 'npm'
+  if (detected === 'npm') {
+    const inferred = inferToolFromRepoLayout(process.cwd())
+    if (inferred)
+      detected = inferred
+  }
   const fallback = process.env.PI_DEFAULT
   const tool = detected === 'npm' && fallback ? fallback : detected
   return {

@@ -55,7 +55,30 @@ async function findUpAsync(
 export async function getParams(params: string) {
   const cwd = process.cwd()
   try {
-    switch (await getPkgTool()) {
+    let tool = (await getPkgTool()) || 'npm'
+    if (tool === 'npm') {
+      // In monorepos, running inside packages/* may not see the root lockfiles.
+      // Infer the real tool by walking up to find workspace/lock indicators.
+      if (
+        findUpSync(cwd, dir =>
+          isFile(path.join(dir, 'pnpm-workspace.yaml'))
+          || isFile(path.join(dir, 'pnpm-lock.yaml')))
+      ) {
+        tool = 'pnpm'
+      }
+      else if (
+        findUpSync(cwd, dir =>
+          isFile(path.join(dir, 'yarn.lock'))
+          || isFile(path.join(dir, '.yarnrc.yml')))
+      ) {
+        tool = 'yarn'
+      }
+      else if (findUpSync(cwd, dir => isFile(path.join(dir, 'bun.lockb')))) {
+        tool = 'bun'
+      }
+    }
+
+    switch (tool) {
       case 'pnpm':
       {
         const pnpmWorkspaceRoot = findUpSync(cwd, dir =>
