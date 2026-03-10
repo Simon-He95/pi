@@ -1,4 +1,5 @@
 import process from 'node:process'
+import { ensurePrunAutoInit } from './prun'
 import { getCcommand } from './require'
 
 function isNoHistory(value?: string) {
@@ -10,6 +11,7 @@ function isNoHistory(value?: string) {
 
 // workspace find script
 export async function pfind(params: string) {
+  ensurePrunAutoInit()
   const hadNoHistoryEnv = process.env.CCOMMAND_NO_HISTORY != null || process.env.NO_HISTORY != null
   const initialNoHistory = process.env.CCOMMAND_NO_HISTORY ?? process.env.NO_HISTORY
   const shouldWriteHistory = !(hadNoHistoryEnv && isNoHistory(initialNoHistory))

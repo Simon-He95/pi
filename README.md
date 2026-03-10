@@ -125,15 +125,21 @@ eval "$(prun --init bash)"
 
 # fish
 eval (prun --init fish)
+
+# Windows PowerShell
+prun --init powershell | Out-String | Invoke-Expression
+
+# PowerShell 7+
+prun --init pwsh | Out-String | Invoke-Expression
 ```
 
-> Note: This lets the command selected by prun be available immediately in your shell history (press ↑ to recall).
+> Note: This lets the command selected by `prun` or `pfind` be available immediately in your shell history (press ↑ to recall).
 
 Auto integration (built-in):
 
-- In interactive shells, the first `prun` run will append the right line to your shell rc (zsh: `~/.zshrc`, bash: `~/.bashrc`, fish: `~/.config/fish/config.fish`).
+- In interactive shells, the first `prun` run will append the right line to your shell rc/profile (zsh: `~/.zshrc`, bash: `~/.bashrc`, fish: `~/.config/fish/config.fish`, PowerShell: `$PROFILE`).
 - Disable with `PI_NO_AUTO_INIT=1` (or set `PI_AUTO_INIT=0`).
-- Open a new terminal (or source the rc file) after the first run.
+- Open a new terminal (or source the rc/profile) after the first run.
 
 Make it persistent:
 
@@ -146,6 +152,12 @@ echo 'eval "$(prun --init bash)"' >> ~/.bashrc
 
 # fish
 echo 'prun --init fish | source' >> ~/.config/fish/config.fish
+
+# Windows PowerShell
+Add-Content -Path $PROFILE -Value 'prun --init powershell | Out-String | Invoke-Expression'
+
+# PowerShell 7+
+Add-Content -Path $PROFILE -Value 'prun --init pwsh | Out-String | Invoke-Expression'
 ```
 
 Reload your shell config (or open a new terminal) after adding the line.

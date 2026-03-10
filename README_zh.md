@@ -121,15 +121,21 @@ eval "$(prun --init bash)"
 
 # fish
 eval (prun --init fish)
+
+# Windows PowerShell
+prun --init powershell | Out-String | Invoke-Expression
+
+# PowerShell 7+
+prun --init pwsh | Out-String | Invoke-Expression
 ```
 
-> 说明：这样 prun 选择的命令会立即写入并刷新当前 shell 的历史记录（按 ↑ 可直接取回）。
+> 说明：这样 `prun` / `pfind` 选择的命令会立即写入并刷新当前 shell 的历史记录（按 ↑ 可直接取回）。
 
 自动集成（内置）：
 
-- 交互式终端下首次执行 `prun` 会自动把对应配置写入 shell 配置文件（zsh: `~/.zshrc`, bash: `~/.bashrc`, fish: `~/.config/fish/config.fish`）。
+- 交互式终端下首次执行 `prun` 会自动把对应配置写入 shell 配置文件（zsh: `~/.zshrc`, bash: `~/.bashrc`, fish: `~/.config/fish/config.fish`, PowerShell: `$PROFILE`）。
 - 可通过 `PI_NO_AUTO_INIT=1` 禁用（或设置 `PI_AUTO_INIT=0`）。
-- 写入后请重新打开终端（或手动 source 对应配置文件）。
+- 写入后请重新打开终端（或手动 source / 重新加载对应配置）。
 
 持久化（写入配置文件）：
 
@@ -142,6 +148,12 @@ echo 'eval "$(prun --init bash)"' >> ~/.bashrc
 
 # fish
 echo 'prun --init fish | source' >> ~/.config/fish/config.fish
+
+# Windows PowerShell
+Add-Content -Path $PROFILE -Value 'prun --init powershell | Out-String | Invoke-Expression'
+
+# PowerShell 7+
+Add-Content -Path $PROFILE -Value 'prun --init pwsh | Out-String | Invoke-Expression'
 ```
 
 写入后请重新加载配置文件，或打开一个新的终端窗口。
