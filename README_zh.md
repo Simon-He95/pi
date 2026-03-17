@@ -18,6 +18,7 @@
 - [语言设置](#-语言)
 - [安装方法](#-安装)
 - [使用方法](#-使用)
+- [Workspace 工具选择](#-workspace-工具选择)
 - [支持的功能](#-功能)
 - [特色功能](#-feature)
 - [自定义配置](#-自定义配置)
@@ -94,6 +95,20 @@ export PI_Lang=en
   # 根据当前目录的环境去分析使用哪种包管理器，go、rust、pnpm、yarn、npm
   # 安装依赖
   pi xxx
+  # 为当前 workspace 重新选择包管理器
+  pi --choose-tool
+  # 不弹交互，直接指定当前 workspace 使用的工具
+  pi --choose-tool bun
+  # 清除当前 workspace 已保存的包管理器选择
+  pi --forget-tool
+  # 查看当前 workspace 实际会使用哪个包管理器
+  pi --show-tool
+  # 以 JSON 查看当前 workspace 的工具状态
+  pi --show-tool --json
+  # 列出当前 workspace 检测到的所有候选工具
+  pi --list-tools
+  # 以 JSON 列出候选工具
+  pi --list-tools --json
   # 卸载依赖
   pui xxx
   # 执行命令
@@ -108,6 +123,45 @@ export PI_Lang=en
   pinit
   # 打包 - 针对cargo  go
   pbuild
+```
+
+## :triangular_ruler: Workspace 工具选择
+
+当同一个 workspace 里同时存在多种包管理器标记时，例如 `bun.lock` 和 `pnpm-lock.yaml`，`pi`、`pil`、`pci` 会先让你选择一次当前 workspace 使用哪种工具，并把这个选择记住。
+
+- 这个选择会保存在你本机的配置目录中，例如 `~/.config/pi/workspace-tools.json`。
+- 这是本地机器配置，不应该提交到仓库中。
+- 如果之前记住的工具对应的 lock 文件已经不存在了，PI 会忽略旧值，并自动清理失效记录。
+- 使用 `pi --choose-tool` 或 `pil --choose-tool` 可以重新选择。
+- 也可以用 `pi --choose-tool bun` 或 `pil --choose-tool pnpm` 直接指定工具，不走交互选择。
+- 使用 `pi --forget-tool` 或 `pil --forget-tool` 可以清除已保存的选择。
+- 使用 `pi --show-tool` 或 `pil --show-tool` 可以查看当前会使用的工具以及决策来源。
+- 如果想给脚本消费，可以在 `--show-tool` 后加 `--json`。
+- 使用 `pi --list-tools` 或 `pil --list-tools` 可以查看当前检测到的所有候选工具、根目录和 lockfile 标记。
+- `pci --choose-tool` 和 `pci --forget-tool` 也遵循同样的行为。
+- `pci --show-tool` 也遵循同样的行为。
+- `pci --list-tools` 也遵循同样的行为。
+- `pui`、`pio` 在解析包管理器时也会复用这份已保存的选择。
+
+示例：
+
+```bash
+pi react --choose-tool
+pi --choose-tool bun
+pil --choose-tool
+pil --choose-tool pnpm
+pi --forget-tool
+pil --forget-tool
+pi --show-tool
+pil --show-tool
+pi --show-tool --json
+pi --list-tools
+pi --list-tools --json
+pci --choose-tool
+pci --forget-tool
+pci --show-tool
+pci --show-tool --json
+pci --list-tools
 ```
 
 ## Shell 集成（prun）
@@ -195,7 +249,7 @@ workspace of pnpm ｜ yarn
 ```
 export PI_COLOR=red # loading样式颜色
 export PI_SPINNER=star # loading样式
-export PI_DEFAULT=pnpm # 如果当前项目并没有设置安装的包管理器可以在这里设置默认的安装
+export PI_DEFAULT=pnpm # 当 PI 无法为当前 workspace 推断出更合适的工具时，作为兜底默认值
 ```
 
 - 样式的种类 70+，来源于[cli-spinners](https://jsfiddle.net/sindresorhus/2eLtsbey/embedded/result/)，可自行选择将名字填入 PI_SPINNER 中。

@@ -16,10 +16,13 @@ vi.mock('lazy-js-utils', () => ({
     p.includes('pnpm-workspace.yaml') ? pnpmWorkspace : false,
 }))
 
-// Import after mocks
-import { getParams } from '../src/utils'
+async function importGetParams() {
+  const mod = await import('../src/utils')
+  return mod.getParams
+}
 
 beforeEach(() => {
+  vi.resetModules()
   pkgTool = 'pnpm'
   pnpmWorkspace = false
   yarnWorkspaces = false
@@ -29,6 +32,7 @@ describe('getParams flag mapping', () => {
   it('pnpm non-workspace: -d -> -D', async () => {
     pkgTool = 'pnpm'
     pnpmWorkspace = false
+    const getParams = await importGetParams()
     const res = await getParams('foo -d')
     expect(res).toBe('foo -D')
   })
@@ -36,6 +40,7 @@ describe('getParams flag mapping', () => {
   it('pnpm workspace: -d -> -Dw', async () => {
     pkgTool = 'pnpm'
     pnpmWorkspace = true
+    const getParams = await importGetParams()
     const res = await getParams('foo -d')
     expect(res).toBe('foo -Dw')
   })
@@ -43,6 +48,7 @@ describe('getParams flag mapping', () => {
   it('yarn non-workspace: -d -> -D', async () => {
     pkgTool = 'yarn'
     yarnWorkspaces = false
+    const getParams = await importGetParams()
     const res = await getParams('foo -d')
     expect(res).toBe('foo -D')
   })
@@ -50,12 +56,14 @@ describe('getParams flag mapping', () => {
   it('yarn workspace: -d -> -DW', async () => {
     pkgTool = 'yarn'
     yarnWorkspaces = true
+    const getParams = await importGetParams()
     const res = await getParams('foo -d')
     expect(res).toBe('foo -DW')
   })
 
   it('npm default: -d -> -D', async () => {
     pkgTool = 'npm'
+    const getParams = await importGetParams()
     const res = await getParams('foo -d')
     expect(res).toBe('foo -D')
   })
@@ -63,6 +71,7 @@ describe('getParams flag mapping', () => {
   it('infer pnpm workspace when detected npm: -d -> -Dw', async () => {
     pkgTool = 'npm'
     pnpmWorkspace = true
+    const getParams = await importGetParams()
     const res = await getParams('foo -d')
     expect(res).toBe('foo -Dw')
   })

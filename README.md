@@ -18,6 +18,7 @@
 - [Language Settings](#-language)
 - [Installation](#-installation)
 - [Usage](#-usage)
+- [Workspace Tool Selection](#-workspace-tool-selection)
 - [Supported Features](#-features)
 - [Special Features](#-feature)
 - [Custom Configuration](#-custom-configuration)
@@ -96,6 +97,20 @@ export PI_Lang=en
   # According to the environment of the current directory to analyze which package manager to use，go、rust、pnpm、yarn、npm
   # Install dependencies
   pi xxx
+  # Re-pick the package manager used by the current workspace
+  pi --choose-tool
+  # Pick the tool directly without opening the selector
+  pi --choose-tool bun
+  # Clear the saved package manager choice for the current workspace
+  pi --forget-tool
+  # Show which package manager the current workspace will use
+  pi --show-tool
+  # Show the current workspace tool as JSON
+  pi --show-tool --json
+  # List all detected package-manager candidates
+  pi --list-tools
+  # List candidates as JSON
+  pi --list-tools --json
   # Uninstall dependencies
   pui xxx
   # Execute command
@@ -112,6 +127,45 @@ export PI_Lang=en
   pbuild
   # pci
 
+```
+
+## :triangular_ruler: Workspace Tool Selection
+
+When a workspace contains multiple package-manager indicators, for example `bun.lock` and `pnpm-lock.yaml`, `pi`, `pil`, and `pci` will ask once which tool to use and remember that choice for the current workspace.
+
+- The saved choice is stored locally in your config directory, for example `~/.config/pi/workspace-tools.json`.
+- The record is local to your machine and should not be committed into the repository.
+- If the remembered tool no longer exists in that workspace, PI ignores the old value and removes the stale record automatically.
+- Use `pi --choose-tool` or `pil --choose-tool` to switch the remembered tool.
+- You can also choose directly with `pi --choose-tool bun` or `pil --choose-tool pnpm`.
+- Use `pi --forget-tool` or `pil --forget-tool` to clear the remembered tool.
+- Use `pi --show-tool` or `pil --show-tool` to inspect the current tool and where that decision came from.
+- Add `--json` to `--show-tool` when you want script-friendly output.
+- Use `pi --list-tools` or `pil --list-tools` to inspect all detected candidates, roots, and lockfile indicators.
+- `pci --choose-tool` and `pci --forget-tool` follow the same behavior.
+- `pci --show-tool` follows the same behavior too.
+- `pci --list-tools` follows the same behavior too.
+- `pui` and `pio` will also reuse the same remembered tool when they resolve the package manager.
+
+Examples:
+
+```bash
+pi react --choose-tool
+pi --choose-tool bun
+pil --choose-tool
+pil --choose-tool pnpm
+pi --forget-tool
+pil --forget-tool
+pi --show-tool
+pil --show-tool
+pi --show-tool --json
+pi --list-tools
+pi --list-tools --json
+pci --choose-tool
+pci --forget-tool
+pci --show-tool
+pci --show-tool --json
+pci --list-tools
 ```
 
 ## Shell Integration (prun)
@@ -199,7 +253,7 @@ You can configure the loading style in .zshrc, as follows：
 ```
 export PI_COLOR=red # loadingstyle color
 export PI_SPINNER=star # loadingstyle
-export PI_DEFAULT=pnpm # If the current project does not set the installed package manager, you can set the default installation here
+export PI_DEFAULT=pnpm # Used as the fallback tool when PI cannot infer a better choice for the current workspace
 ```
 
 - 70+ types of styles, from [cli-spinners](https://jsfiddle.net/sindresorhus/2eLtsbey/embedded/result/)，You can choose to fill in the name in PI_SPINNER.

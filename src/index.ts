@@ -19,6 +19,14 @@ import { pil } from './pil'
 import { pinit } from './pinit'
 import { pio } from './pio'
 import { pix } from './pix'
+import {
+  forgetPkgToolPreference,
+  getPkgToolStatus,
+  getSupportedPkgToolNames,
+  printPkgToolCandidates,
+  printPkgToolStatus,
+  resolvePkgTool,
+} from './pkgManager'
 import { printPrunInit, prun } from './prun'
 import { pu } from './pu'
 import { pui } from './pui'
@@ -52,6 +60,77 @@ const runMap: Record<string, (...arg: any) => Promise<void> | void> = {
   'pio.mjs': pio,
 }
 const isZh = process.env.PI_Lang === 'zh'
+const pkgToolFlagCommands = new Set(['pi', 'pi.mjs', 'pil', 'pil.mjs', 'pci', 'pci.mjs'])
+const supportedPkgTools = new Set(getSupportedPkgToolNames())
+
+function parsePkgToolFlags(argv: string[]) {
+  const hasInspectFlag = argv.includes('--show-tool') || argv.includes('--list-tools')
+  let chooseTool = false
+  let forgetTool = false
+  let listTools = false
+  let showTool = false
+  let showToolJson = false
+  let preferredTool = ''
+  let invalidPreferredTool = ''
+  const normalizedArgv: string[] = []
+
+  for (let i = 0; i < argv.length; i++) {
+    const arg = argv[i]
+
+    if (arg === '--forget-tool') {
+      forgetTool = true
+      continue
+    }
+
+    if (arg === '--show-tool') {
+      showTool = true
+      continue
+    }
+
+    if (arg === '--list-tools') {
+      listTools = true
+      continue
+    }
+
+    if (arg === '--json' && hasInspectFlag) {
+      showToolJson = true
+      continue
+    }
+
+    if (arg === '--choose-tool') {
+      chooseTool = true
+      const next = argv[i + 1]
+      if (next && supportedPkgTools.has(next)) {
+        preferredTool = next
+        i++
+      }
+      continue
+    }
+
+    if (arg.startsWith('--choose-tool=')) {
+      chooseTool = true
+      const value = arg.slice('--choose-tool='.length)
+      if (supportedPkgTools.has(value))
+        preferredTool = value
+      else
+        invalidPreferredTool = value
+      continue
+    }
+
+    normalizedArgv.push(arg)
+  }
+
+  return {
+    chooseTool,
+    forgetTool,
+    invalidPreferredTool,
+    listTools,
+    normalizedArgv,
+    preferredTool,
+    showTool,
+    showToolJson,
+  }
+}
 
 export async function setup() {
   const cmd = process.argv[1]
@@ -72,9 +151,106 @@ export async function setup() {
     return
   }
 
-  let params = spaceFormat(argv.join(' ')).trim()
+  const supportsPkgToolFlags = pkgToolFlagCommands.has(exec)
+  const parsedPkgToolFlags = supportsPkgToolFlags
+    ? parsePkgToolFlags(argv)
+    : {
+        chooseTool: false,
+        forgetTool: false,
+        invalidPreferredTool: '',
+        listTools: false,
+        normalizedArgv: argv,
+        preferredTool: '',
+        showTool: false,
+        showToolJson: false,
+      }
+  const {
+    chooseTool,
+    forgetTool,
+    invalidPreferredTool,
+    listTools,
+    normalizedArgv,
+    preferredTool,
+    showTool,
+    showToolJson,
+  } = parsedPkgToolFlags
+
+  if (invalidPreferredTool) {
+    console.log(
+      color.red(
+        isZh
+          ? `不支持直接指定 ${invalidPreferredTool}，可选值为: ${getSupportedPkgToolNames().join(', ')}`
+          : `Unsupported tool "${invalidPreferredTool}". Valid values: ${getSupportedPkgToolNames().join(', ')}`,
+      ),
+    )
+    return
+  }
+
+  if (chooseTool)
+    process.env.PI_FORCE_PICK_TOOL = '1'
+  else
+    delete process.env.PI_FORCE_PICK_TOOL
+
+  if (forgetTool)
+    process.env.PI_FORGET_PICK_TOOL = '1'
+  else
+    delete process.env.PI_FORGET_PICK_TOOL
+
+  if (preferredTool)
+    process.env.PI_PREFERRED_TOOL = preferredTool
+  else
+    delete process.env.PI_PREFERRED_TOOL
+
+  let params = spaceFormat(normalizedArgv.join(' ')).trim()
 
   const hasPackage = await hasPkg(rootPath)
+  if (supportsPkgToolFlags && (chooseTool || forgetTool || showTool || listTools)) {
+    if (!hasPackage) {
+      console.log(
+        color.yellow(
+          isZh
+            ? '当前命令仅在 Node 项目的包管理场景下可用。'
+            : 'This option is only available for package-manager selection in Node projects.',
+        ),
+      )
+      return
+    }
+    if (showTool || listTools) {
+      if (forgetTool && !chooseTool) {
+        const removed = await forgetPkgToolPreference()
+        console.log(
+          removed
+            ? color.green(isZh ? '已清除当前 workspace 保存的包管理器选择。' : 'Cleared the saved package-manager choice for this workspace.')
+            : color.yellow(isZh ? '当前 workspace 没有保存的包管理器选择。' : 'No saved package-manager choice was found for this workspace.'),
+        )
+      }
+
+      if (chooseTool)
+        await resolvePkgTool()
+
+      const status = await getPkgToolStatus()
+      if (listTools)
+        printPkgToolCandidates(status, { json: showToolJson })
+      else
+        printPkgToolStatus(status, { json: showToolJson })
+      return
+    }
+
+    if (normalizedArgv.length === 0) {
+      if (forgetTool && !chooseTool) {
+        const removed = await forgetPkgToolPreference()
+        console.log(
+          removed
+            ? color.green(isZh ? '已清除当前 workspace 保存的包管理器选择。' : 'Cleared the saved package-manager choice for this workspace.')
+            : color.yellow(isZh ? '当前 workspace 没有保存的包管理器选择。' : 'No saved package-manager choice was found for this workspace.'),
+        )
+        return
+      }
+      await resolvePkgTool()
+      return
+    }
+  }
+
   if (!hasPackage) {
     if (await isGo(rootPath)) {
       if (exec === 'pi') {
@@ -244,7 +420,7 @@ export async function setup() {
     }
     return
   }
-  const pkg = argv.filter(v => !v.startsWith('-')).join(' ')
+  const pkg = normalizedArgv.filter(v => !v.startsWith('-')).join(' ')
   await handler(params, pkg)
 }
 

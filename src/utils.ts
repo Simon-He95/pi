@@ -4,9 +4,10 @@ import os from 'node:os'
 import path from 'node:path'
 import process from 'node:process'
 import { isFile } from 'lazy-js-utils'
-import { getPkg, getPkgTool, jsShell } from 'lazy-js-utils/node'
+import { getPkg, jsShell } from 'lazy-js-utils/node'
 // import ora from 'ora'
 import colors from 'picocolors'
+import { resolvePkgTool } from './pkgManager'
 
 const DW = /\s-DW/g
 const W = /\s-W/g
@@ -55,28 +56,7 @@ async function findUpAsync(
 export async function getParams(params: string) {
   const cwd = process.cwd()
   try {
-    let tool = (await getPkgTool()) || 'npm'
-    if (tool === 'npm') {
-      // In monorepos, running inside packages/* may not see the root lockfiles.
-      // Infer the real tool by walking up to find workspace/lock indicators.
-      if (
-        findUpSync(cwd, dir =>
-          isFile(path.join(dir, 'pnpm-workspace.yaml'))
-          || isFile(path.join(dir, 'pnpm-lock.yaml')))
-      ) {
-        tool = 'pnpm'
-      }
-      else if (
-        findUpSync(cwd, dir =>
-          isFile(path.join(dir, 'yarn.lock'))
-          || isFile(path.join(dir, '.yarnrc.yml')))
-      ) {
-        tool = 'yarn'
-      }
-      else if (findUpSync(cwd, dir => isFile(path.join(dir, 'bun.lockb')))) {
-        tool = 'bun'
-      }
-    }
+    const { tool } = await resolvePkgTool()
 
     switch (tool) {
       case 'pnpm':

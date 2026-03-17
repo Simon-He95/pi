@@ -43,10 +43,10 @@ export async function pi(
   let stdio: any = isSilent ? 'inherit' : ['inherit', 'pipe', 'inherit']
   let loading_status: any
   const { PI_DEFAULT, PI_MaxSockets: sockets } = process.env
-  const { detected, tool } = await resolvePkgTool()
+  const { tool } = await resolvePkgTool()
   // 开启并发下载值
   const maxSockets = sockets || 4
-  if (detected === 'npm' && !PI_DEFAULT) {
+  if (tool === 'npm' && !PI_DEFAULT) {
     stdio = 'inherit'
   }
   else {

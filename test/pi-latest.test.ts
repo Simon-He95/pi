@@ -26,6 +26,15 @@ vi.mock('../src/utils', () => ({
   pushHistory,
 }))
 
+vi.mock('../src/pkgManager', () => ({
+  getInstallCommand: (tool: string, hasParams: boolean) =>
+    tool === 'pnpm' ? `pnpm ${hasParams ? 'add' : 'install'}` : 'npm install',
+  resolvePkgTool: async () => ({
+    detected: 'pnpm',
+    tool: 'pnpm',
+  }),
+}))
+
 describe('pi latest installs', () => {
   let loadingStatus: { succeed: ReturnType<typeof vi.fn>, fail: ReturnType<typeof vi.fn> }
 
