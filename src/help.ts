@@ -38,6 +38,7 @@ export async function help(argv: any[]) {
           '~ pix: npx package',
           '~ pui: uninstall package',
           '~ prun: run package script',
+          '~ prun --doctor: show shell/history diagnostics',
           '~ pinit: package init',
           '~ pbuild: go build | cargo build',
           '~ pfind: find monorepo of yarn or pnpm',

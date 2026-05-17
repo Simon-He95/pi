@@ -18,9 +18,13 @@ vi.mock('../src/tty', () => ({
 
 const originalCwd = process.cwd()
 const originalConfigHome = process.env.XDG_CONFIG_HOME
+const originalAppData = process.env.APPDATA
 
 async function createTempWorkspace() {
   const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'pi-resolve-tool-'))
+  const configHome = path.join(dir, '.config')
+  process.env.XDG_CONFIG_HOME = configHome
+  process.env.APPDATA = configHome
   return dir
 }
 
@@ -48,6 +52,10 @@ afterEach(() => {
     delete process.env.XDG_CONFIG_HOME
   else
     process.env.XDG_CONFIG_HOME = originalConfigHome
+  if (originalAppData == null)
+    delete process.env.APPDATA
+  else
+    process.env.APPDATA = originalAppData
 })
 
 describe('resolvePkgTool', () => {

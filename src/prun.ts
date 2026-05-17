@@ -158,35 +158,126 @@ function getPowerShellProfilePath(shell: 'powershell' | 'pwsh', home: string) {
   return path.join(configHome, 'powershell', 'Microsoft.PowerShell_profile.ps1')
 }
 
+function getPrunInitConfig(shell: string, home: string) {
+  if (shell === 'zsh') {
+    const zdotdir = process.env.ZDOTDIR || home
+    return {
+      rcFile: path.join(zdotdir, '.zshrc'),
+      initLine: 'eval "$(prun --init zsh)"',
+    }
+  }
+  if (shell === 'bash') {
+    return {
+      rcFile: path.join(home, '.bashrc'),
+      initLine: 'eval "$(prun --init bash)"',
+    }
+  }
+  if (shell === 'fish') {
+    const configHome = process.env.XDG_CONFIG_HOME || path.join(home, '.config')
+    return {
+      rcFile: path.join(configHome, 'fish', 'config.fish'),
+      initLine: 'prun --init fish | source',
+    }
+  }
+  if (shell === 'powershell' || shell === 'pwsh') {
+    return {
+      rcFile: getPowerShellProfilePath(shell, home),
+      initLine: `prun --init ${shell} | Out-String | Invoke-Expression`,
+    }
+  }
+  return null
+}
+
+function resolveHistoryHintPath() {
+  const custom = process.env.CCOMMAND_HISTORY_HINT || ''
+  if (custom)
+    return custom
+
+  const home = process.env.HOME || os.homedir()
+  const cacheHome = process.env.XDG_CACHE_HOME || path.join(home, '.cache')
+  return path.join(cacheHome, 'ccommand', 'last-history')
+}
+
+function yesNo(value: boolean) {
+  return value ? 'yes' : 'no'
+}
+
+function printPrunAutoInitNotice(rcFile: string, initLine: string) {
+  if (!process.stdout.isTTY)
+    return
+  console.log(
+    color.yellow(
+      isZh
+        ? `已写入 shell hook: ${rcFile}\n当前终端还未生效，请执行: ${initLine}\n或重新打开终端。`
+        : `Installed shell hook into ${rcFile}.\nThis terminal is not updated yet. Run: ${initLine}\nOr reopen the terminal.`,
+    ),
+  )
+}
+
+export function printPrunDoctor() {
+  const shell = detectShell()
+  const home = process.env.HOME || os.homedir()
+  const initConfig = getPrunInitConfig(shell, home)
+  const rcFile = initConfig?.rcFile || ''
+  let rcContent = ''
+  let rcExists = false
+  if (rcFile) {
+    try {
+      rcContent = fs.readFileSync(rcFile, 'utf8')
+      rcExists = true
+    }
+    catch {
+      rcExists = false
+    }
+  }
+
+  const hintPath = resolveHistoryHintPath()
+  let hintExists = false
+  let hintValue = ''
+  try {
+    hintValue = fs.readFileSync(hintPath, 'utf8').trim()
+    hintExists = true
+  }
+  catch {
+    hintExists = false
+  }
+
+  const lines = [
+    `shell detected: ${shell}`,
+    `hook active: ${yesNo(process.env.PRUN_HOOK_ACTIVE === '1')}`,
+    `profile path: ${rcFile || '(unsupported shell)'}`,
+    `profile exists: ${yesNo(rcExists)}`,
+    `profile contains prun --init: ${yesNo(/prun\s+--init/.test(rcContent))}`,
+    `history hint path: ${hintPath}`,
+    `last hint exists: ${yesNo(hintExists)}`,
+    `last hint value: ${hintValue || '(empty)'}`,
+    `stdin isTTY: ${yesNo(Boolean(process.stdin.isTTY))}`,
+    `stdout isTTY: ${yesNo(Boolean(process.stdout.isTTY))}`,
+    `CCOMMAND_NO_HISTORY: ${process.env.CCOMMAND_NO_HISTORY || ''}`,
+    `NO_HISTORY: ${process.env.NO_HISTORY || ''}`,
+  ]
+
+  if (shell === 'powershell' || shell === 'pwsh') {
+    lines.push(
+      `PSReadLine loaded: ${process.env.PRUN_PSREADLINE_LOADED || '(unknown)'}`,
+      `HistorySavePath: ${process.env.PRUN_PSREADLINE_HISTORY_SAVE_PATH || ''}`,
+      `HistorySaveStyle: ${process.env.PRUN_PSREADLINE_HISTORY_SAVE_STYLE || ''}`,
+    )
+  }
+
+  console.log(lines.join('\n'))
+}
+
 export function ensurePrunAutoInit() {
   if (!shouldAutoInit())
     return
   const shell = detectShell()
   const home = process.env.HOME || os.homedir()
-  let rcFile = ''
-  let initLine = ''
-
-  if (shell === 'zsh') {
-    const zdotdir = process.env.ZDOTDIR || home
-    rcFile = path.join(zdotdir, '.zshrc')
-    initLine = 'eval "$(prun --init zsh)"'
-  }
-  else if (shell === 'bash') {
-    rcFile = path.join(home, '.bashrc')
-    initLine = 'eval "$(prun --init bash)"'
-  }
-  else if (shell === 'fish') {
-    const configHome = process.env.XDG_CONFIG_HOME || path.join(home, '.config')
-    rcFile = path.join(configHome, 'fish', 'config.fish')
-    initLine = 'prun --init fish | source'
-  }
-  else if (shell === 'powershell' || shell === 'pwsh') {
-    rcFile = getPowerShellProfilePath(shell, home)
-    initLine = `prun --init ${shell} | Out-String | Invoke-Expression`
-  }
-  else {
+  const initConfig = getPrunInitConfig(shell, home)
+  if (!initConfig)
     return
-  }
+
+  const { rcFile, initLine } = initConfig
 
   try {
     const dir = path.dirname(rcFile)
@@ -197,6 +288,7 @@ export function ensurePrunAutoInit() {
     if (!/prun\s+--init/.test(content)) {
       const prefix = content.length && !content.endsWith('\n') ? '\n' : ''
       fs.appendFileSync(rcFile, `${prefix}${initLine}\n`, 'utf8')
+      printPrunAutoInitNotice(rcFile, initLine)
     }
   }
   catch {
@@ -230,6 +322,7 @@ export function printPrunInit(args: string[] = []) {
 
   if (shell === 'zsh') {
     script = [
+      'export PRUN_HOOK_ACTIVE=1',
       'prun() {',
       `  local bin=${bin}`,
       '  local -a cmd',
@@ -288,6 +381,7 @@ export function printPrunInit(args: string[] = []) {
   }
   else if (shell === 'bash') {
     script = [
+      'export PRUN_HOOK_ACTIVE=1',
       'prun() {',
       `  local bin=${bin}`,
       '  local -a cmd',
@@ -350,6 +444,7 @@ export function printPrunInit(args: string[] = []) {
   }
   else if (shell === 'fish') {
     script = [
+      'set -gx PRUN_HOOK_ACTIVE 1',
       'function prun',
       `  set -l bin ${bin}`,
       '  set -l cmd (string split -- " " $bin)',
@@ -387,6 +482,20 @@ export function printPrunInit(args: string[] = []) {
     const powerShellBin = splitCommand(binArg).map(powerShellQuote).join(', ')
     script = [
       `$script:__prun_bin = @(${powerShellBin || powerShellQuote('prun')})`,
+      '$env:PRUN_HOOK_ACTIVE = "1"',
+      'try {',
+      '  $option = Get-PSReadLineOption -ErrorAction SilentlyContinue',
+      '  if ($option) {',
+      '    $env:PRUN_PSREADLINE_LOADED = "yes"',
+      '    $env:PRUN_PSREADLINE_HISTORY_SAVE_PATH = "$($option.HistorySavePath)"',
+      '    $env:PRUN_PSREADLINE_HISTORY_SAVE_STYLE = "$($option.HistorySaveStyle)"',
+      '  }',
+      '  else {',
+      '    $env:PRUN_PSREADLINE_LOADED = "no"',
+      '  }',
+      '} catch {',
+      '  $env:PRUN_PSREADLINE_LOADED = "no"',
+      '}',
       '',
       'function global:prun {',
       '  param([Parameter(ValueFromRemainingArguments = $true)] [string[]] $CliArgs)',
@@ -404,6 +513,41 @@ export function printPrunInit(args: string[] = []) {
       '    $extra = $script:__prun_bin[1..($script:__prun_bin.Count - 1)]',
       '  }',
       '  & $command @extra @CliArgs',
+      '}',
+      '',
+      'function global:__prun_add_history {',
+      '  param([string] $Command)',
+      '  $added = $false',
+      '',
+      '  try {',
+      '    $psReadLineType = "Microsoft.PowerShell.PSConsoleReadLine" -as [type]',
+      '    if ($null -ne $psReadLineType) {',
+      '      $psReadLineType::AddToHistory($Command)',
+      '      $added = $true',
+      '    }',
+      '  } catch {}',
+      '',
+      '  try {',
+      '    $option = Get-PSReadLineOption -ErrorAction SilentlyContinue',
+      '    if ($option -and $option.HistorySavePath -and ($option.HistorySaveStyle -ne "SaveNothing")) {',
+      '      $path = $option.HistorySavePath',
+      '      $dir = Split-Path -Parent $path',
+      '      if ($dir -and -not (Test-Path -LiteralPath $dir)) {',
+      '        New-Item -ItemType Directory -Path $dir -Force | Out-Null',
+      '      }',
+      '',
+      '      $last = $null',
+      '      if (Test-Path -LiteralPath $path) {',
+      '        $last = Get-Content -LiteralPath $path -Tail 1 -ErrorAction SilentlyContinue',
+      '      }',
+      '',
+      '      if ($last -ne $Command) {',
+      '        Add-Content -LiteralPath $path -Value $Command -Encoding utf8',
+      '      }',
+      '    }',
+      '  } catch {}',
+      '',
+      '  return $added',
       '}',
       '',
       'function global:__prun_sync_history {',
@@ -445,11 +589,7 @@ export function printPrunInit(args: string[] = []) {
       '    return',
       '  }',
       '  $script:__PRUN_HISTORY_HINT_TS = $hintTs',
-      '  $psReadLineType = "Microsoft.PowerShell.PSConsoleReadLine" -as [type]',
-      '  if ($null -eq $psReadLineType) {',
-      '    return',
-      '  }',
-      '  $psReadLineType::AddToHistory($hintCmd)',
+      '  [void](__prun_add_history $hintCmd)',
       '}',
       '',
       'if (-not $script:__PRUN_PROMPT_INSTALLED) {',
