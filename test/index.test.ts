@@ -42,6 +42,12 @@ vi.mock('../src/pkgManager', () => ({
 
 const originalArgv = process.argv
 
+function binPath(name: string) {
+  return process.platform === 'win32'
+    ? `C:\\tools\\${name}.cmd`
+    : `/usr/local/bin/${name}`
+}
+
 beforeEach(() => {
   vi.resetModules()
   help.mockResolvedValue(undefined)
@@ -73,21 +79,21 @@ afterEach(() => {
 
 describe('setup command guard', () => {
   it('does not run deps for pbuild in node projects', async () => {
-    process.argv = ['node', '/usr/local/bin/pbuild', 'arg1']
+    process.argv = ['node', binPath('pbuild'), 'arg1']
     const { setup } = await import('../src/index')
     await expect(setup()).resolves.toBeUndefined()
     expect(installDeps).not.toHaveBeenCalled()
   })
 
   it('does not run deps for unknown commands', async () => {
-    process.argv = ['node', '/usr/local/bin/punknown', 'arg1']
+    process.argv = ['node', binPath('punknown'), 'arg1']
     const { setup } = await import('../src/index')
     await expect(setup()).resolves.toBeUndefined()
     expect(installDeps).not.toHaveBeenCalled()
   })
 
   it('shows the current package-manager status without running installs', async () => {
-    process.argv = ['node', '/usr/local/bin/pi', '--show-tool']
+    process.argv = ['node', binPath('pi'), '--show-tool']
     const { setup } = await import('../src/index')
     await expect(setup()).resolves.toBeUndefined()
     expect(getPkgToolStatus).toHaveBeenCalledTimes(1)
@@ -102,7 +108,7 @@ describe('setup command guard', () => {
   })
 
   it('shows the current package-manager status as json', async () => {
-    process.argv = ['node', '/usr/local/bin/pi', '--show-tool', '--json']
+    process.argv = ['node', binPath('pi'), '--show-tool', '--json']
     const { setup } = await import('../src/index')
     await expect(setup()).resolves.toBeUndefined()
     expect(getPkgToolStatus).toHaveBeenCalledTimes(1)
@@ -117,7 +123,7 @@ describe('setup command guard', () => {
   })
 
   it('passes an explicit tool choice through to package-manager resolution', async () => {
-    process.argv = ['node', '/usr/local/bin/pi', '--choose-tool', 'bun']
+    process.argv = ['node', binPath('pi'), '--choose-tool', 'bun']
     const { setup } = await import('../src/index')
     await expect(setup()).resolves.toBeUndefined()
     expect(process.env.PI_PREFERRED_TOOL).toBe('bun')
@@ -125,7 +131,7 @@ describe('setup command guard', () => {
   })
 
   it('lists candidate tools without running installs', async () => {
-    process.argv = ['node', '/usr/local/bin/pi', '--list-tools', '--json']
+    process.argv = ['node', binPath('pi'), '--list-tools', '--json']
     const { setup } = await import('../src/index')
     await expect(setup()).resolves.toBeUndefined()
     expect(getPkgToolStatus).toHaveBeenCalledTimes(1)
