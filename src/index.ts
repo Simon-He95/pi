@@ -27,7 +27,7 @@ import {
   printPkgToolStatus,
   resolvePkgTool,
 } from './pkgManager'
-import { printPrunInit, prun } from './prun'
+import { printPrunDoctor, printPrunInit, prun } from './prun'
 import { pu } from './pu'
 import { pui } from './pui'
 import { getCcommand } from './require'
@@ -148,6 +148,16 @@ export async function setup() {
 
   if ((exec === 'prun' || exec === 'prun.mjs') && argv[0] === '--init') {
     printPrunInit(argv.slice(1))
+    return
+  }
+  if (
+    (exec === 'prun'
+      || exec === 'prun.mjs'
+      || exec === 'pfind'
+      || exec === 'pfind.mjs')
+    && argv[0] === '--doctor'
+  ) {
+    printPrunDoctor()
     return
   }
 
