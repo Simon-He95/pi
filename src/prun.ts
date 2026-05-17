@@ -191,7 +191,7 @@ function getPrunInitConfig(shell: string, home: string) {
 function resolveHistoryHintPath() {
   const custom = process.env.CCOMMAND_HISTORY_HINT || ''
   if (custom)
-return custom
+    return custom
 
   const home = process.env.HOME || os.homedir()
   const cacheHome = process.env.XDG_CACHE_HOME || path.join(home, '.cache')
@@ -204,7 +204,7 @@ function yesNo(value: boolean) {
 
 function printPrunAutoInitNotice(rcFile: string, initLine: string) {
   if (!process.stdout.isTTY)
-return
+    return
   console.log(
     color.yellow(
       isZh
@@ -226,7 +226,7 @@ export function printPrunDoctor() {
       rcContent = fs.readFileSync(rcFile, 'utf8')
       rcExists = true
     }
- catch {
+    catch {
       rcExists = false
     }
   }
@@ -238,7 +238,7 @@ export function printPrunDoctor() {
     hintValue = fs.readFileSync(hintPath, 'utf8').trim()
     hintExists = true
   }
- catch {
+  catch {
     hintExists = false
   }
 
