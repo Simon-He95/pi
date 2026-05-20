@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       ccommand:
-        specifier: ^1.1.8
-        version: 1.1.8
+        specifier: ^1.1.9
+        version: 1.1.9
       fast-glob:
         specifier: ^3.3.3
         version: 3.3.3
@@ -1078,8 +1078,8 @@ packages:
   caniuse-lite@1.0.30001767:
     resolution: {integrity: sha512-34+zUAMhSH+r+9eKmYG+k2Rpt8XttfE4yXAjoZvkAPs15xcYQhyBYdalJ65BzivAvGRMViEjy6oKr/S91loekQ==}
 
-  ccommand@1.1.8:
-    resolution: {integrity: sha512-qBm52QvPkwc6GNzFU+U5cP8YVk8a3v/SMr8gexbXUk3ReXc4WbWEHKoqWacyfrHVruM86+lQXNFLZoA6OShBFw==}
+  ccommand@1.1.9:
+    resolution: {integrity: sha512-AVe2R9WkANIip88R2zFMu3p4vmrdODjmBkhXUDhJlc1j8or6z7Rh5D2SGgiAQXxv0G6m7iQrr7zLQohNk6q8Ug==}
     hasBin: true
 
   ccount@2.0.1:
@@ -2001,9 +2001,6 @@ packages:
   mimic-function@5.0.1:
     resolution: {integrity: sha512-VP79XUPxV2CigYP3jWwAUFSku2aKqBH7uTAapFWCBqutsbmDo96KY5o8uh6U+/YSIn5OxJnXp73beVkpqMIGhA==}
     engines: {node: '>=18'}
-
-  minimatch@3.1.2:
-    resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
 
   minimatch@3.1.5:
     resolution: {integrity: sha512-VgjWUsnnT6n+NUk6eZq77zeFdpW2LWDzP6zFGrCbHXiYNul5Dzqk2HHQ5uFH2DNW5Xbp8+jVzaeNt94ssEEl4w==}
@@ -3564,7 +3561,7 @@ snapshots:
 
   caniuse-lite@1.0.30001767: {}
 
-  ccommand@1.1.8:
+  ccommand@1.1.9:
     dependencies:
       '@simon_he/colorize': 0.0.1
       fast-glob: 3.3.3
@@ -4203,7 +4200,7 @@ snapshots:
       fs.realpath: 1.0.0
       inflight: 1.0.6
       inherits: 2.0.4
-      minimatch: 3.1.2
+      minimatch: 3.1.5
       once: 1.4.0
       path-is-absolute: 1.0.1
 
@@ -4720,10 +4717,6 @@ snapshots:
   mimic-fn@4.0.0: {}
 
   mimic-function@5.0.1: {}
-
-  minimatch@3.1.2:
-    dependencies:
-      brace-expansion: 1.1.11
 
   minimatch@3.1.5:
     dependencies:
