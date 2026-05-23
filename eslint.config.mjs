@@ -5,4 +5,9 @@ export default simon({
     'no-console': 'off',
   },
   ignores: ['**/fixtures', 'test'],
+}, {
+  files: ['p*.mjs'],
+  rules: {
+    'antfu/no-top-level-await': 'off',
+  },
 })

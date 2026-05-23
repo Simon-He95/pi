@@ -94,6 +94,14 @@ jobs:
           for bin in pi pio pix pa pu pci pil pui prun pinit pbuild pfind; do
             ./node_modules/.bin/$bin --version >/dev/null
           done
+          mkdir node-project
+          cat > node-project/package.json <<'EOF'
+          {"name":"node-project","version":"0.0.0","scripts":{"dev":"node -e \"console.log(1)\""}}
+          EOF
+          touch node-project/package-lock.json
+          (cd node-project && ../node_modules/.bin/pi --show-tool --json >/dev/null)
+          ./node_modules/.bin/prun --doctor >/dev/null
+          ./node_modules/.bin/pfind --doctor >/dev/null
           test -f node_modules/@simon_he/pi/dist/index.d.mts
           test -f node_modules/@simon_he/pi/dist/index.d.cts
           cat > import-smoke.mts <<'EOF'

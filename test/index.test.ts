@@ -145,4 +145,18 @@ describe('setup command guard', () => {
     expect(printPkgToolStatus).not.toHaveBeenCalled()
     expect(resolvePkgTool).not.toHaveBeenCalled()
   })
+
+  it('passes arguments through to external pa alias', async () => {
+    process.argv = ['node', binPath('pa'), 'run', '--fast']
+    const { setup } = await import('../src/index')
+    await expect(setup()).resolves.toBeUndefined()
+    expect(jsShell).toHaveBeenCalledWith('na run --fast', 'inherit')
+  })
+
+  it('passes arguments through to external pu alias', async () => {
+    process.argv = ['node', binPath('pu'), '--latest']
+    const { setup } = await import('../src/index')
+    await expect(setup()).resolves.toBeUndefined()
+    expect(jsShell).toHaveBeenCalledWith('nu --latest', 'inherit')
+  })
 })

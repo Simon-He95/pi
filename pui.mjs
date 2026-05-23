@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-import('./dist/cli.cjs')
+await import('./dist/cli.cjs')
