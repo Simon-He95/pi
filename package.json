@@ -42,22 +42,19 @@
   "sideEffects": false,
   "exports": {
     ".": {
-      "types": "./dist/index.d.mts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
     }
   },
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
-  "typesVersions": {
-    "*": {
-      "*": [
-        "./dist/*",
-        "./dist/index.d.mts"
-      ]
-    }
-  },
   "bin": {
     "pi": "./pi.mjs",
     "pio": "./pio.mjs",
@@ -76,10 +73,10 @@
     "dist"
   ],
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   },
   "scripts": {
-    "build": "tsdown ./src/index.ts --format cjs,esm --clean",
+    "build": "tsdown ./src/index.ts ./src/cli.ts --format cjs,esm --clean",
     "dev": "pnpm build --watch src",
     "format": "prettier --write --cache .",
     "lint": "eslint .",
@@ -88,7 +85,7 @@
     "prepublishOnly": "pnpm build",
     "release": "bumpp && npm publish",
     "smoke": "pnpm pack:check && node ./pi.mjs --version",
-    "start": "esno src/index.ts",
+    "start": "tsx src/cli.ts",
     "test": "vitest"
   },
   "dependencies": {

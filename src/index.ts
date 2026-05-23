@@ -433,10 +433,3 @@ export async function setup() {
   const pkg = normalizedArgv.filter(v => !v.startsWith('-')).join(' ')
   await handler(params, pkg)
 }
-
-if (!process.env.PI_TEST) {
-  setup().catch((error) => {
-    console.error(error)
-    process.exit(1)
-  })
-}

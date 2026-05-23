@@ -140,8 +140,10 @@ prun --init pwsh | Out-String | Invoke-Expression
 
 Shell 集成说明：
 
-- 在交互式 shell 中，首次运行 `prun` 可能会把对应 hook 写入 shell rc/profile。
-- 可通过 `PI_NO_AUTO_INIT=1` 或 `PI_AUTO_INIT=0` 禁用自动写入。
+默认情况下，`prun` 在首次交互式运行时可能会自动写入 shell hook。
+如果你不希望 PI 修改 shell rc/profile，请在运行前设置 `PI_NO_AUTO_INIT=1`。
+
+- 可通过 `PI_AUTO_INIT=0` 禁用自动写入。
 - 可运行 `prun --doctor` 查看 shell/history 集成状态。
 - 写入 hook 后，请打开新终端或重新加载 shell 配置。
 
@@ -191,11 +193,16 @@ pnpm pack:check
 pnpm smoke
 ```
 
-## 依赖
+## 运行时集成
 
 - [ora](https://github.com/sindresorhus/ora)
 - [ccommand](https://github.com/Simon-He95/ccommand)
-- [cargo](https://github.com/rust-lang/cargo)
+
+当前项目需要时会使用可选外部工具：
+
+- [Cargo](https://github.com/rust-lang/cargo)：Rust 工作流
+- Go 工具链：Go 工作流
+- Python：Python 文件执行
 
 ## License
 

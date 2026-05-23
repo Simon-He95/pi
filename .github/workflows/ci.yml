@@ -21,7 +21,7 @@ jobs:
       - name: Set node
         uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: 24.x
 
       - name: Install
         run: pnpm install --frozen-lockfile
@@ -34,7 +34,7 @@ jobs:
 
     strategy:
       matrix:
-        node: [lts/*]
+        node: [22.x, 24.x]
         os: [ubuntu-latest, windows-latest, macos-latest]
       fail-fast: false
 
@@ -70,7 +70,7 @@ jobs:
       - name: Set node
         uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: 24.x
 
       - name: Install
         run: pnpm install --frozen-lockfile
@@ -87,5 +87,20 @@ jobs:
           cd "$SMOKE_DIR"
           npm init -y
           npm install "./$TARBALL"
-          ./node_modules/.bin/pi --version
+          npm install -D typescript
+          for bin in pi pio pix pa pu pci pil pui prun pinit pbuild pfind; do
+            ./node_modules/.bin/$bin --version >/dev/null
+          done
           test -f node_modules/@simon_he/pi/dist/index.d.mts
+          test -f node_modules/@simon_he/pi/dist/index.d.cts
+          cat > import-smoke.mts <<'EOF'
+          import { setup } from '@simon_he/pi'
+          void setup
+          EOF
+          cat > require-smoke.cts <<'EOF'
+          import pi = require('@simon_he/pi')
+          void pi.setup
+          EOF
+          npx tsc --module nodenext --moduleResolution nodenext --target ES2022 --noEmit import-smoke.mts require-smoke.cts
+          node --input-type=module -e "const { setup } = await import('@simon_he/pi'); if (typeof setup !== 'function') process.exit(1)"
+          node -e "const { setup } = require('@simon_he/pi'); if (typeof setup !== 'function') process.exit(1)"

@@ -140,8 +140,10 @@ prun --init pwsh | Out-String | Invoke-Expression
 
 Shell integration notice:
 
-- In interactive shells, the first `prun` run may append the matching hook to your shell rc/profile.
-- Disable automatic setup with `PI_NO_AUTO_INIT=1` or `PI_AUTO_INIT=0`.
+By default, `prun` may install the shell hook on the first interactive run.
+Set `PI_NO_AUTO_INIT=1` before running `prun` if you do not want PI to modify your shell rc/profile.
+
+- Disable automatic setup with `PI_AUTO_INIT=0`.
 - Run `prun --doctor` to inspect shell/history integration state.
 - Open a new terminal, or reload your shell config, after adding the hook.
 
@@ -191,11 +193,16 @@ pnpm pack:check
 pnpm smoke
 ```
 
-## Dependencies
+## Runtime Integrations
 
 - [ora](https://github.com/sindresorhus/ora)
 - [ccommand](https://github.com/Simon-He95/ccommand)
-- [cargo](https://github.com/rust-lang/cargo)
+
+Optional external tools are used when the current project needs them:
+
+- [Cargo](https://github.com/rust-lang/cargo) for Rust workflows
+- Go toolchain for Go workflows
+- Python for Python file execution
 
 ## License
 
