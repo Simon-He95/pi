@@ -189,13 +189,14 @@ export async function setup() {
   } = parsedPkgToolFlags
 
   if (invalidPreferredTool) {
-    console.log(
+    console.error(
       color.red(
         isZh
           ? `不支持直接指定 ${invalidPreferredTool}，可选值为: ${getSupportedPkgToolNames().join(', ')}`
           : `Unsupported tool "${invalidPreferredTool}". Valid values: ${getSupportedPkgToolNames().join(', ')}`,
       ),
     )
+    process.exitCode = 1
     return
   }
 

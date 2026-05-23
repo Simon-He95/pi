@@ -147,10 +147,9 @@ prun --init pwsh | Out-String | Invoke-Expression
 
 Shell 集成说明：
 
-默认情况下，`prun` 在首次交互式运行时可能会自动写入 shell hook。
-如果你不希望 PI 修改 shell rc/profile，请在运行前设置 `PI_NO_AUTO_INIT=1`。
+默认情况下，PI 不会修改你的 shell rc/profile。
 
-- 可通过 `PI_AUTO_INIT=0` 禁用自动写入。
+- 如果希望首次交互式运行时自动写入，可以显式运行 `PI_AUTO_INIT=1 prun`。
 - 可运行 `prun --doctor` 查看 shell/history 集成状态。
 - 写入 hook 后，请打开新终端或重新加载 shell 配置。
 

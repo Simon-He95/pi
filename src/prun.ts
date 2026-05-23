@@ -297,9 +297,6 @@ export function ensurePrunAutoInit() {
 }
 
 function shouldAutoInit() {
-  const auto = process.env.PI_AUTO_INIT || process.env.PRUN_AUTO_INIT
-  if (auto != null)
-    return isNoHistory(auto)
   const disable = process.env.PI_NO_AUTO_INIT || process.env.PRUN_NO_AUTO_INIT
   if (isNoHistory(disable))
     return false
@@ -307,7 +304,8 @@ function shouldAutoInit() {
     return false
   if (!process.stdout.isTTY || !process.stdin.isTTY)
     return false
-  return true
+  const auto = process.env.PI_AUTO_INIT || process.env.PRUN_AUTO_INIT
+  return isNoHistory(auto)
 }
 
 export function printPrunInit(args: string[] = []) {

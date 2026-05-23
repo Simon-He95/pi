@@ -82,7 +82,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "pack:check": "pnpm build && npm pack --dry-run",
-    "prepublishOnly": "pnpm build",
+    "prepublishOnly": "pnpm lint && pnpm test && pnpm pack:check",
     "release": "bumpp && npm publish",
     "smoke": "pnpm pack:check && node ./pi.mjs --version",
     "start": "tsx src/cli.ts",

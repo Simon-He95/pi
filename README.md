@@ -147,10 +147,9 @@ prun --init pwsh | Out-String | Invoke-Expression
 
 Shell integration notice:
 
-By default, `prun` may install the shell hook on the first interactive run.
-Set `PI_NO_AUTO_INIT=1` before running `prun` if you do not want PI to modify your shell rc/profile.
+By default, PI does not modify your shell rc/profile.
 
-- Disable automatic setup with `PI_AUTO_INIT=0`.
+- Automatic setup is opt-in with `PI_AUTO_INIT=1 prun`.
 - Run `prun --doctor` to inspect shell/history integration state.
 - Open a new terminal, or reload your shell config, after adding the hook.
 

@@ -69,6 +69,7 @@ beforeEach(() => {
 
 afterEach(() => {
   process.argv = originalArgv
+  process.exitCode = undefined
   delete process.env.PI_FORCE_PICK_TOOL
   delete process.env.PI_FORGET_PICK_TOOL
   delete process.env.PI_PREFERRED_TOOL
@@ -129,17 +130,18 @@ describe('setup command guard', () => {
   })
 
   it('rejects unsupported explicit tool after --choose-tool', async () => {
-    const log = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {})
     process.argv = ['node', binPath('pi'), '--choose-tool', 'foo']
     const { setup } = await import('../src/index')
 
     await expect(setup()).resolves.toBeUndefined()
 
+    expect(process.exitCode).toBe(1)
     expect(resolvePkgTool).not.toHaveBeenCalled()
     expect(printPkgToolStatus).not.toHaveBeenCalled()
-    expect(log).toHaveBeenCalledWith(expect.stringContaining('Unsupported tool "foo"'))
+    expect(error).toHaveBeenCalledWith(expect.stringContaining('Unsupported tool "foo"'))
 
-    log.mockRestore()
+    error.mockRestore()
   })
 
   it('lists candidate tools without running installs', async () => {
