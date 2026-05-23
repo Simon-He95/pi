@@ -16,6 +16,8 @@
 
 PI 会识别当前项目环境，然后为 npm、pnpm、yarn、bun、Go、Rust 和 Python 工作流运行正确的命令。
 
+> 需要 Node.js >= 22。CI 覆盖 Node.js 22 和 24。
+
 ```bash
 npm i -g @simon_he/pi
 
@@ -54,6 +56,11 @@ pfind
 | `pi` | 使用当前项目的包管理器安装或更新依赖。 |
 | `prun` | 运行 package scripts、模糊选择 scripts，或执行语言入口文件。 |
 | `pfind` | 在 workspace / monorepo 中查找并运行 scripts。 |
+
+## 命名说明
+
+当前包仍发布为 `@simon_he/pi`，`pi` 仍是主命令。
+但项目定位已经不只是安装依赖，而是面向项目上下文的命令路由器。
 
 ## 和 ni 对比
 

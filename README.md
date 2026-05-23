@@ -16,6 +16,8 @@
 
 PI detects your current project context and runs the right command for npm, pnpm, yarn, bun, Go, Rust, and Python workflows.
 
+> Requires Node.js >= 22. CI tests Node.js 22 and 24.
+
 ```bash
 npm i -g @simon_he/pi
 
@@ -54,6 +56,11 @@ pfind
 | `pi` | Install or update dependencies with the package manager for the current project. |
 | `prun` | Run package scripts, fuzzy-select scripts, or run language entry files. |
 | `pfind` | Find and run scripts across a workspace or monorepo. |
+
+## Naming
+
+The package is still published as `@simon_he/pi`, and `pi` remains the primary short command.
+The product positioning is now broader than dependency installation: PI is a project-aware command router.
 
 ## Compared With ni
 
