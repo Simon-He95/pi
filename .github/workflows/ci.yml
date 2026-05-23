@@ -57,3 +57,35 @@ jobs:
 
       - name: Test
         run: pnpm test
+
+  pack-smoke:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Pack check
+        run: pnpm pack:check
+
+      - name: Smoke install packed package
+        shell: bash
+        run: |
+          TARBALL=$(npm pack --json | node -e "let input = ''; process.stdin.on('data', chunk => input += chunk); process.stdin.on('end', () => console.log(JSON.parse(input)[0].filename))")
+          SMOKE_DIR=$(mktemp -d)
+          cp "$TARBALL" "$SMOKE_DIR/"
+          cd "$SMOKE_DIR"
+          npm init -y
+          npm install "./$TARBALL"
+          ./node_modules/.bin/pi --version
+          test -f node_modules/@simon_he/pi/dist/index.d.mts
