@@ -65,12 +65,10 @@ beforeEach(() => {
   hasPkg.mockResolvedValue(true)
   isGo.mockResolvedValue(false)
   isRust.mockResolvedValue(false)
-  process.env.PI_TEST = 'true'
 })
 
 afterEach(() => {
   process.argv = originalArgv
-  delete process.env.PI_TEST
   delete process.env.PI_FORCE_PICK_TOOL
   delete process.env.PI_FORGET_PICK_TOOL
   delete process.env.PI_PREFERRED_TOOL
@@ -128,6 +126,20 @@ describe('setup command guard', () => {
     await expect(setup()).resolves.toBeUndefined()
     expect(process.env.PI_PREFERRED_TOOL).toBe('bun')
     expect(resolvePkgTool).toHaveBeenCalledTimes(1)
+  })
+
+  it('rejects unsupported explicit tool after --choose-tool', async () => {
+    const log = vi.spyOn(console, 'log').mockImplementation(() => {})
+    process.argv = ['node', binPath('pi'), '--choose-tool', 'foo']
+    const { setup } = await import('../src/index')
+
+    await expect(setup()).resolves.toBeUndefined()
+
+    expect(resolvePkgTool).not.toHaveBeenCalled()
+    expect(printPkgToolStatus).not.toHaveBeenCalled()
+    expect(log).toHaveBeenCalledWith(expect.stringContaining('Unsupported tool "foo"'))
+
+    log.mockRestore()
   })
 
   it('lists candidate tools without running installs', async () => {
