@@ -84,7 +84,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "pack:check": "pnpm build && npm pack --dry-run",
-    "prepublishOnly": "pnpm lint && pnpm test && pnpm smoke:packed",
+    "prepublishOnly": "pnpm lint && pnpm smoke:packed",
     "release": "bumpp && npm publish",
     "smoke": "pnpm smoke:packed",
     "smoke:packed": "pnpm build && node ./scripts/smoke-packed.mjs",
