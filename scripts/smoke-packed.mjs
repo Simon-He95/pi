@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process'
-import { copyFileSync, mkdtempSync, rmSync } from 'node:fs'
+import { copyFileSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import process from 'node:process'
@@ -29,6 +29,7 @@ try {
 
   run(npmBin, ['init', '-y'], tmp)
   run(npmBin, ['install', `./${filename}`], tmp)
+  run(npmBin, ['install', '-D', 'typescript@5.9.3'], tmp)
 
   for (const bin of [
     'pi',
@@ -57,6 +58,37 @@ try {
   run(nodeBin, [
     '-e',
     'const { setup } = require(\'@simon_he/pi\'); if (typeof setup !== \'function\') process.exit(1)',
+  ], tmp)
+
+  writeFileSync(
+    join(tmp, 'import-smoke.mts'),
+    [
+      'import { setup } from \'@simon_he/pi\'',
+      'void setup',
+      '',
+    ].join('\n'),
+  )
+
+  writeFileSync(
+    join(tmp, 'require-smoke.cts'),
+    [
+      'import pi = require(\'@simon_he/pi\')',
+      'void pi.setup',
+      '',
+    ].join('\n'),
+  )
+
+  const tscBin = process.platform === 'win32' ? 'tsc.cmd' : 'tsc'
+  run(join(tmp, 'node_modules', '.bin', tscBin), [
+    '--module',
+    'nodenext',
+    '--moduleResolution',
+    'nodenext',
+    '--target',
+    'ES2022',
+    '--noEmit',
+    'import-smoke.mts',
+    'require-smoke.cts',
   ], tmp)
 }
 finally {

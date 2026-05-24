@@ -141,6 +141,15 @@ describe('setup command guard', () => {
     expect(resolvePkgTool).not.toHaveBeenCalled()
   })
 
+  it('normalizes stacked bin suffixes', async () => {
+    process.argv = ['node', '/repo/pi.mjs.cmd', '--show-tool', '--json']
+    const { setup } = await import('../src/index')
+
+    await expect(setup()).resolves.toBeUndefined()
+
+    expect(printPkgToolStatus).toHaveBeenCalledTimes(1)
+  })
+
   it('passes an explicit tool choice through to package-manager resolution', async () => {
     process.argv = ['node', binPath('pi'), '--choose-tool', 'bun']
     const { setup } = await import('../src/index')

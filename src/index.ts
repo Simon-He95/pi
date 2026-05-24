@@ -53,14 +53,7 @@ const pkgToolFlagCommands = new Set(['pi', 'pil', 'pci'])
 const supportedPkgTools = new Set(getSupportedPkgToolNames())
 
 function getExecName(argv1 = process.argv[1] ?? '') {
-  const file = path.basename(argv1)
-
-  return file
-    .replace(/\.mjs$/i, '')
-    .replace(/\.cjs$/i, '')
-    .replace(/\.js$/i, '')
-    .replace(/\.cmd$/i, '')
-    .replace(/\.ps1$/i, '')
+  return path.basename(argv1).replace(/(?:\.(?:mjs|cjs|js|cmd|ps1))+$/i, '')
 }
 
 function parsePkgToolFlags(argv: string[]) {
