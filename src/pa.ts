@@ -14,14 +14,14 @@ function hasCommand(command: string) {
 export function pa(params = '') {
   console.warn(
     pc.yellow(
-      '[pi] `pa` is deprecated and will be removed in a future release. Use `pi --show-tool` / `pi --choose-tool`, or install/use `na` directly.',
+      '[pi] `pa` is deprecated and only kept as a compatibility bridge to `na`. Install/use `na` directly if you still need that workflow.',
     ),
   )
 
   if (!hasCommand('na')) {
     console.error(
       pc.red(
-        '[pi] `pa` delegates to `na`, but `na` is not installed. Install the tool that provides `na`, or use `pi --show-tool` / `pi --choose-tool` instead.',
+        '[pi] `pa` delegates to `na`, but `na` is not installed. Install the package that provides `na`, or stop using the deprecated `pa` alias.',
       ),
     )
     process.exitCode = 1

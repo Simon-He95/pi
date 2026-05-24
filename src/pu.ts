@@ -14,14 +14,14 @@ function hasCommand(command: string) {
 export function pu(params = '') {
   console.warn(
     pc.yellow(
-      '[pi] `pu` is deprecated and will be removed in a future release. Use `pil` for latest upgrades, or install/use `nu` directly.',
+      '[pi] `pu` is deprecated and only kept as a compatibility bridge to `nu`. Use `nu` directly, or use `pil` only when you specifically want @latest upgrades.',
     ),
   )
 
   if (!hasCommand('nu')) {
     console.error(
       pc.red(
-        '[pi] `pu` delegates to `nu`, but `nu` is not installed. Install the tool that provides `nu`, or use `pil` for latest upgrades instead.',
+        '[pi] `pu` delegates to `nu`, but `nu` is not installed. Install the package that provides `nu`, or stop using the deprecated `pu` alias.',
       ),
     )
     process.exitCode = 1

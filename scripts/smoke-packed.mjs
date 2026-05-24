@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process'
-import { copyFileSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs'
+import { copyFileSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import process from 'node:process'
@@ -8,11 +8,15 @@ const npmBin = process.platform === 'win32' ? 'npm.cmd' : 'npm'
 const nodeBin = process.execPath
 const root = process.cwd()
 
-function run(command, args, cwd) {
+function run(command, args, cwd, extraEnv = {}) {
   execFileSync(command, args, {
     cwd,
     stdio: 'inherit',
     shell: process.platform === 'win32',
+    env: {
+      ...process.env,
+      ...extraEnv,
+    },
   })
 }
 
@@ -76,6 +80,25 @@ try {
     const binFile = process.platform === 'win32' ? `${bin}.cmd` : bin
     run(join(tmp, 'node_modules', '.bin', binFile), ['--version'], tmp)
   }
+
+  const nodeProject = join(tmp, 'node-project')
+  mkdirSync(nodeProject)
+  writeFileSync(
+    join(nodeProject, 'package.json'),
+    '{"name":"node-project","version":"0.0.0","scripts":{"dev":"node -e \\"console.log(1)\\""}}\n',
+  )
+  writeFileSync(join(nodeProject, 'package-lock.json'), '')
+
+  const prunBin = process.platform === 'win32' ? 'prun.cmd' : 'prun'
+  run(
+    join(tmp, 'node_modules', '.bin', prunBin),
+    ['dev'],
+    nodeProject,
+    {
+      CCOMMAND_NO_HISTORY: '1',
+      PI_NO_AUTO_INIT: '1',
+    },
+  )
 
   run(nodeBin, [
     '--input-type=module',

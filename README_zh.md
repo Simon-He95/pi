@@ -81,8 +81,8 @@ PI 更偏向项目命令路由器：
 | --- | --- |
 | Node.js | npm、pnpm、yarn、bun 的 install/remove/run 工作流 |
 | Monorepo | pnpm 和 yarn workspace 的脚本发现与包管理器选择 |
-| Go | `go get`、`go mod tidy`、`go run`、`go mod init`、`go build` |
-| Rust | `cargo install`、`cargo uninstall`、`cargo run`、`cargo init`、`cargo build` |
+| Go | `go get`、`go mod tidy`、`go run`、`go mod init`、`go build`，以及用于清理任务的 `go clean`。 |
+| Rust | `cargo run`、`cargo init`、`cargo build`，以及用于二进制 crate 的 `cargo install` / `cargo uninstall`。 |
 | Python | 通过 `prun` / `pfind` 执行 Python 入口文件 |
 
 ## 命令参考
@@ -104,8 +104,8 @@ PI 更偏向项目命令路由器：
 
 | 命令 | 状态 |
 | --- | --- |
-| `pa` | 已废弃。安装了 `na` 时会代理到 `na`。推荐使用 `pi --show-tool` / `pi --choose-tool`。 |
-| `pu` | 已废弃。安装了 `nu` 时会代理到 `nu`。推荐使用 `pil` 或直接使用底层包管理器。 |
+| `pa` | 已废弃。安装了 `na` 时会代理到 `na`。如果仍需要该工作流，请直接使用 `na`。 |
+| `pu` | 已废弃。安装了 `nu` 时会代理到 `nu`。请直接使用 `nu`；只有需要 `@latest` 升级时才使用 `pil`。 |
 
 ## Workspace 工具选择
 

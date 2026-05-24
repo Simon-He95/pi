@@ -81,8 +81,8 @@ PI goes further as a project command router:
 | --- | --- |
 | Node.js | npm, pnpm, yarn, bun install/remove/run workflows |
 | Monorepo | pnpm and yarn workspace script discovery and package-manager selection |
-| Go | `go get`, `go mod tidy`, `go run`, `go mod init`, `go build` |
-| Rust | `cargo install`, `cargo uninstall`, `cargo run`, `cargo init`, `cargo build` |
+| Go | `go get`, `go mod tidy`, `go run`, `go mod init`, `go build`, plus `go clean` for clean tasks. |
+| Rust | `cargo run`, `cargo init`, `cargo build`, plus `cargo install` / `cargo uninstall` for binary crates. |
 | Python | Python entry file execution through `prun` / `pfind` |
 
 ## Command Reference
@@ -104,8 +104,8 @@ PI goes further as a project command router:
 
 | Command | Status |
 | --- | --- |
-| `pa` | Deprecated. Delegates to `na` when installed. Prefer `pi --show-tool` / `pi --choose-tool`. |
-| `pu` | Deprecated. Delegates to `nu` when installed. Prefer `pil` or the underlying package manager directly. |
+| `pa` | Deprecated. Delegates to `na` when installed. Use `na` directly if you still need that workflow. |
+| `pu` | Deprecated. Delegates to `nu` when installed. Use `nu` directly, or `pil` only for `@latest` upgrades. |
 
 ## Workspace Tool Selection
 
