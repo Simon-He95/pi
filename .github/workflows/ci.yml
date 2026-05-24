@@ -9,19 +9,25 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
+        with:
+          version: 10.33.4
 
       - name: Set node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: lts/*
+          node-version: 24.x
+          package-manager-cache: false
 
       - name: Install
         run: pnpm install --frozen-lockfile
@@ -34,26 +40,184 @@ jobs:
 
     strategy:
       matrix:
-        node: [lts/*]
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            node: 18.x
+          - os: ubuntu-latest
+            node: 20.x
+          - os: ubuntu-latest
+            node: 22.x
+          - os: ubuntu-latest
+            node: 24.x
+          - os: windows-latest
+            node: 22.x
+          - os: windows-latest
+            node: 24.x
+          - os: macos-latest
+            node: 22.x
+          - os: macos-latest
+            node: 24.x
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
+        with:
+          version: 10.33.4
 
       - name: Set node ${{ matrix.node }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node }}
+          package-manager-cache: false
 
       - name: Install
         run: pnpm install --frozen-lockfile
 
       - name: Build
+        if: ${{ matrix.node != '18.x' }}
         run: pnpm build
 
       - name: Test
         run: pnpm test
+
+  pack-smoke:
+    runs-on: ubuntu-latest
+    outputs:
+      tarball-name: ${{ steps.pack.outputs.tarball-name }}
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 10.33.4
+
+      - name: Set node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24.x
+          package-manager-cache: false
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Pack
+        id: pack
+        shell: bash
+        run: |
+          pnpm build
+          TARBALL=$(npm pack --json | node -e "let input = ''; process.stdin.on('data', chunk => input += chunk); process.stdin.on('end', () => console.log(JSON.parse(input)[0].filename))")
+          echo "tarball-name=$TARBALL" >> "$GITHUB_OUTPUT"
+
+      - name: Upload packed package
+        uses: actions/upload-artifact@v7
+        with:
+          path: ${{ steps.pack.outputs.tarball-name }}
+          if-no-files-found: error
+          archive: false
+
+  runtime-smoke:
+    needs: pack-smoke
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            node: 18.x
+          - os: ubuntu-latest
+            node: 20.x
+          - os: ubuntu-latest
+            node: 22.x
+          - os: ubuntu-latest
+            node: 24.x
+          - os: windows-latest
+            node: 22.x
+          - os: windows-latest
+            node: 24.x
+      fail-fast: false
+
+    steps:
+      - name: Set node ${{ matrix.node }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node }}
+          package-manager-cache: false
+
+      - name: Download packed package
+        uses: actions/download-artifact@v8
+        with:
+          name: ${{ needs.pack-smoke.outputs.tarball-name }}
+
+      - name: Smoke install packed package
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          TARBALL=$(ls *.tgz | head -n 1)
+          npm init -y
+          npm install "./$TARBALL"
+          npm install -D typescript@5.9.3
+          for bin in pi pio pix pa pu pci pil pui prun pinit pbuild pfind; do
+            ./node_modules/.bin/$bin --version >/dev/null
+          done
+          mkdir node-project
+          cat > node-project/package.json <<'EOF'
+          {"name":"node-project","version":"0.0.0","scripts":{"dev":"node -e \"console.log(1)\""}}
+          EOF
+          touch node-project/package-lock.json
+          (cd node-project && ../node_modules/.bin/pi --show-tool --json >/dev/null)
+          (cd node-project && CCOMMAND_NO_HISTORY=1 PI_NO_AUTO_INIT=1 ../node_modules/.bin/prun dev >/dev/null)
+          ./node_modules/.bin/prun --doctor >/dev/null
+          ./node_modules/.bin/pfind --doctor >/dev/null
+          test -f node_modules/@simon_he/pi/dist/index.d.mts
+          test -f node_modules/@simon_he/pi/dist/index.d.cts
+          cat > import-smoke.mts <<'EOF'
+          import { setup } from '@simon_he/pi'
+          void setup
+          EOF
+          cat > require-smoke.cts <<'EOF'
+          import pi = require('@simon_he/pi')
+          void pi.setup
+          EOF
+          npx tsc --module nodenext --moduleResolution nodenext --target ES2022 --noEmit import-smoke.mts require-smoke.cts
+          node --input-type=module -e "const { setup } = await import('@simon_he/pi'); if (typeof setup !== 'function') process.exit(1)"
+          node -e "const { setup } = require('@simon_he/pi'); if (typeof setup !== 'function') process.exit(1)"
+
+      - name: Smoke install packed package on Windows
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $tarball = Get-ChildItem *.tgz | Select-Object -First 1
+          npm init -y
+          npm install ".\$($tarball.Name)"
+
+          foreach ($bin in @('pi','pio','pix','pa','pu','pci','pil','pui','prun','pinit','pbuild','pfind')) {
+            & ".\node_modules\.bin\$bin.cmd" --version | Out-Null
+          }
+
+          New-Item -ItemType Directory node-project | Out-Null
+
+          @'
+          {"name":"node-project","version":"0.0.0","scripts":{"dev":"node -e \"console.log(1)\""}}
+          '@ | Set-Content node-project\package.json -NoNewline
+
+          New-Item node-project\package-lock.json -ItemType File | Out-Null
+
+          Push-Location node-project
+          try {
+            $env:CCOMMAND_NO_HISTORY = '1'
+            $env:PI_NO_AUTO_INIT = '1'
+            ..\node_modules\.bin\prun.cmd dev | Out-Null
+          }
+          finally {
+            Remove-Item Env:\CCOMMAND_NO_HISTORY -ErrorAction SilentlyContinue
+            Remove-Item Env:\PI_NO_AUTO_INIT -ErrorAction SilentlyContinue
+            Pop-Location
+          }
+
+          node -e "const { setup } = require('@simon_he/pi'); if (typeof setup !== 'function') process.exit(1)"
+          node --input-type=module -e "const { setup } = await import('@simon_he/pi'); if (typeof setup !== 'function') process.exit(1)"

@@ -1,7 +1,7 @@
 import path from 'node:path'
 import process from 'node:process'
 import fg from 'fast-glob'
-import { isWin, spaceFormat } from 'lazy-js-utils'
+import { spaceFormat } from 'lazy-js-utils'
 import {
   hasPkg,
   isGo,
@@ -37,31 +37,24 @@ let rootPath = process.cwd()
 
 const runMap: Record<string, (...arg: any) => Promise<void> | void> = {
   pi,
-  'pi.mjs': pi,
   pix,
-  'pix.mjs': pix,
   pa,
-  'pa.mjs': pa,
-  pui,
-  'pui.mjs': pui,
   pu,
-  'pu.mjs': pu,
+  pui,
   pil,
-  'pil.mjs': pil,
   pci,
-  'pci.mjs': pci,
   prun,
-  'prun.mjs': prun,
   pinit,
-  'pinit.mjs': pinit,
   pfind,
-  'pfind.mjs': pfind,
   pio,
-  'pio.mjs': pio,
 }
 const isZh = process.env.PI_Lang === 'zh'
-const pkgToolFlagCommands = new Set(['pi', 'pi.mjs', 'pil', 'pil.mjs', 'pci', 'pci.mjs'])
+const pkgToolFlagCommands = new Set(['pi', 'pil', 'pci'])
 const supportedPkgTools = new Set(getSupportedPkgToolNames())
+
+function getExecName(argv1 = process.argv[1] ?? '') {
+  return path.basename(argv1).replace(/(?:\.(?:mjs|cjs|js|cmd|ps1))+$/i, '')
+}
 
 function parsePkgToolFlags(argv: string[]) {
   const hasInspectFlag = argv.includes('--show-tool') || argv.includes('--list-tools')
@@ -100,7 +93,7 @@ function parsePkgToolFlags(argv: string[]) {
     if (arg === '--choose-tool') {
       chooseTool = true
       const next = argv[i + 1]
-      if (next && supportedPkgTools.has(next)) {
+      if (next && !next.startsWith('-') && supportedPkgTools.has(next)) {
         preferredTool = next
         i++
       }
@@ -133,30 +126,15 @@ function parsePkgToolFlags(argv: string[]) {
 }
 
 export async function setup() {
-  const cmd = process.argv[1]
-  let exec = ''
-  if (isWin()) {
-    const last = cmd.lastIndexOf('\\') + 1
-    exec = cmd.slice(last, cmd.length).split('.').slice(0, -1).join('.')
-  }
-  else {
-    const last = cmd.lastIndexOf('/') + 1
-    exec = cmd.slice(last, cmd.length)
-  }
+  const exec = getExecName(process.argv[1])
   const argv: string[] = process.argv.slice(2)
   await help(argv)
 
-  if ((exec === 'prun' || exec === 'prun.mjs') && argv[0] === '--init') {
+  if (exec === 'prun' && argv[0] === '--init') {
     printPrunInit(argv.slice(1))
     return
   }
-  if (
-    (exec === 'prun'
-      || exec === 'prun.mjs'
-      || exec === 'pfind'
-      || exec === 'pfind.mjs')
-    && argv[0] === '--doctor'
-  ) {
+  if ((exec === 'prun' || exec === 'pfind') && argv[0] === '--doctor') {
     printPrunDoctor()
     return
   }
@@ -186,13 +164,14 @@ export async function setup() {
   } = parsedPkgToolFlags
 
   if (invalidPreferredTool) {
-    console.log(
+    console.error(
       color.red(
         isZh
           ? `不支持直接指定 ${invalidPreferredTool}，可选值为: ${getSupportedPkgToolNames().join(', ')}`
           : `Unsupported tool "${invalidPreferredTool}". Valid values: ${getSupportedPkgToolNames().join(', ')}`,
       ),
     )
+    process.exitCode = 1
     return
   }
 
@@ -410,7 +389,7 @@ export async function setup() {
   }
   const handler = runMap[exec]
   if (!handler) {
-    if (exec === 'pbuild' || exec === 'pbuild.mjs') {
+    if (exec === 'pbuild') {
       console.log(
         color.yellow(
           isZh
@@ -432,11 +411,4 @@ export async function setup() {
   }
   const pkg = normalizedArgv.filter(v => !v.startsWith('-')).join(' ')
   await handler(params, pkg)
-}
-
-if (!process.env.PI_TEST) {
-  setup().catch((error) => {
-    console.error(error)
-    process.exit(1)
-  })
 }

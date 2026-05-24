@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.2.15",
   "packageManager": "pnpm@10.33.4",
-  "description": "An intelligent cross-platform package manager and CLI tool that autodetects project environments (Node.mjs, Go, Rust, Python) with beautiful loading animations and smart command execution.",
+  "description": "Project-aware CLI that detects npm, pnpm, yarn, bun, Go, Rust and Python projects, then routes installs, scripts, builds and workspace commands automatically.",
   "author": {
     "name": "Simon He",
     "url": "https://github.com/Simon-He95"
@@ -17,50 +17,44 @@
   },
   "bugs": "https://github.com/Simon-He95/pi/issues",
   "keywords": [
-    "command-line",
-    "tool",
-    "project-management",
-    "automation",
-    "nodejs",
-    "rust",
-    "go",
-    "python",
-    "package-manager",
     "cli",
     "developer-tools",
-    "npm-alternative",
+    "project-cli",
+    "command-runner",
+    "script-runner",
+    "npm-scripts",
+    "package-manager",
+    "package-manager-detector",
+    "npm",
     "pnpm",
     "yarn",
-    "cargo",
-    "pip",
+    "bun",
     "monorepo",
     "workspace",
-    "dependency-management",
-    "development-workflow",
-    "cross-platform",
-    "javascript",
-    "typescript",
-    "smart-detection"
+    "pnpm-workspace",
+    "fuzzy-search",
+    "go-mod",
+    "cargo",
+    "rust",
+    "go",
+    "python"
   ],
   "sideEffects": false,
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
     }
   },
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "*": [
-        "./dist/*",
-        "./dist/index.d.ts"
-      ]
-    }
-  },
+  "types": "./dist/index.d.mts",
   "bin": {
     "pi": "./pi.mjs",
     "pio": "./pio.mjs",
@@ -76,17 +70,25 @@
     "pfind": "./pfind.mjs"
   },
   "files": [
+    "*.mjs",
+    "README_zh.md",
     "dist"
   ],
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
-    "build": "tsdown ./src/index.ts --format cjs,esm --clean",
+    "build": "tsdown ./src/index.ts ./src/cli.ts --format cjs,esm --target node18 --clean",
     "dev": "pnpm build --watch src",
     "format": "prettier --write --cache .",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prepublishOnly": "pnpm build",
+    "pack:check": "pnpm build && npm pack --dry-run",
+    "prepublishOnly": "pnpm lint && pnpm test && pnpm smoke:packed",
     "release": "bumpp && npm publish",
-    "start": "esno src/index.ts",
+    "smoke": "pnpm smoke:packed",
+    "smoke:packed": "pnpm build && node ./scripts/smoke-packed.mjs",
+    "start": "tsx src/cli.ts",
     "test": "vitest"
   },
   "dependencies": {
@@ -98,7 +100,7 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^6.7.3",
-    "@types/node": "^22.19.19",
+    "@types/node": "^18.19.0",
     "bumpp": "^10.4.1",
     "eslint": "^9.39.4",
     "lint-staged": "^13.3.0",
@@ -106,7 +108,7 @@
     "tsdown": "^0.20.3",
     "tsx": "^4.22.1",
     "typescript": "^5.9.3",
-    "vitest": "^4.1.6"
+    "vitest": "^3.2.4"
   },
   "lint-staged": {
     "*.{vue,js,ts,jsx,tsx,md,json}": "eslint . --fix"

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="/assets/kv.png" alt="PI - Smart Package Manager">
+  <img src="https://raw.githubusercontent.com/Simon-He95/pi/main/assets/kv.png" alt="PI - Project-aware command router">
 </p>
 
 <p align="center">
@@ -10,167 +10,130 @@
 
 <p align="center">English | <a href="./README_zh.md">简体中文</a></p>
 
-## 📖 Table of Contents
+# PI
 
-- [Introduction](#-pi)
-- [Features](#-smart-package-manager)
-- [Examples](#-examples)
-- [Language Settings](#-language)
-- [Installation](#-installation)
-- [Usage](#-usage)
-- [Workspace Tool Selection](#-workspace-tool-selection)
-- [Supported Features](#-features)
-- [Special Features](#-feature)
-- [Custom Configuration](#-custom-configuration)
-- [Dependencies](#-dependencies)
-- [License](#license)
+> Project-aware command router for package managers, monorepos, and multi-language dev tasks.
 
-## 🍭 PI
+PI detects your current project context and runs the right command for npm, pnpm, yarn, bun, Go, Rust, and Python workflows.
 
-PI is an intelligent package manager with beautiful custom loading styles, providing a better visual experience when installing dependencies. It can intelligently identify project environments, fuzzy match commands, and find deep-nested instructions, greatly improving development efficiency.
-
-## 🚀 Smart Package Manager
-
-PI supports package management for multiple environments:
-
-- ✅ **Go**: Supports dependency installation, uninstallation, execution, and packaging with go mod
-- ✅ **Rust**: Supports dependency installation, uninstallation, execution, and packaging with Cargo
-- ✅ **Node.js**: Supports dependency installation, uninstallation, and execution with npm, pnpm, and yarn
-- ✅ **Python**: Supports Python file execution
-- ✅ **Monorepo**: Automatically identifies and handles differences between yarn and pnpm workspaces, fixing monorepo installation issues
-
-## 📷 Examples
-
-### pi - Install Dependencies
-
-![Install Dependencies Example](/assets/pi.png)
-
-![Install Dependencies Animation](/assets/pi.gif)
-
-### pil - Install the latest dependencies
-
-![Example of running a command](/assets/prun.png)
-
-### pui - Uninstall Dependencies
-
-![Uninstall Dependencies Example](/assets/pui.png)
-
-### pci - Clear Cache
-
-![Clear Cache Example](/assets/pci.png)
-
-### prun - Run Commands
-
-![Run Commands Example](/assets/prun.png)
-
-![Run Commands Animation](/assets/prun.gif)
-
-### pfind - Find Commands
-
-![Find Commands Animation](/assets/pfind.gif)
-
-### Other Features
-
-![Other Features Animation](/assets/others.gif)
-
-## 📱 Language
+> Requires Node.js >= 18. Node.js 22+ is recommended for supported LTS runtimes.
 
 ```bash
-# Set environment variables in your bash or zsh configuration file
+npm i -g @simon_he/pi
 
-# Chinese
-export PI_Lang=zh
-
-# English
-export PI_Lang=en
+pi react          # install with the detected package manager
+prun dev          # run or fuzzy-select package scripts
+pfind build       # find and run scripts inside a workspace
 ```
 
-## :gear: Install
+## Why
 
-```
-  npm i -g @simon_he/pi
-```
+Different projects use different package managers, lockfiles, workspaces, and script layouts. PI gives you one command layer that understands the current project before running commands.
 
-## :open_hands: Usage
+- Auto-detect npm, pnpm, yarn, and bun
+- Remember package-manager choices per workspace
+- Fuzzy run package scripts
+- Find scripts deeply in monorepos
+- Run Go, Rust, and Python entry files
+- Integrate selected `prun` / `pfind` commands with shell history
 
-```
-  # According to the environment of the current directory to analyze which package manager to use，go、rust、pnpm、yarn、npm
-  # Install dependencies
-  pi xxx
-  # Re-pick the package manager used by the current workspace
-  pi --choose-tool
-  # Pick the tool directly without opening the selector
-  pi --choose-tool bun
-  # Clear the saved package manager choice for the current workspace
-  pi --forget-tool
-  # Show which package manager the current workspace will use
-  pi --show-tool
-  # Show the current workspace tool as JSON
-  pi --show-tool --json
-  # List all detected package-manager candidates
-  pi --list-tools
-  # List candidates as JSON
-  pi --list-tools --json
-  # Uninstall dependencies
-  pui xxx
-  # Execute command
-  prun
-  # Execute scripts in workspace
-  # Execute index.js | index.ts in js | ts files or directories
-  # Execute main.go in go files or directories
-  # Execute main.rs in rust files or directories
-  # Execute main.py in python files or directories
-  pfind
-  # Initialization
-  pinit
-  # build - for cargo, go
-  pbuild
-  # pci
-
-```
-
-## :triangular_ruler: Workspace Tool Selection
-
-When a workspace contains multiple package-manager indicators, for example `bun.lock` and `pnpm-lock.yaml`, `pi`, `pil`, and `pci` will ask once which tool to use and remember that choice for the current workspace.
-
-- The saved choice is stored locally in your config directory, for example `~/.config/pi/workspace-tools.json`.
-- The record is local to your machine and should not be committed into the repository.
-- If the remembered tool no longer exists in that workspace, PI ignores the old value and removes the stale record automatically.
-- Use `pi --choose-tool` or `pil --choose-tool` to switch the remembered tool.
-- You can also choose directly with `pi --choose-tool bun` or `pil --choose-tool pnpm`.
-- Use `pi --forget-tool` or `pil --forget-tool` to clear the remembered tool.
-- Use `pi --show-tool` or `pil --show-tool` to inspect the current tool and where that decision came from.
-- Add `--json` to `--show-tool` when you want script-friendly output.
-- Use `pi --list-tools` or `pil --list-tools` to inspect all detected candidates, roots, and lockfile indicators.
-- `pci --choose-tool` and `pci --forget-tool` follow the same behavior.
-- `pci --show-tool` follows the same behavior too.
-- `pci --list-tools` follows the same behavior too.
-- `pui` and `pio` will also reuse the same remembered tool when they resolve the package manager.
-
-Examples:
+## Core Commands
 
 ```bash
-pi react --choose-tool
+pi react
 pi --choose-tool bun
-pil --choose-tool
-pil --choose-tool pnpm
-pi --forget-tool
-pil --forget-tool
 pi --show-tool
-pil --show-tool
+
+prun dev
+prun
+
+pfind build
+pfind
+```
+
+| Command | Purpose |
+| --- | --- |
+| `pi` | Install or update dependencies with the package manager for the current project. |
+| `prun` | Run package scripts, fuzzy-select scripts, or run language entry files. |
+| `pfind` | Find and run scripts across a workspace or monorepo. |
+
+## Naming
+
+The package is still published as `@simon_he/pi`, and `pi` remains the primary short command.
+The product positioning is now broader than dependency installation: PI is a project-aware command router.
+
+## Compared With ni
+
+[`ni`](https://github.com/antfu-collective/ni) focuses on using the right JavaScript package manager.
+
+PI goes further as a project command router:
+
+- remembers ambiguous workspace choices
+- supports fuzzy script selection via `prun`
+- searches scripts in monorepos via `pfind`
+- supports Go and Rust build/run workflows
+- supports Python file execution
+- provides optional shell history integration
+
+## Supported Projects
+
+| Environment | Support |
+| --- | --- |
+| Node.js | npm, pnpm, yarn, bun install/remove/run workflows |
+| Monorepo | pnpm and yarn workspace script discovery and package-manager selection |
+| Go | `go get`, `go mod tidy`, `go run`, `go mod init`, `go build`, plus `go clean` for clean tasks. |
+| Rust | `cargo run`, `cargo init`, `cargo build`, plus `cargo install` / `cargo uninstall` for binary crates. |
+| Python | Python entry file execution through `prun` / `pfind` |
+
+## Command Reference
+
+| Command | Description |
+| --- | --- |
+| `pi [pkg]` | Install a package, or update dependencies when no package is passed. |
+| `pil [pkg]` | Install selected packages at `@latest`. |
+| `pui [pkg]` | Remove dependencies. |
+| `pio [pkg]` | Install with the detected package manager and `--prefer-offline`. |
+| `pix [cmd]` | Run `npx` or `bunx` depending on the project. |
+| `prun [script]` | Run a package script, fuzzy-select one, or run a language entry file. |
+| `pfind [script]` | Search workspace packages and run matching scripts. |
+| `pinit` | Initialize the current project with the detected tool. |
+| `pbuild` | Run `go build` or `cargo build` in Go/Rust projects. |
+| `pci [pkg]` | Compatibility alias of `pi`; kept for older workflows. Prefer `pi`. |
+
+## Deprecated Aliases
+
+| Command | Status |
+| --- | --- |
+| `pa` | Deprecated. Delegates to `na` when installed. Use `na` directly if you still need that workflow. |
+| `pu` | Deprecated. Delegates to `nu` when installed. Use `nu` directly, or `pil` only for `@latest` upgrades. |
+
+## Workspace Tool Selection
+
+When a workspace contains multiple package-manager indicators, for example `bun.lock` and `pnpm-lock.yaml`, `pi`, `pil`, and `pci` ask which tool to use and remember that choice for the current workspace.
+
+- Saved choices are stored locally, for example `~/.config/pi/workspace-tools.json`.
+- The file is local machine configuration and should not be committed.
+- If the remembered tool no longer matches the workspace, PI removes the stale record.
+
+```bash
+pi --choose-tool
+pi --choose-tool bun
+pi --forget-tool
+pi --show-tool
 pi --show-tool --json
 pi --list-tools
 pi --list-tools --json
-pci --choose-tool
-pci --forget-tool
-pci --show-tool
-pci --show-tool --json
-pci --list-tools
 ```
 
-## Shell Integration (prun)
+`pil` and `pci` support the same package-manager selection flags. `pui` and `pio` reuse the remembered workspace choice when they resolve a package manager.
 
-```
+## Shell Integration
+
+`prun` and `pfind` can make the command selected by the fuzzy UI available immediately in your shell history.
+
+Manual setup:
+
+```bash
 # zsh
 eval "$(prun --init zsh)"
 
@@ -178,7 +141,7 @@ eval "$(prun --init zsh)"
 eval "$(prun --init bash)"
 
 # fish
-eval (prun --init fish)
+prun --init fish | source
 
 # Windows PowerShell
 prun --init powershell | Out-String | Invoke-Expression
@@ -187,83 +150,71 @@ prun --init powershell | Out-String | Invoke-Expression
 prun --init pwsh | Out-String | Invoke-Expression
 ```
 
-> Note: This lets the command selected by `prun` or `pfind` be available immediately in your shell history (press ↑ to recall).
+Shell integration notice:
 
-Auto integration (built-in):
+By default, PI does not modify your shell rc/profile.
 
-- In interactive shells, the first `prun` run will append the right line to your shell rc/profile (zsh: `~/.zshrc`, bash: `~/.bashrc`, fish: `~/.config/fish/config.fish`, PowerShell: `$PROFILE`).
-- Disable with `PI_NO_AUTO_INIT=1` (or set `PI_AUTO_INIT=0`).
-- Open a new terminal (or source the rc/profile) after the first run.
+- Automatic setup is opt-in with `PI_AUTO_INIT=1 prun`.
+- Run `prun --doctor` to inspect shell/history integration state.
+- Open a new terminal, or reload your shell config, after adding the hook.
 
-Make it persistent:
+## Configuration
 
-```
-# zsh
-echo 'eval "$(prun --init zsh)"' >> ~/.zshrc
-
-# bash
-echo 'eval "$(prun --init bash)"' >> ~/.bashrc
-
-# fish
-echo 'prun --init fish | source' >> ~/.config/fish/config.fish
-
-# Windows PowerShell
-Add-Content -Path $PROFILE -Value 'prun --init powershell | Out-String | Invoke-Expression'
-
-# PowerShell 7+
-Add-Content -Path $PROFILE -Value 'prun --init pwsh | Out-String | Invoke-Expression'
+```bash
+export PI_Lang=en        # en or zh
+export PI_DEFAULT=pnpm   # fallback package manager
+export PI_COLOR=yellow   # ora color
+export PI_SPINNER=star   # cli-spinners name
 ```
 
-Reload your shell config (or open a new terminal) after adding the line.
+`PI_COLOR` accepts `black`, `red`, `green`, `yellow`, `blue`, `magenta`, `cyan`, `white`, and `gray`.
 
-## Power
+## Examples
 
-The current environment is npm | yarn | pnpm, and it supports passing some args --silent
+### pi
 
-- prun dev The dev command in the current package.json
-- prun If no command is specified, provide all scripts command options under the current package
-- prun playground, provide all scripts command options under the current package
+![Install dependencies example](https://raw.githubusercontent.com/Simon-He95/pi/main/assets/pi.png)
 
-The current environment is go
+![Install dependencies animation](https://raw.githubusercontent.com/Simon-He95/pi/main/assets/pi.gif)
 
-- prun message, it will find message.go first, if not found, it will find message/main.go to execute
+### prun
 
-The current environment is rust
+![Run commands example](https://raw.githubusercontent.com/Simon-He95/pi/main/assets/prun.png)
 
-- prun executable cargo run
+![Run commands animation](https://raw.githubusercontent.com/Simon-He95/pi/main/assets/prun.gif)
 
-workspace of pnpm ｜ yarn
+### pfind
 
-- pfind Select the package under the current workspace, and then select the corresponding command
+![Find commands animation](https://raw.githubusercontent.com/Simon-He95/pi/main/assets/pfind.gif)
 
-## :monocle_face: Feature
+### pui
 
-```
-<-- Go -->
- ## input folder and executor command
- prun  # default executor main.go
- prun table # if table.go exists, executor table.go else executor table/main.go. and table can under any folder. For example, examples/table/main.go will also be found and executed
-<-- Go -->
-```
+![Uninstall dependencies example](https://raw.githubusercontent.com/Simon-He95/pi/main/assets/pui.png)
 
-## :bulb: Custom configuration
+### Other Features
 
-You can configure the loading style in .zshrc, as follows：
+![Other features animation](https://raw.githubusercontent.com/Simon-He95/pi/main/assets/others.gif)
 
-```
-export PI_COLOR=red # loadingstyle color
-export PI_SPINNER=star # loadingstyle
-export PI_DEFAULT=pnpm # Used as the fallback tool when PI cannot infer a better choice for the current workspace
+## Development Checks
+
+```bash
+pnpm build
+pnpm test
+pnpm pack:check
+pnpm smoke
+pnpm smoke:packed
 ```
 
-- 70+ types of styles, from [cli-spinners](https://jsfiddle.net/sindresorhus/2eLtsbey/embedded/result/)，You can choose to fill in the name in PI_SPINNER.
-- Color options: 'black' | 'red' | 'green' | 'yellow' | 'blue' | 'magenta' | 'cyan' | 'white' | 'gray', Fill in PI_COLOR.
-
-## :battery: Dependency
+## Runtime Integrations
 
 - [ora](https://github.com/sindresorhus/ora)
 - [ccommand](https://github.com/Simon-He95/ccommand)
-- [cargo](https://github.com/rust-lang/cargo)
+
+Optional external tools are used when the current project needs them:
+
+- [Cargo](https://github.com/rust-lang/cargo) for Rust workflows
+- Go toolchain for Go workflows
+- Python for Python file execution
 
 ## License
 

@@ -8,10 +8,8 @@ import { getCcommand } from './require'
 // package run script
 export async function prun(params: string) {
   ensurePrunAutoInit()
-  const hadNoHistoryEnv = process.env.CCOMMAND_NO_HISTORY != null || process.env.NO_HISTORY != null
-  const initialNoHistory = process.env.CCOMMAND_NO_HISTORY ?? process.env.NO_HISTORY
   const prevNoHistory = process.env.CCOMMAND_NO_HISTORY
-  const shouldWriteHistory = !(hadNoHistoryEnv && isNoHistory(initialNoHistory))
+  const shouldWriteHistory = !shouldSuppressHistory()
 
   if (shouldWriteHistory)
     delete process.env.CCOMMAND_NO_HISTORY
@@ -37,6 +35,15 @@ function isNoHistory(value?: string) {
     return false
   const normalized = value.toLowerCase()
   return normalized === '1' || normalized === 'true' || normalized === 'yes'
+}
+
+function shouldSuppressHistory() {
+  return isNoHistory(process.env.CCOMMAND_NO_HISTORY)
+    || isNoHistory(process.env.NO_HISTORY)
+}
+
+function hasTruthyEnv(...values: Array<string | undefined>) {
+  return values.some(isNoHistory)
 }
 
 function shellQuote(value: string) {
@@ -297,17 +304,13 @@ export function ensurePrunAutoInit() {
 }
 
 function shouldAutoInit() {
-  const auto = process.env.PI_AUTO_INIT || process.env.PRUN_AUTO_INIT
-  if (auto != null)
-    return isNoHistory(auto)
-  const disable = process.env.PI_NO_AUTO_INIT || process.env.PRUN_NO_AUTO_INIT
-  if (isNoHistory(disable))
+  if (hasTruthyEnv(process.env.PI_NO_AUTO_INIT, process.env.PRUN_NO_AUTO_INIT))
     return false
   if (process.env.CI)
     return false
   if (!process.stdout.isTTY || !process.stdin.isTTY)
     return false
-  return true
+  return hasTruthyEnv(process.env.PI_AUTO_INIT, process.env.PRUN_AUTO_INIT)
 }
 
 export function printPrunInit(args: string[] = []) {
@@ -362,7 +365,7 @@ export function printPrunInit(args: string[] = []) {
       '  if [[ $last_cmd == "$hint_cmd" ]]; then',
       '    return',
       '  fi',
-      '  if [[ $last_cmd == prun || $last_cmd == prun\\ * ]]; then',
+      '  if [[ $last_cmd == prun || $last_cmd == prun\\ * || $last_cmd == pfind || $last_cmd == pfind\\ * ]]; then',
       '    local last_num',
       '    last_num=$(printf "%s" "$last_line" | sed -E "s/^[[:space:]]*([0-9]+).*/\\1/")',
       '    if [[ -n $last_num ]]; then',
@@ -422,7 +425,7 @@ export function printPrunInit(args: string[] = []) {
       '  if [[ $last_cmd == "$hint_cmd" ]]; then',
       '    return',
       '  fi',
-      '  if [[ $last_cmd == prun || $last_cmd == prun\\ * ]]; then',
+      '  if [[ $last_cmd == prun || $last_cmd == prun\\ * || $last_cmd == pfind || $last_cmd == pfind\\ * ]]; then',
       '    local last_num',
       '    last_num=$(printf "%s" "$last_line" | sed -E "s/^[[:space:]]*([0-9]+).*/\\1/")',
       '    if [[ -n $last_num ]]; then',
@@ -445,10 +448,7 @@ export function printPrunInit(args: string[] = []) {
   else if (shell === 'fish') {
     script = [
       'set -gx PRUN_HOOK_ACTIVE 1',
-      'function prun',
-      `  set -l bin ${bin}`,
-      '  set -l cmd (string split -- " " $bin)',
-      '  command $cmd $argv',
+      'function __prun_sync_history',
       '  set -l history_disable $CCOMMAND_NO_HISTORY',
       '  if test -z "$history_disable"',
       '    set history_disable $NO_HISTORY',
@@ -475,6 +475,18 @@ export function printPrunInit(args: string[] = []) {
       '      end',
       '    end',
       '  end',
+      'end',
+      '',
+      'function prun',
+      `  set -l bin ${bin}`,
+      '  set -l cmd (string split -- " " $bin)',
+      '  command $cmd $argv',
+      '  __prun_sync_history',
+      'end',
+      '',
+      'function pfind',
+      '  command pfind $argv',
+      '  __prun_sync_history',
       'end',
     ].join('\n')
   }
