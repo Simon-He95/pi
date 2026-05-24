@@ -1,7 +1,7 @@
 {
   "name": "@simon_he/pi",
   "type": "module",
-  "version": "0.2.15",
+  "version": "0.2.16",
   "packageManager": "pnpm@10.33.4",
   "description": "Project-aware CLI that detects npm, pnpm, yarn, bun, Go, Rust and Python projects, then routes installs, scripts, builds and workspace commands automatically.",
   "author": {
