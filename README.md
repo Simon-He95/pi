@@ -134,7 +134,7 @@ eval "$(prun --init zsh)"
 eval "$(prun --init bash)"
 
 # fish
-eval (prun --init fish)
+prun --init fish | source
 
 # Windows PowerShell
 prun --init powershell | Out-String | Invoke-Expression

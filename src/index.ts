@@ -11,6 +11,7 @@ import {
 } from 'lazy-js-utils/node'
 import color from 'picocolors'
 import { help } from './help'
+import { pa } from './pa'
 import { pci } from './pci'
 import { pfind } from './pfind'
 import { pi } from './pi'
@@ -27,6 +28,7 @@ import {
   resolvePkgTool,
 } from './pkgManager'
 import { printPrunDoctor, printPrunInit, prun } from './prun'
+import { pu } from './pu'
 import { pui } from './pui'
 import { getCcommand } from './require'
 import { loading } from './utils'
@@ -36,6 +38,8 @@ let rootPath = process.cwd()
 const runMap: Record<string, (...arg: any) => Promise<void> | void> = {
   pi,
   pix,
+  pa,
+  pu,
   pui,
   pil,
   pci,

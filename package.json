@@ -59,6 +59,8 @@
     "pi": "./pi.mjs",
     "pio": "./pio.mjs",
     "pix": "./pix.mjs",
+    "pa": "./pa.mjs",
+    "pu": "./pu.mjs",
     "pci": "./pci.mjs",
     "pil": "./pil.mjs",
     "pui": "./pui.mjs",

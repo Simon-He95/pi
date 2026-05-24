@@ -147,7 +147,7 @@ jobs:
           npm init -y
           npm install "./$TARBALL"
           npm install -D typescript@5.9.3
-          for bin in pi pio pix pci pil pui prun pinit pbuild pfind; do
+          for bin in pi pio pix pa pu pci pil pui prun pinit pbuild pfind; do
             ./node_modules/.bin/$bin --version >/dev/null
           done
           mkdir node-project
