@@ -98,7 +98,14 @@ PI goes further as a project command router:
 | `pfind [script]` | Search workspace packages and run matching scripts. |
 | `pinit` | Initialize the current project with the detected tool. |
 | `pbuild` | Run `go build` or `cargo build` in Go/Rust projects. |
-| `pci` | Install with the same routing as `pi`; package-manager selection flags are supported. |
+| `pci [pkg]` | Compatibility alias of `pi`; kept for older workflows. Prefer `pi`. |
+
+## Deprecated Aliases
+
+| Command | Status |
+| --- | --- |
+| `pa` | Deprecated. Delegates to `na` when installed. Prefer `pi --show-tool` / `pi --choose-tool`. |
+| `pu` | Deprecated. Delegates to `nu` when installed. Prefer `pil` or the underlying package manager directly. |
 
 ## Workspace Tool Selection
 
@@ -195,6 +202,7 @@ pnpm build
 pnpm test
 pnpm pack:check
 pnpm smoke
+pnpm smoke:packed
 ```
 
 ## Runtime Integrations

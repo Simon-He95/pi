@@ -98,7 +98,14 @@ PI 更偏向项目命令路由器：
 | `pfind [script]` | 在 workspace 包中搜索并运行匹配的 scripts。 |
 | `pinit` | 使用检测到的工具初始化当前项目。 |
 | `pbuild` | 在 Go/Rust 项目中执行 `go build` 或 `cargo build`。 |
-| `pci` | 使用和 `pi` 相同的路由安装；支持包管理器选择参数。 |
+| `pci [pkg]` | `pi` 的兼容别名，为旧工作流保留。推荐使用 `pi`。 |
+
+## 已废弃别名
+
+| 命令 | 状态 |
+| --- | --- |
+| `pa` | 已废弃。安装了 `na` 时会代理到 `na`。推荐使用 `pi --show-tool` / `pi --choose-tool`。 |
+| `pu` | 已废弃。安装了 `nu` 时会代理到 `nu`。推荐使用 `pil` 或直接使用底层包管理器。 |
 
 ## Workspace 工具选择
 
@@ -195,6 +202,7 @@ pnpm build
 pnpm test
 pnpm pack:check
 pnpm smoke
+pnpm smoke:packed
 ```
 
 ## 运行时集成
