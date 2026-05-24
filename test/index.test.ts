@@ -17,6 +17,7 @@ const getPkgToolStatus = vi.fn()
 const getSupportedPkgToolNames = vi.fn()
 const printPkgToolCandidates = vi.fn()
 const printPkgToolStatus = vi.fn()
+const pi = vi.fn()
 
 vi.mock('lazy-js-utils/node', () => ({
   hasPkg,
@@ -31,6 +32,7 @@ vi.mock('lazy-js-utils/node', () => ({
 
 vi.mock('../src/help', () => ({ help }))
 vi.mock('../src/installDeps', () => ({ installDeps }))
+vi.mock('../src/pi', () => ({ pi }))
 vi.mock('../src/pkgManager', () => ({
   forgetPkgToolPreference,
   getPkgToolStatus,
@@ -62,6 +64,7 @@ beforeEach(() => {
     candidates: [{ tool: 'pnpm', indicators: ['pnpm-lock.yaml'], root: '/tmp/demo' }],
   })
   getSupportedPkgToolNames.mockReturnValue(['pnpm', 'yarn', 'bun', 'npm'])
+  pi.mockResolvedValue(undefined)
   hasPkg.mockResolvedValue(true)
   isGo.mockResolvedValue(false)
   isRust.mockResolvedValue(false)
@@ -129,9 +132,20 @@ describe('setup command guard', () => {
     expect(resolvePkgTool).toHaveBeenCalledTimes(1)
   })
 
-  it('rejects unsupported explicit tool after --choose-tool', async () => {
+  it('keeps package args after --choose-tool when the next token is not a supported tool', async () => {
+    process.argv = ['node', binPath('pi'), '--choose-tool', 'react']
+    const { setup } = await import('../src/index')
+
+    await expect(setup()).resolves.toBeUndefined()
+
+    expect(process.env.PI_FORCE_PICK_TOOL).toBe('1')
+    expect(process.env.PI_PREFERRED_TOOL).toBeUndefined()
+    expect(pi).toHaveBeenCalledWith('react', 'react')
+  })
+
+  it('rejects unsupported explicit tool from --choose-tool=', async () => {
     const error = vi.spyOn(console, 'error').mockImplementation(() => {})
-    process.argv = ['node', binPath('pi'), '--choose-tool', 'foo']
+    process.argv = ['node', binPath('pi'), '--choose-tool=foo']
     const { setup } = await import('../src/index')
 
     await expect(setup()).resolves.toBeUndefined()

@@ -73,10 +73,10 @@
     "dist"
   ],
   "engines": {
-    "node": ">=22"
+    "node": ">=18"
   },
   "scripts": {
-    "build": "tsdown ./src/index.ts ./src/cli.ts --format cjs,esm --clean",
+    "build": "tsdown ./src/index.ts ./src/cli.ts --format cjs,esm --target node18 --clean",
     "dev": "pnpm build --watch src",
     "format": "prettier --write --cache .",
     "lint": "eslint .",

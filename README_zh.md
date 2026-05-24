@@ -16,7 +16,7 @@
 
 PI 会识别当前项目环境，然后为 npm、pnpm、yarn、bun、Go、Rust 和 Python 工作流运行正确的命令。
 
-> 需要 Node.js >= 22。CI 覆盖 Node.js 22 和 24。
+> 需要 Node.js >= 18。推荐使用 Node.js 22+，以获得仍在维护的 LTS 运行时。
 
 ```bash
 npm i -g @simon_he/pi

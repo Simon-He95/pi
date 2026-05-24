@@ -100,11 +100,8 @@ function parsePkgToolFlags(argv: string[]) {
     if (arg === '--choose-tool') {
       chooseTool = true
       const next = argv[i + 1]
-      if (next && !next.startsWith('-')) {
-        if (supportedPkgTools.has(next))
-          preferredTool = next
-        else
-          invalidPreferredTool = next
+      if (next && !next.startsWith('-') && supportedPkgTools.has(next)) {
+        preferredTool = next
         i++
       }
       continue

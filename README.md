@@ -16,7 +16,7 @@
 
 PI detects your current project context and runs the right command for npm, pnpm, yarn, bun, Go, Rust, and Python workflows.
 
-> Requires Node.js >= 22. CI tests Node.js 22 and 24.
+> Requires Node.js >= 18. Node.js 22+ is recommended for supported LTS runtimes.
 
 ```bash
 npm i -g @simon_he/pi

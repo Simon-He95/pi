@@ -69,6 +69,8 @@ jobs:
 
   pack-smoke:
     runs-on: ubuntu-latest
+    outputs:
+      tarball-name: ${{ steps.pack.outputs.tarball-name }}
 
     steps:
       - uses: actions/checkout@v6
@@ -87,19 +89,48 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
-      - name: Pack check
-        run: pnpm pack:check
+      - name: Pack
+        id: pack
+        shell: bash
+        run: |
+          pnpm build
+          TARBALL=$(npm pack --json | node -e "let input = ''; process.stdin.on('data', chunk => input += chunk); process.stdin.on('end', () => console.log(JSON.parse(input)[0].filename))")
+          echo "tarball-name=$TARBALL" >> "$GITHUB_OUTPUT"
+
+      - name: Upload packed package
+        uses: actions/upload-artifact@v4
+        with:
+          name: packed-package
+          path: ${{ steps.pack.outputs.tarball-name }}
+
+  runtime-smoke:
+    needs: pack-smoke
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node: [18.x, 20.x, 22.x, 24.x]
+      fail-fast: false
+
+    steps:
+      - name: Set node ${{ matrix.node }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node }}
+          package-manager-cache: false
+
+      - name: Download packed package
+        uses: actions/download-artifact@v4
+        with:
+          name: packed-package
 
       - name: Smoke install packed package
         shell: bash
         run: |
-          TARBALL=$(npm pack --json | node -e "let input = ''; process.stdin.on('data', chunk => input += chunk); process.stdin.on('end', () => console.log(JSON.parse(input)[0].filename))")
-          SMOKE_DIR=$(mktemp -d)
-          cp "$TARBALL" "$SMOKE_DIR/"
-          cd "$SMOKE_DIR"
+          TARBALL=$(ls *.tgz | head -n 1)
           npm init -y
           npm install "./$TARBALL"
-          npm install -D typescript
+          npm install -D typescript@5.9.3
           for bin in pi pio pix pa pu pci pil pui prun pinit pbuild pfind; do
             ./node_modules/.bin/$bin --version >/dev/null
           done
