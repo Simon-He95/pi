@@ -1,7 +1,7 @@
 import path from 'node:path'
 import process from 'node:process'
 import fg from 'fast-glob'
-import { isWin, spaceFormat } from 'lazy-js-utils'
+import { spaceFormat } from 'lazy-js-utils'
 import {
   hasPkg,
   isGo,
@@ -11,7 +11,6 @@ import {
 } from 'lazy-js-utils/node'
 import color from 'picocolors'
 import { help } from './help'
-import { pa } from './pa'
 import { pci } from './pci'
 import { pfind } from './pfind'
 import { pi } from './pi'
@@ -28,7 +27,6 @@ import {
   resolvePkgTool,
 } from './pkgManager'
 import { printPrunDoctor, printPrunInit, prun } from './prun'
-import { pu } from './pu'
 import { pui } from './pui'
 import { getCcommand } from './require'
 import { loading } from './utils'
@@ -37,31 +35,29 @@ let rootPath = process.cwd()
 
 const runMap: Record<string, (...arg: any) => Promise<void> | void> = {
   pi,
-  'pi.mjs': pi,
   pix,
-  'pix.mjs': pix,
-  pa,
-  'pa.mjs': pa,
   pui,
-  'pui.mjs': pui,
-  pu,
-  'pu.mjs': pu,
   pil,
-  'pil.mjs': pil,
   pci,
-  'pci.mjs': pci,
   prun,
-  'prun.mjs': prun,
   pinit,
-  'pinit.mjs': pinit,
   pfind,
-  'pfind.mjs': pfind,
   pio,
-  'pio.mjs': pio,
 }
 const isZh = process.env.PI_Lang === 'zh'
-const pkgToolFlagCommands = new Set(['pi', 'pi.mjs', 'pil', 'pil.mjs', 'pci', 'pci.mjs'])
+const pkgToolFlagCommands = new Set(['pi', 'pil', 'pci'])
 const supportedPkgTools = new Set(getSupportedPkgToolNames())
+
+function getExecName(argv1 = process.argv[1] ?? '') {
+  const file = path.basename(argv1)
+
+  return file
+    .replace(/\.mjs$/i, '')
+    .replace(/\.cjs$/i, '')
+    .replace(/\.js$/i, '')
+    .replace(/\.cmd$/i, '')
+    .replace(/\.ps1$/i, '')
+}
 
 function parsePkgToolFlags(argv: string[]) {
   const hasInspectFlag = argv.includes('--show-tool') || argv.includes('--list-tools')
@@ -133,30 +129,15 @@ function parsePkgToolFlags(argv: string[]) {
 }
 
 export async function setup() {
-  const cmd = process.argv[1]
-  let exec = ''
-  if (isWin()) {
-    const last = cmd.lastIndexOf('\\') + 1
-    exec = cmd.slice(last, cmd.length).split('.').slice(0, -1).join('.')
-  }
-  else {
-    const last = cmd.lastIndexOf('/') + 1
-    exec = cmd.slice(last, cmd.length)
-  }
+  const exec = getExecName(process.argv[1])
   const argv: string[] = process.argv.slice(2)
   await help(argv)
 
-  if ((exec === 'prun' || exec === 'prun.mjs') && argv[0] === '--init') {
+  if (exec === 'prun' && argv[0] === '--init') {
     printPrunInit(argv.slice(1))
     return
   }
-  if (
-    (exec === 'prun'
-      || exec === 'prun.mjs'
-      || exec === 'pfind'
-      || exec === 'pfind.mjs')
-    && argv[0] === '--doctor'
-  ) {
+  if ((exec === 'prun' || exec === 'pfind') && argv[0] === '--doctor') {
     printPrunDoctor()
     return
   }
@@ -411,7 +392,7 @@ export async function setup() {
   }
   const handler = runMap[exec]
   if (!handler) {
-    if (exec === 'pbuild' || exec === 'pbuild.mjs') {
+    if (exec === 'pbuild') {
       console.log(
         color.yellow(
           isZh

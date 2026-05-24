@@ -99,8 +99,6 @@ PI 更偏向项目命令路由器：
 | `pinit` | 使用检测到的工具初始化当前项目。 |
 | `pbuild` | 在 Go/Rust 项目中执行 `go build` 或 `cargo build`。 |
 | `pci` | 使用和 `pi` 相同的路由安装；支持包管理器选择参数。 |
-| `pa` | 当外部 `na` 命令可用时透传给 `na`。 |
-| `pu` | 当外部 `nu` 命令可用时透传给 `nu`。 |
 
 ## Workspace 工具选择
 

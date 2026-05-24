@@ -59,8 +59,6 @@
     "pi": "./pi.mjs",
     "pio": "./pio.mjs",
     "pix": "./pix.mjs",
-    "pa": "./pa.mjs",
-    "pu": "./pu.mjs",
     "pci": "./pci.mjs",
     "pil": "./pil.mjs",
     "pui": "./pui.mjs",
@@ -97,7 +95,7 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^6.7.3",
-    "@types/node": "^22.19.19",
+    "@types/node": "^18.19.0",
     "bumpp": "^10.4.1",
     "eslint": "^9.39.4",
     "lint-staged": "^13.3.0",
@@ -105,7 +103,7 @@
     "tsdown": "^0.20.3",
     "tsx": "^4.22.1",
     "typescript": "^5.9.3",
-    "vitest": "^4.1.6"
+    "vitest": "^3.2.4"
   },
   "lint-staged": {
     "*.{vue,js,ts,jsx,tsx,md,json}": "eslint . --fix"

@@ -87,6 +87,23 @@ describe('setup command guard', () => {
     expect(installDeps).not.toHaveBeenCalled()
   })
 
+  it('normalizes direct .mjs entry names', async () => {
+    hasPkg.mockResolvedValue(false)
+    isGo.mockResolvedValue(true)
+    process.argv = ['node', '/repo/pbuild.mjs', 'arg1']
+    const exit = vi.spyOn(process, 'exit').mockImplementation(() => undefined as never)
+
+    try {
+      const { setup } = await import('../src/index')
+      await expect(setup()).resolves.toBeUndefined()
+      expect(jsShell).toHaveBeenCalledWith('go build arg1', 'inherit')
+      expect(exit).toHaveBeenCalledTimes(1)
+    }
+    finally {
+      exit.mockRestore()
+    }
+  })
+
   it('does not run deps for unknown commands', async () => {
     process.argv = ['node', binPath('punknown'), 'arg1']
     const { setup } = await import('../src/index')
@@ -172,19 +189,5 @@ describe('setup command guard', () => {
     )
     expect(printPkgToolStatus).not.toHaveBeenCalled()
     expect(resolvePkgTool).not.toHaveBeenCalled()
-  })
-
-  it('passes arguments through to external pa alias', async () => {
-    process.argv = ['node', binPath('pa'), 'run', '--fast']
-    const { setup } = await import('../src/index')
-    await expect(setup()).resolves.toBeUndefined()
-    expect(jsShell).toHaveBeenCalledWith('na run --fast', 'inherit')
-  })
-
-  it('passes arguments through to external pu alias', async () => {
-    process.argv = ['node', binPath('pu'), '--latest']
-    const { setup } = await import('../src/index')
-    await expect(setup()).resolves.toBeUndefined()
-    expect(jsShell).toHaveBeenCalledWith('nu --latest', 'inherit')
   })
 })

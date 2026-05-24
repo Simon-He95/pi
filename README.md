@@ -99,8 +99,6 @@ PI goes further as a project command router:
 | `pinit` | Initialize the current project with the detected tool. |
 | `pbuild` | Run `go build` or `cargo build` in Go/Rust projects. |
 | `pci` | Install with the same routing as `pi`; package-manager selection flags are supported. |
-| `pa` | Pass through to the external `na` command when available. |
-| `pu` | Pass through to the external `nu` command when available. |
 
 ## Workspace Tool Selection
 

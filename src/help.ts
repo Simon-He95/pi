@@ -42,8 +42,6 @@ export async function help(argv: any[]) {
           '~ pinit: package init',
           '~ pbuild: go build | cargo build',
           '~ pfind: find and run workspace scripts',
-          '~ pa: external na command alias',
-          '~ pu: external nu command alias',
           '~ pci: install using the same routing as pi',
           '~ pci --choose-tool: re-pick tool before install',
           '~ pci --choose-tool bun: choose the tool directly',
