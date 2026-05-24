@@ -9,13 +9,16 @@ function isNoHistory(value?: string) {
   return normalized === '1' || normalized === 'true' || normalized === 'yes'
 }
 
+function shouldSuppressHistory() {
+  return isNoHistory(process.env.CCOMMAND_NO_HISTORY)
+    || isNoHistory(process.env.NO_HISTORY)
+}
+
 // workspace find script
 export async function pfind(params: string) {
   ensurePrunAutoInit()
-  const hadNoHistoryEnv = process.env.CCOMMAND_NO_HISTORY != null || process.env.NO_HISTORY != null
-  const initialNoHistory = process.env.CCOMMAND_NO_HISTORY ?? process.env.NO_HISTORY
-  const shouldWriteHistory = !(hadNoHistoryEnv && isNoHistory(initialNoHistory))
   const prevNoHistory = process.env.CCOMMAND_NO_HISTORY
+  const shouldWriteHistory = !shouldSuppressHistory()
   if (shouldWriteHistory)
     delete process.env.CCOMMAND_NO_HISTORY
   else

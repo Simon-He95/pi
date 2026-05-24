@@ -8,10 +8,8 @@ import { getCcommand } from './require'
 // package run script
 export async function prun(params: string) {
   ensurePrunAutoInit()
-  const hadNoHistoryEnv = process.env.CCOMMAND_NO_HISTORY != null || process.env.NO_HISTORY != null
-  const initialNoHistory = process.env.CCOMMAND_NO_HISTORY ?? process.env.NO_HISTORY
   const prevNoHistory = process.env.CCOMMAND_NO_HISTORY
-  const shouldWriteHistory = !(hadNoHistoryEnv && isNoHistory(initialNoHistory))
+  const shouldWriteHistory = !shouldSuppressHistory()
 
   if (shouldWriteHistory)
     delete process.env.CCOMMAND_NO_HISTORY
@@ -37,6 +35,11 @@ function isNoHistory(value?: string) {
     return false
   const normalized = value.toLowerCase()
   return normalized === '1' || normalized === 'true' || normalized === 'yes'
+}
+
+function shouldSuppressHistory() {
+  return isNoHistory(process.env.CCOMMAND_NO_HISTORY)
+    || isNoHistory(process.env.NO_HISTORY)
 }
 
 function hasTruthyEnv(...values: Array<string | undefined>) {
