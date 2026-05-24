@@ -68,6 +68,18 @@ afterEach(() => {
 })
 
 describe('printPrunInit', () => {
+  it('emits history sync hooks for zsh', () => {
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    printPrunInit(['zsh'])
+
+    const script = logSpy.mock.calls[0]?.[0]
+    expect(script).toContain('__prun_sync_history()')
+    expect(script).toContain('add-zsh-hook precmd __prun_precmd')
+    expect(script).toContain('print -s -- "$hint_cmd"')
+    expect(script).toContain('$last_cmd == pfind || $last_cmd == pfind\\ *')
+  })
+
   it('emits history sync hooks for bash', () => {
     const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
@@ -77,6 +89,19 @@ describe('printPrunInit', () => {
     expect(script).toContain('__prun_sync_history()')
     expect(script).toContain('PROMPT_COMMAND="__prun_sync_history')
     expect(script).toContain('history -s -- "$hint_cmd"')
+    expect(script).toContain('$last_cmd == pfind || $last_cmd == pfind\\ *')
+  })
+
+  it('emits a fish wrapper for pfind history sync', () => {
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    printPrunInit(['fish'])
+
+    const script = logSpy.mock.calls[0]?.[0]
+    expect(script).toContain('function __prun_sync_history')
+    expect(script).toContain('function pfind')
+    expect(script).toContain('command pfind $argv')
+    expect(script).toContain('__prun_sync_history')
   })
 
   it('emits a PowerShell prompt hook with PSReadLine and file history fallback', () => {
@@ -121,5 +146,26 @@ describe('printPrunInit', () => {
 
     expect(fs.readFileSync(rcFile, 'utf8')).toContain('prun --init zsh')
     expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('Installed shell hook'))
+  })
+
+  it('treats either disable flag as authoritative', () => {
+    const rcFile = prepareAutoInitEnv()
+    process.env.PI_AUTO_INIT = '1'
+    process.env.PI_NO_AUTO_INIT = '0'
+    process.env.PRUN_NO_AUTO_INIT = '1'
+
+    ensurePrunAutoInit()
+
+    expect(fs.existsSync(rcFile)).toBe(false)
+  })
+
+  it('accepts either auto-init flag', () => {
+    const rcFile = prepareAutoInitEnv()
+    process.env.PI_AUTO_INIT = '0'
+    process.env.PRUN_AUTO_INIT = '1'
+
+    ensurePrunAutoInit()
+
+    expect(fs.readFileSync(rcFile, 'utf8')).toContain('prun --init zsh')
   })
 })

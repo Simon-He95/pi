@@ -20,7 +20,35 @@ const packOutput = execFileSync(npmBin, ['pack', '--json'], {
   cwd: root,
   encoding: 'utf8',
 })
-const [{ filename }] = JSON.parse(packOutput)
+const [pack] = JSON.parse(packOutput)
+const { filename } = pack
+const packedPaths = new Set(pack.files?.map(file => file.path) ?? [])
+
+for (const requiredPath of [
+  'README.md',
+  'README_zh.md',
+  'pi.mjs',
+  'pio.mjs',
+  'pix.mjs',
+  'pa.mjs',
+  'pu.mjs',
+  'pci.mjs',
+  'pil.mjs',
+  'pui.mjs',
+  'prun.mjs',
+  'pinit.mjs',
+  'pbuild.mjs',
+  'pfind.mjs',
+  'dist/index.cjs',
+  'dist/index.mjs',
+  'dist/cli.cjs',
+  'dist/index.d.cts',
+  'dist/index.d.mts',
+]) {
+  if (!packedPaths.has(requiredPath))
+    throw new Error(`Packed tarball is missing ${requiredPath}`)
+}
+
 const packedFile = join(root, filename)
 const tmp = mkdtempSync(join(tmpdir(), 'pi-packed-smoke-'))
 
