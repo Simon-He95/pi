@@ -114,18 +114,31 @@ jobs:
           echo "tarball-name=$TARBALL" >> "$GITHUB_OUTPUT"
 
       - name: Upload packed package
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: packed-package
           path: ${{ steps.pack.outputs.tarball-name }}
+          if-no-files-found: error
+          archive: false
 
   runtime-smoke:
     needs: pack-smoke
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        node: [18.x, 20.x, 22.x, 24.x]
+        include:
+          - os: ubuntu-latest
+            node: 18.x
+          - os: ubuntu-latest
+            node: 20.x
+          - os: ubuntu-latest
+            node: 22.x
+          - os: ubuntu-latest
+            node: 24.x
+          - os: windows-latest
+            node: 22.x
+          - os: windows-latest
+            node: 24.x
       fail-fast: false
 
     steps:
@@ -136,11 +149,12 @@ jobs:
           package-manager-cache: false
 
       - name: Download packed package
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
-          name: packed-package
+          name: ${{ needs.pack-smoke.outputs.tarball-name }}
 
       - name: Smoke install packed package
+        if: runner.os != 'Windows'
         shell: bash
         run: |
           TARBALL=$(ls *.tgz | head -n 1)
@@ -171,3 +185,18 @@ jobs:
           npx tsc --module nodenext --moduleResolution nodenext --target ES2022 --noEmit import-smoke.mts require-smoke.cts
           node --input-type=module -e "const { setup } = await import('@simon_he/pi'); if (typeof setup !== 'function') process.exit(1)"
           node -e "const { setup } = require('@simon_he/pi'); if (typeof setup !== 'function') process.exit(1)"
+
+      - name: Smoke install packed package on Windows
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $tarball = Get-ChildItem *.tgz | Select-Object -First 1
+          npm init -y
+          npm install ".\$($tarball.Name)"
+
+          foreach ($bin in @('pi','pio','pix','pa','pu','pci','pil','pui','prun','pinit','pbuild','pfind')) {
+            & ".\node_modules\.bin\$bin.cmd" --version | Out-Null
+          }
+
+          node -e "const { setup } = require('@simon_he/pi'); if (typeof setup !== 'function') process.exit(1)"
+          node --input-type=module -e "const { setup } = await import('@simon_he/pi'); if (typeof setup !== 'function') process.exit(1)"
