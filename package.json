@@ -105,7 +105,7 @@
     "eslint": "^9.39.4",
     "lint-staged": "^13.3.0",
     "prettier": "^2.8.8",
-    "tsdown": "^0.20.3",
+    "tsdown": "^0.22.0",
     "tsx": "^4.22.1",
     "typescript": "^5.9.3",
     "vitest": "^3.2.4"
