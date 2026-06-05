@@ -234,6 +234,16 @@ export async function pushHistory(command: string) {
     ),
   )
 
+  const historyHint = process.env.CCOMMAND_HISTORY_HINT
+    || path.join(process.env.XDG_CACHE_HOME || path.join(process.env.HOME || os.homedir(), '.cache'), 'ccommand', 'last-history')
+  try {
+    fs.mkdirSync(path.dirname(historyHint), { recursive: true })
+    fs.writeFileSync(historyHint, `${Date.now()}\t${command}\n`, 'utf8')
+  }
+  catch {
+    // Shell history integration is best-effort.
+  }
+
   // 检测当前shell类型
   const currentShell = process.env.SHELL || '/bin/bash'
   const shellName = currentShell.split('/').pop() || 'bash'

@@ -78,6 +78,9 @@ describe('printPrunInit', () => {
     expect(script).toContain('add-zsh-hook precmd __prun_precmd')
     expect(script).toContain('print -s -- "$hint_cmd"')
     expect(script).toContain('$last_cmd == pfind || $last_cmd == pfind\\ *')
+    expect(script).toContain('$hint_cmd != pnpm\\ add*')
+    expect(script).toContain('$last_cmd == pi || $last_cmd == pi\\ *')
+    expect(script).toContain('$last_cmd == pil || $last_cmd == pil\\ *')
   })
 
   it('emits history sync hooks for bash', () => {
@@ -90,6 +93,9 @@ describe('printPrunInit', () => {
     expect(script).toContain('PROMPT_COMMAND="__prun_sync_history')
     expect(script).toContain('history -s -- "$hint_cmd"')
     expect(script).toContain('$last_cmd == pfind || $last_cmd == pfind\\ *')
+    expect(script).toContain('$hint_cmd != pnpm\\ add*')
+    expect(script).toContain('$last_cmd == pi || $last_cmd == pi\\ *')
+    expect(script).toContain('$last_cmd == pil || $last_cmd == pil\\ *')
   })
 
   it('emits a fish wrapper for pfind history sync', () => {
@@ -101,6 +107,11 @@ describe('printPrunInit', () => {
     expect(script).toContain('function __prun_sync_history')
     expect(script).toContain('function pfind')
     expect(script).toContain('command pfind $argv')
+    expect(script).toContain('function pi')
+    expect(script).toContain('command pi $argv')
+    expect(script).toContain('function pil')
+    expect(script).toContain('command pil $argv')
+    expect(script).toContain('string match -q "pnpm add*"')
     expect(script).toContain('__prun_sync_history')
   })
 
@@ -117,6 +128,7 @@ describe('printPrunInit', () => {
     expect(script).toContain('AddToHistory($Command)')
     expect(script).toContain('HistorySavePath')
     expect(script).toContain('[void](__prun_add_history $hintCmd)')
+    expect(script).toContain('$hintCmd.StartsWith("pnpm add")')
     expect(script).toContain('function global:prompt')
   })
 
