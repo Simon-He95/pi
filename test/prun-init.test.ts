@@ -115,7 +115,7 @@ describe('printPrunInit', () => {
     expect(script).toContain('__prun_sync_history')
   })
 
-  it('emits a PowerShell prompt hook with PSReadLine and guarded file history fallback', () => {
+  it('emits a PowerShell prompt hook without startup PSReadLine file access', () => {
     const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     printPrunInit(['powershell'])
@@ -126,9 +126,11 @@ describe('printPrunInit', () => {
     expect(script).toContain('function global:__prun_add_history')
     expect(script).toContain('PSConsoleReadLine')
     expect(script).toContain('AddToHistory($Command)')
-    expect(script).toContain('if (-not $added) {')
-    expect(script).toContain('HistorySavePath')
-    expect(script).toContain('Add-Content -LiteralPath $path -Value $Command -Encoding utf8 -ErrorAction Stop')
+    expect(script).toContain('$firstSync = -not $script:__PRUN_HISTORY_READY')
+    expect(script).toContain('if ($firstSync) {')
+    expect(script).not.toContain('Get-PSReadLineOption')
+    expect(script).not.toContain('HistorySavePath')
+    expect(script).not.toContain('Add-Content')
     expect(script).toContain('[void](__prun_add_history $hintCmd)')
     expect(script).toContain('$hintCmd.StartsWith("pnpm add")')
     expect(script).toContain('function global:prompt')
