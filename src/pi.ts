@@ -13,16 +13,14 @@ export async function pi(
   params: string | string[],
   pkg: string,
   executor = 'pi',
+  historyCommand?: string,
 ) {
   await detectNode()
   const text = pkg ? `Installing ${params} ...` : 'Updating dependency ...'
   const isLatest = executor === 'pil'
   const start = Date.now()
   let successMsg = ''
-  if (isLatest) {
-    successMsg = await getLatestVersion(pkg, isZh)
-  }
-  else {
+  if (!isLatest) {
     successMsg = pkg
       ? isZh
         ? `${pkg} 安装成功! 😊`
@@ -46,12 +44,6 @@ export async function pi(
   const { tool } = await resolvePkgTool()
   // 开启并发下载值
   const maxSockets = sockets || 4
-  if (tool === 'npm' && !PI_DEFAULT) {
-    stdio = 'inherit'
-  }
-  else {
-    loading_status = await loading(text, isSilent)
-  }
   executor = getInstallCommand(tool, Boolean(params))
   const newParams = isLatest ? '' : await getParams(params as string)
   const runSockets
@@ -65,6 +57,16 @@ export async function pi(
     ? latestParams.map(p => `${executor} ${p}`)
     : [`${executor}${newParams ? ` ${newParams}` : runSockets}`]
   const runCmd = isLatest ? cmdList.join(' & ') : cmdList[0]
+  if (isLatest) {
+    console.log(colors.blue(runCmd))
+    successMsg = await getLatestVersion(pkg, isZh)
+  }
+  if (tool === 'npm' && !PI_DEFAULT) {
+    stdio = 'inherit'
+  }
+  else {
+    loading_status = await loading(text, isSilent)
+  }
   const runCommands = async (commands: string[]) => {
     const results = await Promise.all(
       commands.map(command =>
@@ -121,7 +123,7 @@ export async function pi(
   successMsg += colors.blue(` ---- ⏰：${costTime}s`)
   if (status === 0) {
     loading_status.succeed(colors.green(successMsg))
-    pushHistory(runCmd)
+    pushHistory(historyCommand || runCmd)
   }
   else if (result && result.includes('Not Found - 404')) {
     const _pkg = result.match(/\/[^/:]+:/)?.[0].slice(1, -1)

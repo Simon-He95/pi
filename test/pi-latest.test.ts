@@ -52,6 +52,7 @@ describe('pi latest installs', () => {
   })
 
   afterEach(() => {
+    vi.restoreAllMocks()
     vi.clearAllMocks()
   })
 
@@ -67,6 +68,7 @@ describe('pi latest installs', () => {
     const exitSpy = vi
       .spyOn(process, 'exit')
       .mockImplementation((() => undefined) as never)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     const { pi } = await import('../src/pi')
     const promise = pi(
@@ -91,7 +93,38 @@ describe('pi latest installs', () => {
     const commands = useNodeWorker.mock.calls.map(call => call[0]?.params)
     expect(commands).toContain('pnpm add foo@latest -S')
     expect(commands).toContain('pnpm add bar@latest -D')
+    expect(logSpy).toHaveBeenCalledWith(
+      expect.stringContaining('pnpm add foo@latest -S & pnpm add bar@latest -D'),
+    )
+    expect(pushHistory).toHaveBeenCalledWith(
+      'pnpm add foo@latest -S & pnpm add bar@latest -D',
+    )
 
     exitSpy.mockRestore()
+    logSpy.mockRestore()
+  })
+
+  it('uses the provided shortcut command for latest history', async () => {
+    useNodeWorker.mockResolvedValue({ status: 0, result: '' })
+    const exitSpy = vi
+      .spyOn(process, 'exit')
+      .mockImplementation((() => undefined) as never)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    const { pi } = await import('../src/pi')
+    await pi(['foo@latest'], 'foo$1.0.0', 'pil', 'pil foo')
+
+    expect(useNodeWorker).toHaveBeenCalledWith({
+      params: 'pnpm add foo@latest',
+      stdio: ['inherit', 'pipe', 'inherit'],
+      errorExit: false,
+    })
+    expect(logSpy).toHaveBeenCalledWith(
+      expect.stringContaining('pnpm add foo@latest'),
+    )
+    expect(pushHistory).toHaveBeenCalledWith('pil foo')
+
+    exitSpy.mockRestore()
+    logSpy.mockRestore()
   })
 })

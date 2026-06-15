@@ -49,6 +49,12 @@ export async function pil(params: string) {
     })
     params = names.join(' ')
   }
+  const shortcutParams = params
+    .replace(/@latest/g, '')
+    .replace(/\s-s\b/gi, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+  const historyCommand = shortcutParams ? `pil ${shortcutParams}` : 'pil'
   let latestPkgname = params
   const reg = /\s(-[dws]+)/gi
   const suffix: string[] = []
@@ -76,7 +82,9 @@ export async function pil(params: string) {
   // - 若存在全局 workspace 标志（-w 或 -W），将其与每个包的标志合并：'' -> -w/-W，-D -> -Dw/-DW
   // - 忽略 -s/-S（仅作占位，不向真实命令透传）
   const tokens = command.replace(/\s+/, ' ').trim().split(' ').filter(Boolean)
-  const pkgs = tokens.filter(t => !t.startsWith('-'))
+  const pkgs = tokens
+    .filter(t => !t.startsWith('-'))
+    .map(p => p.endsWith('@latest') ? p : `${p}@latest`)
 
   // 拆分后缀：识别全局 workspace 标志（-w/-W），其余按顺序分配给包
   let globalWorkspaceFlag: string | null = null
@@ -129,5 +137,5 @@ export async function pil(params: string) {
     ([flag, list]) => `${list.join(' ')}${flag ? ` ${flag}` : ''}`,
   )
 
-  return await pi(cmds, latestPkgname.replace(/@latest/g, ''), 'pil')
+  return await pi(cmds, latestPkgname.replace(/@latest/g, ''), 'pil', historyCommand)
 }
