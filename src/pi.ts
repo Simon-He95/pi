@@ -44,7 +44,7 @@ export async function pi(
   const { tool } = await resolvePkgTool()
   // 开启并发下载值
   const maxSockets = sockets || 4
-  executor = getInstallCommand(tool, Boolean(params))
+  executor = getInstallCommand(tool, Boolean(pkg))
   const newParams = isLatest ? '' : await getParams(params as string)
   const runSockets
     = tool === 'npm' ? ` --max-sockets=${maxSockets}` : ''

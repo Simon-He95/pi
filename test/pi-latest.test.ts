@@ -56,6 +56,25 @@ describe('pi latest installs', () => {
     vi.clearAllMocks()
   })
 
+  it('runs install when only package-manager options are provided', async () => {
+    getParams.mockResolvedValue('--force')
+    useNodeWorker.mockResolvedValue({ status: 0, result: '' })
+    const exitSpy = vi
+      .spyOn(process, 'exit')
+      .mockImplementation((() => undefined) as never)
+
+    const { pi } = await import('../src/pi')
+    await pi('--force', '')
+
+    expect(useNodeWorker).toHaveBeenCalledWith({
+      params: 'pnpm install --force',
+      stdio: ['inherit', 'pipe', 'inherit'],
+      errorExit: false,
+    })
+
+    exitSpy.mockRestore()
+  })
+
   it('waits for all parallel installs before succeeding', async () => {
     const resolvers: Array<(value: { status: number, result: string }) => void> = []
     useNodeWorker.mockImplementation(
