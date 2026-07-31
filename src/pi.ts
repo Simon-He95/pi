@@ -61,6 +61,15 @@ export async function pi(
     console.log(colors.blue(runCmd))
     successMsg = await getLatestVersion(pkg, isZh)
   }
+  // For pil, the shell only recorded the bare `pil` the user typed. Write the
+  // resolved re-runnable shortcut (`pil <pkgs>`) to history BEFORE the install
+  // runs, so an interrupt (Ctrl+C) or a failed install still leaves it in
+  // history for a quick re-run via the up arrow.
+  let historyRecorded = false
+  if (isLatest && historyCommand) {
+    pushHistory(historyCommand)
+    historyRecorded = true
+  }
   if (tool === 'npm' && !PI_DEFAULT) {
     stdio = 'inherit'
   }
@@ -123,7 +132,8 @@ export async function pi(
   successMsg += colors.blue(` ---- ⏰：${costTime}s`)
   if (status === 0) {
     loading_status.succeed(colors.green(successMsg))
-    pushHistory(historyCommand || runCmd)
+    if (!historyRecorded)
+      pushHistory(historyCommand || runCmd)
   }
   else if (result && result.includes('Not Found - 404')) {
     const _pkg = result.match(/\/[^/:]+:/)?.[0].slice(1, -1)

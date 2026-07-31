@@ -124,4 +124,32 @@ describe('pil history', () => {
 
     exitSpy.mockRestore()
   })
+
+  it('still records the pil shortcut when the install is interrupted or fails', async () => {
+    const exitSpy = vi
+      .spyOn(process, 'exit')
+      .mockImplementation((() => undefined) as never)
+    vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    // Simulate a failed/interrupted install (non-zero status, e.g. Ctrl+C).
+    useNodeWorker.mockResolvedValue({ status: 1, result: 'interrupted' })
+
+    const { pil } = await import('../src/pil')
+    await pil('markstream-vue stream-monaco')
+
+    // The re-runnable shortcut must be in history even on failure, so the
+    // user can re-run it with the up arrow after cancelling the install.
+    expect(fs.readFileSync(process.env.CCOMMAND_HISTORY_HINT!, 'utf8')).toMatch(
+      /^\d+\tpil markstream-vue stream-monaco\n$/,
+    )
+    expect(fs.readFileSync(process.env.HISTFILE!, 'utf8')).toBe(
+      'pil markstream-vue stream-monaco\n',
+    )
+    // And it must not be duplicated by the success path.
+    expect(
+      fs.readFileSync(process.env.HISTFILE!, 'utf8').split('\n').filter(Boolean).length,
+    ).toBe(1)
+
+    exitSpy.mockRestore()
+  })
 })
