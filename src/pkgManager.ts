@@ -5,7 +5,7 @@ import process from 'node:process'
 import { isFile } from 'lazy-js-utils'
 import { getPkgTool } from 'lazy-js-utils/node'
 import colors from 'picocolors'
-import { isInteractive, ttySelect } from './tty'
+import { exitWithFlush, isInteractive, ttySelect } from './tty'
 
 export type PkgTool = string
 export type PkgToolResolutionSource
@@ -643,7 +643,7 @@ export async function resolvePkgTool(options: ResolvePkgToolOptions = {}): Promi
     }
     if (selection.status === 'cancelled') {
       console.log(colors.dim(isZh ? '已取消' : 'Cancelled'))
-      process.exit(0)
+      await exitWithFlush(0)
     }
 
     const tool = getDetectedToolFallback(detected, candidates)

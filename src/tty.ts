@@ -416,7 +416,14 @@ async function runSelect(options: string[], config: SelectConfig) {
         readline.cursorTo(stdout, 0)
       readline.clearScreenDown(stdout)
       stdout.write('\n')
-      resolve(value)
+      // Flush the terminal-restore writes before resolving: callers may call
+      // process.exit() right away, and hard exits can drop queued TTY writes
+      // on Windows (ConPTY), leaving the terminal in a broken state (hidden
+      // cursor, stale screen) and making subsequent shell input laggy.
+      const flushed = () => resolve(value)
+      stdout.write('', flushed)
+      const timer = setTimeout(flushed, 200)
+      timer.unref?.()
     }
 
     const confirmSelection = () => {
@@ -563,6 +570,30 @@ export async function ttyMultiSelect(options: string[], placeholder: string) {
     mode: 'multiple',
   })
   return Array.isArray(result) ? result : null
+}
+
+/**
+ * Exit after queued terminal output (cancel messages, cursor/mouse restore
+ * sequences) has been flushed. A plain process.exit() can drop queued TTY
+ * writes on Windows (ConPTY), leaving the terminal in a broken state.
+ * Resolves as `never`: always await it so no code runs after the exit.
+ */
+export async function exitWithFlush(code = 0): Promise<never> {
+  const stdout = process.stdout
+  if (stdout.writableLength > 0) {
+    await new Promise<void>((resolve) => {
+      const flushed = () => resolve()
+      try {
+        stdout.write('', flushed)
+      }
+      catch {
+        return resolve()
+      }
+      const timer = setTimeout(flushed, 200)
+      timer.unref?.()
+    })
+  }
+  process.exit(code)
 }
 
 export function renderBox(
