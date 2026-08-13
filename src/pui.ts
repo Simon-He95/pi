@@ -2,7 +2,7 @@ import process from 'node:process'
 import { getPkg, useNodeWorker } from 'lazy-js-utils/node'
 import colors from 'picocolors'
 import { getRemoveCommand, resolvePkgTool } from './pkgManager'
-import { isInteractive, ttySelect } from './tty'
+import { exitWithFlush, isInteractive, ttySelect } from './tty'
 import { loading } from './utils'
 
 const isZh = process.env.PI_Lang === 'zh'
@@ -41,7 +41,7 @@ export async function pui(params: string, pkg: string) {
     )
     if (!choose) {
       console.log(colors.dim('已取消'))
-      process.exit(0)
+      await exitWithFlush(0)
     }
     pkg = params = choose!.split(': ')[0]
   }

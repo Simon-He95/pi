@@ -2,7 +2,7 @@ import process from 'node:process'
 import { getPkg } from 'lazy-js-utils/node'
 import pc from 'picocolors'
 import { pi } from './pi'
-import { isInteractive, ttyMultiSelect } from './tty'
+import { exitWithFlush, isInteractive, ttyMultiSelect } from './tty'
 import { getParams } from './utils'
 // install @latest
 export async function pil(params: string) {
@@ -39,7 +39,7 @@ export async function pil(params: string) {
 
     if (!choose || choose.length === 0) {
       console.log(pc.dim('已取消'))
-      process.exit(0)
+      await exitWithFlush(0)
     }
     const names = choose!.map((i: string) => {
       const name = i.split(': ')[0]
