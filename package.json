@@ -92,7 +92,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "ccommand": "^1.1.11",
+    "ccommand": "^1.1.12",
     "fast-glob": "^3.3.3",
     "lazy-js-utils": "^0.1.51",
     "ora": "^8.2.0",
