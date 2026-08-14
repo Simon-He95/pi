@@ -1,11 +1,12 @@
 import { getPkgTool, jsShell } from 'lazy-js-utils/node'
+import { runGuardedChild } from './utils'
 
 // npx
 export async function pix(params: string) {
   switch (await getPkgTool()) {
     case 'bun':
-      return jsShell(`bunx ${params}`)
+      return runGuardedChild(() => jsShell(`bunx ${params}`))
     default:
-      return jsShell(`npx ${params}`)
+      return runGuardedChild(() => jsShell(`npx ${params}`))
   }
 }

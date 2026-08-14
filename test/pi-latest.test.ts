@@ -24,6 +24,7 @@ vi.mock('../src/utils', () => ({
   getParams,
   loading,
   pushHistory,
+  runGuardedChild: (fn: () => Promise<any>) => fn(),
 }))
 
 vi.mock('../src/pkgManager', () => ({
