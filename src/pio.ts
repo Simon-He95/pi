@@ -2,7 +2,7 @@ import process from 'node:process'
 import { useNodeWorker } from 'lazy-js-utils/node'
 import color from 'picocolors'
 import { getInstallCommand, resolvePkgTool } from './pkgManager'
-import { getParams, loading } from './utils'
+import { getParams, loading, runGuardedChild } from './utils'
 
 // package install
 export async function pio(params: string, pkg: string) {
@@ -18,10 +18,10 @@ export async function pio(params: string, pkg: string) {
   const { tool } = await resolvePkgTool()
   const executor = getInstallCommand(tool, Boolean(params))
   const cmd = `${executor}${newParams ? ` ${newParams}` : ''} ${offline}`.trim()
-  const { status, result } = await useNodeWorker({
+  const { status, result } = await runGuardedChild(() => useNodeWorker({
     params: cmd,
     stdio: 'inherit',
-  })
+  }))
   const loading_status = await loading('')
   if (status === 0)
     loading_status.succeed(color.green(successMsg))

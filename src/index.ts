@@ -31,7 +31,7 @@ import { printPrunDoctor, printPrunInit, prun } from './prun'
 import { pu } from './pu'
 import { pui } from './pui'
 import { getCcommand } from './require'
-import { loading } from './utils'
+import { loading, runGuardedChild } from './utils'
 
 let rootPath = process.cwd()
 
@@ -247,8 +247,8 @@ export async function setup() {
           `${isZh ? '正在为您安装' : 'Installing'} ${params} ...\n`,
         )
         const { status } = params
-          ? await useNodeWorker(`go get ${params}`)
-          : await useNodeWorker('go mod tidy')
+          ? await runGuardedChild(() => useNodeWorker(`go get ${params}`))
+          : await runGuardedChild(() => useNodeWorker('go mod tidy'))
 
         if (status === 0) {
           loading_status.succeed(
@@ -265,7 +265,7 @@ export async function setup() {
         const loading_status = await loading(
           `${isZh ? '正在为您卸载' : 'Uninstalling'} ${params} ...\n`,
         )
-        const { status } = await useNodeWorker(`go clean ${params}`)
+        const { status } = await runGuardedChild(() => useNodeWorker(`go clean ${params}`))
         if (status === 0) {
           loading_status.succeed(
             color.green(isZh ? '卸载成功! 😊' : 'Uninstalled successfully! 😊'),
@@ -286,15 +286,15 @@ export async function setup() {
         const target = (await fg(match))[0]
 
         if (target)
-          return await jsShell(`go run ${target}`, 'inherit')
+          return await runGuardedChild(() => jsShell(`go run ${target}`, 'inherit'))
         const { ccommand } = getCcommand()
         return ccommand(params)
       }
       else if (exec === 'pinit') {
-        await jsShell(`go mod init ${params}`, 'inherit')
+        await runGuardedChild(() => jsShell(`go mod init ${params}`, 'inherit'))
       }
       else if (exec === 'pbuild') {
-        await jsShell(`go build ${params}`, 'inherit')
+        await runGuardedChild(() => jsShell(`go build ${params}`, 'inherit'))
       }
       else {
         console.log(
@@ -317,11 +317,11 @@ export async function setup() {
         const loading_status = await loading(
           `${isZh ? '正在为您安装' : 'Installing'} ${params} ...\n`,
         )
-        const { status } = await useNodeWorker(
+        const { status } = await runGuardedChild(() => useNodeWorker(
           `cargo install ${params}${
             projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
           }`,
-        )
+        ))
         if (status === 0) {
           loading_status.succeed(
             color.green(isZh ? '安装成功! 😊' : 'Installed successfully! 😊'),
@@ -337,11 +337,11 @@ export async function setup() {
         const loading_status = await loading(
           `${isZh ? '正在为您卸载' : 'Uninstalling'} ${params} ...\n`,
         )
-        const { status } = await useNodeWorker(
+        const { status } = await runGuardedChild(() => useNodeWorker(
           `cargo uninstall ${params}${
             projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
           }`,
-        )
+        ))
         if (status === 0) {
           loading_status.succeed(
             color.green(isZh ? '卸载成功! 😊' : 'Uninstalled successfully! 😊'),
@@ -354,28 +354,28 @@ export async function setup() {
         }
       }
       else if (exec === 'prun') {
-        await jsShell(
+        await runGuardedChild(() => jsShell(
           `cargo run ${params}${
             projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
           }`,
           'inherit',
-        )
+        ))
       }
       else if (exec === 'pinit') {
-        await jsShell(
+        await runGuardedChild(() => jsShell(
           `cargo init ${params}${
             projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
           }`,
           'inherit',
-        )
+        ))
       }
       else if (exec === 'pbuild') {
-        await jsShell(
+        await runGuardedChild(() => jsShell(
           `cargo build ${params}${
             projectPath ? `--manifest-path=./${projectPath}/Cargo.toml` : ''
           }`,
           'inherit',
-        )
+        ))
       }
       else {
         console.log(

@@ -3,7 +3,7 @@ import { getPkg, useNodeWorker } from 'lazy-js-utils/node'
 import colors from 'picocolors'
 import { getRemoveCommand, resolvePkgTool } from './pkgManager'
 import { exitWithFlush, isInteractive, ttySelect } from './tty'
-import { loading } from './utils'
+import { loading, runGuardedChild } from './utils'
 
 const isZh = process.env.PI_Lang === 'zh'
 
@@ -64,7 +64,7 @@ export async function pui(params: string, pkg: string) {
   const loading_status = await loading(text)
   const { tool } = await resolvePkgTool()
   const removeCmd = getRemoveCommand(tool)
-  const { status, result } = await useNodeWorker(`${removeCmd} ${params}`)
+  const { status, result } = await runGuardedChild(() => useNodeWorker(`${removeCmd} ${params}`))
   const end = Date.now()
   const costTime = (end - start) / 1000
   successMsg += colors.blue(` ---- ⏰：${costTime}s`)

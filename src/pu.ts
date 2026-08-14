@@ -2,6 +2,7 @@ import { spawnSync } from 'node:child_process'
 import process from 'node:process'
 import { jsShell } from 'lazy-js-utils/node'
 import pc from 'picocolors'
+import { runGuardedChild } from './utils'
 
 function hasCommand(command: string) {
   const result = process.platform === 'win32'
@@ -28,5 +29,5 @@ export function pu(params = '') {
     return
   }
 
-  return jsShell(`nu${params ? ` ${params}` : ''}`, 'inherit')
+  return runGuardedChild(() => jsShell(`nu${params ? ` ${params}` : ''}`, 'inherit'))
 }

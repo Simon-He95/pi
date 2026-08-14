@@ -4,7 +4,7 @@ import { jsShell, useNodeWorker } from 'lazy-js-utils/node'
 import colors from 'picocolors'
 import { detectNode } from './detectNode'
 import { getInstallCommand, resolvePkgTool } from './pkgManager'
-import { getLatestVersion, getParams, loading, pushHistory } from './utils'
+import { getLatestVersion, getParams, loading, pushHistory, runGuardedChild } from './utils'
 
 const isZh = process.env.PI_Lang === 'zh'
 
@@ -79,11 +79,11 @@ export async function pi(
   const runCommands = async (commands: string[]) => {
     const results = await Promise.all(
       commands.map(command =>
-        useNodeWorker({
+        runGuardedChild(() => useNodeWorker({
           params: command,
           stdio,
           errorExit: false,
-        }),
+        })),
       ),
     )
     const failed = results.find(r => r.status !== 0)
@@ -114,7 +114,7 @@ export async function pi(
       ? latestParams.map(p => `npm install ${p}`)
       : [`npm install${newParams ? ` ${newParams}` : runSockets}`]
     const fallbackResults = await Promise.all(
-      fallbackCommands.map(command => jsShell(command, { stdio })),
+      fallbackCommands.map(command => runGuardedChild(() => jsShell(command, { stdio }))),
     )
     const fallbackFailed = fallbackResults.find(r => r.status !== 0)
     const fallbackMerged = fallbackResults
