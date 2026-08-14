@@ -21,7 +21,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v6
         with:
-          version: 10.33.4
+          version: 10.34.5
 
       - name: Set node
         uses: actions/setup-node@v6
@@ -65,7 +65,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v6
         with:
-          version: 10.33.4
+          version: 10.34.5
 
       - name: Set node ${{ matrix.node }}
         uses: actions/setup-node@v6
@@ -94,7 +94,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v6
         with:
-          version: 10.33.4
+          version: 10.34.5
 
       - name: Set node
         uses: actions/setup-node@v6
